@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mdabali_report/view/extracted_widgets/custom_textfield.dart';
 import 'package:mdabali_report/view/extracted_widgets/extracted_button.dart';
+import 'package:mdabali_report/view/password_login_page.dart';
 
 import 'extracted_widgets/custom_text.dart';
 
@@ -116,7 +118,9 @@ class LoginPage extends StatelessWidget {
               const Spacer(),
               
               LoginButton(
-                onPress: (){},
+                onPress: (){
+                  Get.to(PasswordLoginPage());
+                },
                 color: Colors.blue[100],
                 text: 'Continue',
                              

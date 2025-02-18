@@ -8,6 +8,7 @@ class PasswordLoginPage extends StatelessWidget {
   PasswordLoginPage({super.key});
 
   final _passwordController = TextEditingController();
+  final _numberController =TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -81,21 +82,72 @@ class PasswordLoginPage extends StatelessWidget {
               color: Colors.deepOrange,
               weight: FontWeight.bold,),
               const SizedBox(height: 40),
-              CustomText(text: 'Login or register',
-              fontSize: 24,
-              weight: FontWeight.bold,),
+          
+          Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 16),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                border: Border.all(
+                  color: Colors.grey[600]!
+                )
+              ),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    backgroundColor:Colors.grey[200],
+                    child: Icon(Icons.person,
+                    color: Colors.grey,),
+                    
+                  ),
+                  const SizedBox(width: 12,),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomText(text: 'Info Developers Pvt Ltd',
+                      weight: FontWeight.w400,
+                      color: Colors.black,),
+                      CustomText(text: '98*****93',
+                      color: Colors.grey[600],)
+                    ],
+                  )
+                ],
+              ),
+          ),
+              // CustomTextField(
+              //   maxLines: 2,
+              //   isLabel: false,
+              //   readOnly: true,
+              // //  contentPadding: EdgeInsets.all(12),
+              //   prefixIcon:Icon(Icons.person),
+              //   hintText:'Info Developers Pvt Ltd\n''984****93',
+              //   // Column(
+              //   //   children: [
+              //   //     CustomText(text: 'Info Devlopers Pvt Ltd',
+              //   //     color: Colors.black,
+              //   //     fontSize: 20,
+              //   //     weight: FontWeight.w400,),
+              //   //     const SizedBox(height: 5,),
+              //   //     CustomText(text: '984*****93',
+              //   //     color: Colors.grey,
+              //   //     fontSize: 15,
+              //   //     )
+              //   //   ],
+              //   // ),
+              //    controller:_numberController ),
 
               const SizedBox(height: 20),
               CustomTextField(
+
                 hintText: 'Password',
                  controller:_passwordController,
+                 isPass: true,
                  contentPadding: EdgeInsets.symmetric(
                   horizontal: 16,
                   vertical: 16),
                   keyboardType: TextInputType.phone,
-                  suffixIconEnabled: [
-                    Icon(Icons.remove_red_eye_rounded)
-                  ],
+                  suffixIconEnabled: true
                   ),
 
               const SizedBox(height: 16),
@@ -105,7 +157,7 @@ class PasswordLoginPage extends StatelessWidget {
                 children: [
                   CustomText(text: 'Forgot Password?',
                   fontSize: 16,
-                  color: Colors.deepOrange,
+                  color: Colors.black,
                   decoration: TextDecoration.underline,),
                   
                 ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
+import 'package:mdabali_report/resources/images_constants.dart';
 
 class CustomTextField extends StatefulWidget {
   final hintText,
@@ -120,8 +121,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
                     },
                     child: Image.asset(
                       isHidden
-                          ? 'assets/dashboard/eye_close.png'
-                          : 'assets/dashboard/eye.png',
+                          ? ImagesConstants.eyeClose
+                          : ImagesConstants.eye,
                       color: theme.onSurfaceVariant,
                       scale: 2.5,
                     ),

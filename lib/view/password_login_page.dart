@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'extracted_widgets/custom_text.dart';
 import 'extracted_widgets/custom_textfield.dart';
 import 'extracted_widgets/extracted_button.dart';
+import 'login_page.dart';
 
 class PasswordLoginPage extends StatelessWidget {
   PasswordLoginPage({super.key});
@@ -172,7 +174,9 @@ class PasswordLoginPage extends StatelessWidget {
               const Spacer(),
               
               LoginButton(
-                onPress: (){},
+                onPress: (){
+                  Get.to(PasswordLoginPage());
+                },
                 color: Colors.blue[100],
                 text: 'Login',
                 textcolor: Colors.black,
@@ -185,17 +189,7 @@ class PasswordLoginPage extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar:  BottomNavigationBar(items: [
-                BottomNavigationBarItem(icon:Image.asset('lib/assets/info.png',
-                scale: 4,),
-                label:''),
-                BottomNavigationBarItem(icon:Image.asset('lib/assets/info.png',
-                scale: 1,),
-                label:''),
-                BottomNavigationBarItem(icon:Image.asset('lib/assets/info.png',
-                scale: 1,),
-                label:'')
-              ])    ,
+      bottomNavigationBar: BottomNavAuth(size: MediaQuery.of(context).size,)
     );
   }
 }

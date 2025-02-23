@@ -50,7 +50,7 @@ dependencies:
   http: ^1.1.0
   local_auth: ^2.3.0
   flutter_sizer: ^1.0.5
-  fl_chart: ^0.70.2
+  fl_chart: ^0.63.0
 
 dev_dependencies:
   flutter_test:

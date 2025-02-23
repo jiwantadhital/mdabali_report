@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mdabali_report/view/dash_board_page.dart';
 
 import 'extracted_widgets/custom_text.dart';
 import 'extracted_widgets/custom_textfield.dart';
@@ -130,7 +131,7 @@ class PasswordLoginPage extends StatelessWidget {
                 LoginButton(
                   onPress: (){
                    if(_formKey.currentState?.validate()??false){
-                     Get.to(PasswordLoginPage());
+                     Get.to(DashBoardPage());
                    }
                   },
                   color: Colors.blue[100],

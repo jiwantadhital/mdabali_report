@@ -15,6 +15,7 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
@@ -34,9 +35,7 @@ class LoginPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Center(
-                          child: CustomText(
-                        text: 'Logo',
-                      )),
+                          child:Image.asset(ImagesConstants.arjnaLogo,scale: 1,)),
                     ),
                     Row(
                       children: [
@@ -146,7 +145,7 @@ class LoginPage extends StatelessWidget {
                     if(_formKey.currentState?.validate()?? false){
                     Get.to(PasswordLoginPage());}
                   },
-                  color: Colors.blue[100],
+                  color: Colors.blue,
                   text: 'Continue',
                 ),
                 const SizedBox(height: 20),
@@ -200,7 +199,7 @@ class BottomNavAuth extends StatelessWidget {
           Container(
             width: 40,
             height: 40,
-            child: Image.asset(ImagesConstants.info),
+            child: Image.asset(ImagesConstants.arjnaLogo),
           ),
           Container(
             width: 40,

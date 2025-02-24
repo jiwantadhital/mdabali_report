@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mdabali_report/view/dash_board_page.dart';
 
+import '../resources/images_constants.dart';
 import 'extracted_widgets/custom_text.dart';
 import 'extracted_widgets/custom_textfield.dart';
 import 'extracted_widgets/extracted_button.dart';
@@ -17,7 +18,7 @@ class PasswordLoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
   return Scaffold(
-      
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -37,10 +38,7 @@ class PasswordLoginPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child:  Center(
-                        child: CustomText(
-                          text: 'Logo',
-                        )
-                      ),
+                        child:Image.asset(ImagesConstants.arjnaLogo,scale: 1,)),
                     ),
                     Row(
                       children: [
@@ -103,7 +101,7 @@ class PasswordLoginPage extends StatelessWidget {
                    contentPadding: EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 16),
-                    keyboardType: TextInputType.phone,
+                    keyboardType: TextInputType.text,
                     suffixIconEnabled: true
                     ),
             
@@ -134,7 +132,7 @@ class PasswordLoginPage extends StatelessWidget {
                      Get.to(DashBoardPage());
                    }
                   },
-                  color: Colors.blue[100],
+                  color: Colors.blue,
                   text: 'Login',
                   textcolor: Colors.black,
                                

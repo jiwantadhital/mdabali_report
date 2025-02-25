@@ -7,13 +7,18 @@ import 'package:path/path.dart';
 import '../resources/images_constants.dart';
 
 class DashBoardPage extends StatefulWidget {
-  const DashBoardPage({super.key});
+   DashBoardPage({super.key});
 
+ 
   @override
   State<DashBoardPage> createState() => _DashBoardPageState();
 }
 
 class _DashBoardPageState extends State<DashBoardPage> {
+   bool _isTransactionExpanded=false;
+   bool _isSMSExpanded=false;
+   bool _ismDabbaliExpanded=false;
+
   @override
   Widget build(BuildContext context) {
     List<String> months =[
@@ -175,28 +180,344 @@ class _DashBoardPageState extends State<DashBoardPage> {
                       ),),
                   ),
                   
+                    const SizedBox(height: 24,),
+                   CustomText(text: 'At a Glance',
+                   
+                  fontSize: 20,
+                  weight: FontWeight.bold,
+                  color: Colors.black87,),
+                  const SizedBox(height: 10,),
+                    const SizedBox(height: 24,),
                    _PieChartCard(),
-                    const SizedBox(height: 10,),
+                      const SizedBox(height: 24,),
+                    CustomText(text: 'Transaction Summary',fontSize: 20,weight: FontWeight.bold,
+                    color: Colors.black87,),
+                    const SizedBox(height: 24,),
+                    _buildExpandedSection(isExpanded: _isTransactionExpanded,
+                     onTap:()=> setState(() {
+                       _isTransactionExpanded=!_isTransactionExpanded;
+                     }),
+                    title: 'Transaction Details',
+                    children: [
+                _buildTransactionCard('Data Pack', 6, 809, 110, 24546, 0, 0),
+                _buildTransactionCard('Electricity', 96, 133986, 328, 72079, 1, 0),
+                _buildTransactionCard('Internet', 8, 13670, 417, 95786, 6, 40122),
+                _buildTransactionCard('TopUp', 1084, 117990, 425, 82956, 84, 6054),
+                _buildTransactionCard('TV', 1, 846, 444, 54886, 2, 0),
+                _buildTransactionCard('Water', 24, 16423, 112, 73677, 2, 3684),
+                _buildTransactionCard('BANK_TRANSFER', 114, 3851498, 420, 213600, 392, 9008839),
+                _buildTransactionCard('QR', 1095, 4036716, 477, 997777, 158, 1141924),
+                _buildTransactionCard('WALLET', 201, 1679092, 495, 508556, 481, 2197637),
+                    ]),
+                      const SizedBox(height: 24,),
                       CustomText(text: 'Transaction Trends',
             fontSize: 20,
             weight: FontWeight.bold,
             color: Colors.black87,
             ),
-            const SizedBox(height: 16,),
+            const SizedBox(height: 24,),
                     _buildLineChartCard('Utility',
                     [25000,30000,35000,40000,45000]),
                     const SizedBox(height: 15,),
                     _buildLineChartCard('DFS(Dr)', [25000,30000,35000,40000,45000]),
                     const SizedBox(height: 15,),
-                    _buildLineChartCard('DFS(Cr)', [25000,30000,35000,40000,45000])
-                   //_lineChartCard()                     
+                    _buildLineChartCard('DFS(Cr)', [25000,30000,35000,40000,45000]),
+                 const SizedBox(height: 24,),
+                 CustomText(text: 'mDabbali Details',
+                 weight: FontWeight.bold,
+                 fontSize: 20,
+                 color: Colors.black87,),
+                 const SizedBox(height: 5,),
+                 Divider(thickness: 2,
+                 color: Colors.black87,
+                 indent: 20,
+                 endIndent: 20,),
+                 const SizedBox(height: 24,),
+                 CustomText(text: 'SMS Summary',
+                 fontSize: 20,
+                 weight: FontWeight.bold,
+                 color: Colors.black87,),
+                 const SizedBox(height: 24,),
+                 _buildExpandedSection(
+                  isExpanded: _isSMSExpanded,
+                   onTap: ()=> setState(() {
+                     _isSMSExpanded=!_isSMSExpanded;
+                   }),
+                    title: 'SMS Details',
+                    children: [
+                      _buildSMSCard(institute: 'Aarjan Saving and Credit Cooperative Limited',
+                       totalUsed: 100, 
+                       rate:'11.13%',
+                      totalAmount: 114,
+                      availableBalance: 500),
+                    ]),
+                      const SizedBox(height: 24,),
+                      CustomText(text: 'mDabbali Summary',
+                      fontSize: 20,
+                      weight: FontWeight.bold,
+                      color: Colors.black87,
+                      ),
+                      const SizedBox(height: 24,),
+                      _buildExpandedSection(
+                        isExpanded: _ismDabbaliExpanded,
+                         onTap: ()=> setState(() {
+                           _ismDabbaliExpanded=!_ismDabbaliExpanded;
+                         }),
+                          title: 'mDabbali Details',
+                           children: [
+                          _buildMDabbaliCard(institute: 'Aarjan Saving and Credit Cooperative',
+                           membersLimit:500,
+                           verifiedUser: 500,
+                            closedUser: 500,
+                             totalUser:500)
+                           ])               
           ],
         ),),
       ),
     );
   }
+
+  Widget _buildExpandedSection({
+    required bool isExpanded,
+    required VoidCallback onTap,
+    required String title,
+    required List<Widget> children,
+  }){
+
+  return Column(
+    children: [
+      InkWell(
+        onTap: onTap,
+        child: Card(
+          color: Colors.white,
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Padding(
+            padding:EdgeInsets.all(16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CustomText(text: title,
+                fontSize: 18,
+                weight: FontWeight.bold,
+                color: Colors.blue[600],),
+                Icon(isExpanded? Icons.expand_less:Icons.expand_more,color: Colors.blue[900],)
+              ],
+            ), ),
+        ),
+      ),
+      AnimatedContainer(
+        duration: Duration(milliseconds: 300),
+        height: isExpanded?children.length * 120.0:0,
+        child: SingleChildScrollView(
+          
+
+          child: Column(
+            children:children,
+          ),
+        ),
+        )
+    ],
+  );
+  }
+}
+Widget _buildSMSCard({
+  required String institute,
+  required  int totalUsed,
+  required String rate,
+  required int totalAmount,
+  required int availableBalance,
+}){
+  return Card(
+elevation: 4,
+color: Colors.white,
+margin: EdgeInsets.symmetric(vertical: 8),
+shape: RoundedRectangleBorder(
+  borderRadius: BorderRadius.circular(12),
+),
+child: Container(
+  decoration: BoxDecoration(
+    gradient: LinearGradient(colors: [
+      Colors.blue[100]!,
+      Colors.blue[300]!,
+    
+    ],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight
+    ),
+    borderRadius: BorderRadius.circular(12),
+  ),
+  child: Column(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      const SizedBox(height: 15,),
+      CustomText(text: institute,fontSize: 16,weight: FontWeight.bold,color: Colors.white,),
+      const SizedBox(height: 12,),
+      Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+          _buildDetails('Total Used',
+           totalUsed,
+            Icons.message,
+             Colors.white),
+             _buildDetails('Rate',
+              rate,
+               Icons.percent,
+                Colors.white),
+                _buildDetails('Total Amount',
+                 totalAmount,
+                  Icons.attach_money,
+                   Colors.white),
+                   _buildDetails('Available Balance',
+                    availableBalance,
+                     Icons.account_balance_wallet_rounded,
+                      Colors.white
+                      )
+      ],
+      )
+    ],
+  ),
+),
+  );
 }
 
+Widget _buildMDabbaliCard({
+  required String institute,
+  required  int  membersLimit,
+  required int verifiedUser,
+  required int closedUser ,
+  required int totalUser,
+}){
+  return Card(
+elevation: 4,
+color: Colors.white,
+margin: EdgeInsets.symmetric(vertical: 8),
+shape: RoundedRectangleBorder(
+  borderRadius: BorderRadius.circular(12),
+),
+child: Container(
+  decoration: BoxDecoration(
+    gradient: LinearGradient(colors: [
+      Colors.blue[100]!,
+      Colors.blue[300]!,
+    
+    ],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight
+    ),
+    borderRadius: BorderRadius.circular(12),
+  ),
+  child: Column(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      const SizedBox(height: 15,),
+      CustomText(text: institute,fontSize: 16,weight: FontWeight.bold,color: Colors.white,),
+      const SizedBox(height: 12,),
+      Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+          _buildDetails('Members Limit',
+           membersLimit,
+            Icons.card_membership,
+             Colors.white),
+             _buildDetails('Verified Users',
+              verifiedUser,
+               Icons.verified_user_sharp,
+                Colors.white),
+                _buildDetails('Closed Users',
+                 closedUser,
+                  Icons.person,
+                   Colors.white),
+                   _buildDetails('Total Users',
+                    totalUser,
+                     Icons.person_2,
+                      Colors.white
+                      )
+      ],
+      )
+    ],
+  ),
+),
+  );
+}
+
+Widget _buildDetails(String label,dynamic value,IconData icon,Color color){
+  return Padding(padding: EdgeInsets.symmetric(vertical: 4,horizontal: 10),
+  child:Row(
+    children: [
+      Icon(icon,color: color,size: 16,),
+      const SizedBox(width: 8,),
+      CustomText(text: '$label: $value',
+      fontSize: 14,
+      color: color,)
+    ],
+  ) ,);
+}
+Widget _buildTransactionCard(
+  String service,
+  int successCount,
+  int successAmount,
+  int pendingCount,
+  int pendingAmount,
+  int failCount,
+  int failAmount
+){
+return Card(
+  elevation: 4,
+  margin: EdgeInsets.symmetric(vertical: 8),
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(12),
+  ),
+  child: Container(
+    decoration: BoxDecoration(
+      gradient: LinearGradient(colors: [
+        Colors.blue[100]!,
+        Colors.blue[300]!
+      ],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight),
+      borderRadius: BorderRadius.circular(12),
+    ),
+    padding: EdgeInsets.all(16),
+    child: Row(
+   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+ CustomText(text: service,fontSize: 16,weight: FontWeight.bold,color: Colors.white,),
+        SizedBox(height: 8,),
+        _buildstat('Success', 
+        successCount,
+         successAmount,
+          Colors.green),
+          _buildstat('Pending', pendingCount, pendingAmount, Colors.orange),
+    _buildstat('Failure', failCount, failAmount, Colors.red),
+          ],
+        ),
+       
+      Icon(Icons.trending_up,color: Colors.white,size: 30,)
+
+      ],
+    ),
+  ),
+
+);
+}
+Widget _buildstat(String label, int count,int amount,Color color){
+  return Padding(padding: EdgeInsets.symmetric(vertical: 4),
+  child: Row(
+    children: [
+      Icon(Icons.circle,color: color,size: 10,),
+      const SizedBox(width: 4,),
+      CustomText(text: '$label: $count ($amount)',
+      fontSize: 14,
+      color: Colors.white,)
+    ],
+  ),);
+}
 Widget _buildSummaryItem({
 required String title,
 required String amount,
@@ -237,11 +558,13 @@ Widget _buildLineChartCard(String title,List<double> dataPoints){
     child: Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-     
-              CustomText(text: title,
-              fontSize: 16,
-              weight: FontWeight.bold,
-              color: Colors.blue[600],),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: CustomText(text: title,
+                fontSize: 16,
+                weight: FontWeight.bold,
+                color: Colors.blue[600],),
+              ),
               const SizedBox(height: 8,),
               Container(
                 height: 200,
@@ -335,67 +658,6 @@ Widget _buildLineChartCard(String title,List<double> dataPoints){
   );
 }
 
-Widget _lineChartCard(){
-  return   Container(
-    width: double.maxFinite,
-    child: Card(
-      elevation: 6,
-      child: Padding(
-        padding:EdgeInsets.symmetric(vertical: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CustomText(text: 'Transaction Trends',
-            fontSize: 20,
-            weight: FontWeight.bold,
-            color: Colors.black87,
-            ),
-            const SizedBox(height: 16,),
-    
-            SizedBox(
-              height: 300,
-              child: LineChart(
-                LineChartData(
-                  gridData: FlGridData(show: true),
-                  titlesData: FlTitlesData(
-                    leftTitles: AxisTitles(
-                      sideTitles: SideTitles(showTitles: false,),
-                    ),
-                    bottomTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        getTitlesWidget: (value, meta) {
-                          const titles=['Baisakh','Jestha','Asar','Shrawan'];
-                          if(value.toInt()<titles.length){
-                            return CustomText(text: titles[value.toInt()],);
-                          }
-                          return  CustomText(text: '');
-                        },
-                      )
-                    ),
-                  ),
-                  lineBarsData:[
-                    LineChartBarData(
-                      spots: const[
-                        FlSpot(0, 38000),
-                        FlSpot(1, 42000),
-                        FlSpot(2, 40000),
-                        FlSpot(3, 408.90)
-                      ],
-                      isCurved: true,
-                      color: Colors.blue[200]
-                    )
-                  ]
-    
-              ),
-            ))
-          ],
-        ),),
-        
-    ),
-  );
-}
-
 class _PieChartCard extends StatefulWidget {
  const _PieChartCard({super.key});
 
@@ -415,14 +677,11 @@ class __PieChartCardState extends State<_PieChartCard> {
         child:Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-               CustomText(text: 'At a Glance',
-                  fontSize: 20,
-                  weight: FontWeight.bold,
-                  color: Colors.black87,),
-                  const SizedBox(height: 10,),
+              const SizedBox(height: 10,),
              CustomText(text: 'Summary of successful transactions',
             color: Colors.grey[600],
             weight: FontWeight.bold,),
+            const SizedBox(height: 24,),
             Row(
               children: [
                
@@ -576,17 +835,13 @@ class __PieChartCardState extends State<_PieChartCard> {
 }
 
 Widget _buildIndicator({required Color color,required String text}){
-  return Card(
-    elevation: 5,
-    color: Colors.white,
-    child: Row(
-      children: [
-        Container(width: 16,height: 16,
-        color: color,),
-        const SizedBox(width: 8,),
-        CustomText(text: text,fontSize: 14,color: Colors.black87,)
-      ],
-    ),
+  return Row(
+    children: [
+      Container(width: 16,height: 16,
+      color: color,),
+      const SizedBox(width: 8,),
+      CustomText(text: text,fontSize: 14,color: Colors.black87,)
+    ],
   );
 }
 }

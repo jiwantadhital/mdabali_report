@@ -109,6 +109,9 @@ class LoginPage extends StatelessWidget {
                     else if(value.length<10){
                       return 'Number should be of 10 digit';
                     }
+                    else if(value.length>10){
+                      return 'Number should not exceed 10 digit';
+                    }
                   }
                 ),
             
@@ -143,7 +146,7 @@ class LoginPage extends StatelessWidget {
                   
                   onPress: (){
                     if(_formKey.currentState?.validate()?? false){
-                    Get.to(PasswordLoginPage());}
+                    Get.to(()=>PasswordLoginPage() );}
                   },
                   color: Colors.blue,
                   text: 'Continue',

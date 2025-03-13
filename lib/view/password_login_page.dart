@@ -129,7 +129,7 @@ class PasswordLoginPage extends StatelessWidget {
                 LoginButton(
                   onPress: (){
                    if(_formKey.currentState?.validate()??false){
-                     Get.to(DashBoardPage());
+                     Get.to(()=>DashBoardPage());
                    }
                   },
                   color: Colors.blue,

@@ -44,9 +44,10 @@ class _DashBoardPageState extends State<DashBoardPage> {
         elevation: 0,
         automaticallyImplyLeading: false,
         backgroundColor: Colors.grey[100],
-        title: CustomText(text: 'm Dabbali Next Gen Report ',
+        title: CustomText(text: 'mDabbali Next Gen Report ',
         fontSize: 18,
-        color: Colors.blue,),
+        color: Colors.blue,
+        weight: FontWeight.w400,),
         centerTitle: true,
       ),
       backgroundColor: Colors.grey[100],
@@ -237,8 +238,8 @@ class _DashBoardPageState extends State<DashBoardPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
           Container(
-            width: 50,
-            height: 50,
+            width: 30,
+            height: 30,
             decoration: BoxDecoration(
               color: Colors.blue[200],
               borderRadius:BorderRadius.circular(8) 
@@ -247,10 +248,10 @@ class _DashBoardPageState extends State<DashBoardPage> {
               child:Image.asset('assets/images/arjan_logo.jpeg')
             ),
           ),
-          const SizedBox(width: 12,),
+          const SizedBox(width:5,),
            CustomText(text:'Arjan saving and credit cooperative',
            fontSize: 20,
-           weight: FontWeight.bold,),
+           weight: FontWeight.w600,),
            const SizedBox(height: 24,),
          
                  
@@ -258,7 +259,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
         ],),
           CustomText(text: 'All your transaction details',
                       fontSize: 18,
-                      weight:FontWeight.bold,
+                      weight:FontWeight.w600,
                       color: Colors.black87,),
          const SizedBox(height: 24,),
                
@@ -298,7 +299,6 @@ class _DashBoardPageState extends State<DashBoardPage> {
                                   change: '+33% month over month',
                                   isPositive: true,
                                   changeColor: Colors.green),
-                                  const SizedBox(height: 10,),
                         ],
                       ),),
                   ),
@@ -319,7 +319,6 @@ class _DashBoardPageState extends State<DashBoardPage> {
                                   change: '-10% month over month',
                                   isPositive: true,
                                   changeColor: Colors.red),
-                                  const SizedBox(height: 10,),
                                 
                         ],
                       ),),
@@ -355,7 +354,7 @@ Widget _buildBottomNavBar(){
           label: 'Transaction'),
           BottomNavigationBarItem(
           icon: Icon(Icons.message),
-          label: 'Message'),
+          label: 'SMS'),
           BottomNavigationBarItem(
             icon: Icon(Icons.people),
             label: 'mDabbali')
@@ -379,9 +378,13 @@ Widget _buildTransactionPage(){
         const SizedBox(height: 16,),
         _buildLineChartCard('Utiliy', [20000,25000,30000,35000,40000,45000]),
         const SizedBox(height: 24,),
+          _buildLineChartCard('DFS(Dr)', [25000,30000,35000,40000,45000]),
+                   const SizedBox(height: 24,),
+               _buildLineChartCard('DFS(Cr)', [25000,30000,35000,40000,45000]),
+               const SizedBox(height: 24,),
           CustomText(text: 'Transaction Summary',
         fontSize: 20,
-        weight: FontWeight.bold,),
+        weight: FontWeight.w600,),
         _buildTransactionList(),
              
         const SizedBox(height: 24,),
@@ -395,7 +398,7 @@ Widget _buildTransactionPage(){
 }
 Widget _buildSMSPage(){
   return SingleChildScrollView(
-    child: Padding(padding: EdgeInsets.all(26),
+    child: Padding(padding: EdgeInsets.all(16),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -403,9 +406,9 @@ Widget _buildSMSPage(){
         const SizedBox(height: 24,),
         CustomText(text: 'SMS Summary',
         fontSize: 20,
-        weight: FontWeight.bold,),
+        weight: FontWeight.w600,),
         const SizedBox(height: 16,),
-         _buildSMSCard(institute: 'Aarjan Saving and Credit Cooperative Limited',
+         _buildSMSCard(institute: 'Aarjan Saving and Credit Cooperative',
                        totalUsed: 100, 
                        rate:'11.13%',
                       totalAmount: 114,
@@ -424,7 +427,7 @@ Widget _buildMDabbaliPage(){
         const SizedBox(height: 24,),
         CustomText(text: 'mDabbali Summary',
         fontSize: 20,
-        weight: FontWeight.bold,),
+        weight: FontWeight.w600,),
         const SizedBox(height: 16,),
           _buildMDabbaliCard(institute: 'Aarjan Saving and Credit Cooperative',
                            membersLimit:500,
@@ -452,51 +455,51 @@ Widget _buildTransactionList(){
       ],
   );
 }
-  Widget _buildExpandedSection({
-    required bool isExpanded,
-    required VoidCallback onTap,
-    required String title,
-    required List<Widget> children,
-  }){
+//   Widget _buildExpandedSection({
+//     required bool isExpanded,
+//     required VoidCallback onTap,
+//     required String title,
+//     required List<Widget> children,
+//   }){
 
-  return Column(
-    children: [
-      InkWell(
-        onTap: onTap,
-        child: Card(
-          color: Colors.white,
-          elevation: 4,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Padding(
-            padding:EdgeInsets.all(16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CustomText(text: title,
-                fontSize: 18,
-                weight: FontWeight.bold,
-                color: Colors.blue[600],),
-                Icon(isExpanded? Icons.expand_less:Icons.expand_more,color: Colors.blue[900],)
-              ],
-            ), ),
-        ),
-      ),
-      AnimatedContainer(
-        duration: Duration(milliseconds: 300),
-        height: isExpanded?children.length * 150:0,
-        child: SingleChildScrollView(
-          physics: NeverScrollableScrollPhysics(),
-          child: Column(
-                      children:children,
-                    ),
-        ),
-        )
-    ],
-  );
-  }
-}
+//   return Column(
+//     children: [
+//       InkWell(
+//         onTap: onTap,
+//         child: Card(
+//           color: Colors.white,
+//           elevation: 4,
+//           shape: RoundedRectangleBorder(
+//             borderRadius: BorderRadius.circular(12),
+//           ),
+//           child: Padding(
+//             padding:EdgeInsets.all(16),
+//             child: Row(
+//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//               children: [
+//                 CustomText(text: title,
+//                 fontSize: 18,
+//                 weight: FontWeight.bold,
+//                 color: Colors.blue[600],),
+//                 Icon(isExpanded? Icons.expand_less:Icons.expand_more,color: Colors.blue[900],)
+//               ],
+//             ), ),
+//         ),
+//       ),
+//       AnimatedContainer(
+//         duration: Duration(milliseconds: 300),
+//         height: isExpanded?children.length * 150:0,
+//         child: SingleChildScrollView(
+//           physics: NeverScrollableScrollPhysics(),
+//           child: Column(
+//                       children:children,
+//                     ),
+//         ),
+//         )
+//     ],
+//   );
+//   }
+// }
 Widget _buildSMSCard({
   required String institute,
   required  int totalUsed,
@@ -514,9 +517,11 @@ shape: RoundedRectangleBorder(
 child: Container(
   decoration: BoxDecoration(
     gradient: LinearGradient(colors: [
-    
-    Colors.blue[700]!,
-        Colors.blue[400]!,
+
+   Colors.blue[400]!,
+       Colors.tealAccent,
+        Colors.blue[300]!,
+        //Colors.blue[400]!,
     
     ],
     begin: Alignment.topLeft,
@@ -575,8 +580,10 @@ shape: RoundedRectangleBorder(
 child: Container(
   decoration: BoxDecoration(
     gradient: LinearGradient(colors: [
-      Colors.blue[700]!,
-        Colors.blue[400]!,
+      Colors.blue[400]!,
+       Colors.tealAccent,
+        Colors.blue[300]!,
+       // Colors.blue[400]!,
     
     ],
     begin: Alignment.topLeft,
@@ -648,8 +655,10 @@ return Card(
   child: Container(
     decoration: BoxDecoration(
       gradient: LinearGradient(colors: [
-        Colors.blue[700]!,
         Colors.blue[400]!,
+         Colors.tealAccent,
+         Colors.blue[300]!,
+       // Colors.blue[400]!,
       ],
       begin: Alignment.topLeft,
       end: Alignment.bottomRight),
@@ -673,7 +682,7 @@ return Card(
           ],
         ),
        
-      Icon(Icons.trending_up,color: Colors.white,size: 30,)
+      // Icon(Icons.trending_up,color: Colors.white,size: 30,)
 
       ],
     ),
@@ -728,111 +737,133 @@ required Color changeColor,}){
 }
 Widget _buildLineChartCard(String title,List<double> dataPoints){
   return Card(
-    elevation: 6,
+    elevation: 4,
     color: Colors.white,
-    child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: CustomText(text: title,
-                fontSize: 16,
-                weight: FontWeight.bold,
-                color: Colors.blue[600],),
-              ),
-              const SizedBox(height: 8,),
-              Container(
-                height: 200,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: LineChart(
-                    LineChartData(
-                      gridData: FlGridData(show: true),
-                      titlesData: FlTitlesData(
-                        leftTitles: AxisTitles(
-                          sideTitles: SideTitles(showTitles: true,
-                          getTitlesWidget: (value, meta) {
-                            switch(value.toInt()){
-                              case 0:
-                              return CustomText(text: '0');
-                              case 1:
-                              return CustomText(text: '20k');
-                              case 2:
-                              return CustomText(text: '30k');
-                              case 3:
-                              return CustomText(text: '4ok');
-                              case 4:
-                              return CustomText(text: '50k');
-                              default:
-                              return CustomText(text: '');
-                            }
-                          },),
-                        
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(16)
+    ),
+    child: Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: CustomText(text: title,
+                  fontSize: 16,
+                  weight: FontWeight.bold,
+                  color: Colors.blue[600],),
+                ),
+                const SizedBox(height: 8,),
+                Container(
+                  height: 200,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: LineChart(
+                      LineChartData(
+                        gridData: FlGridData(
+                        show: true,
+                        drawVerticalLine: false,
+                        drawHorizontalLine: true,
+                        horizontalInterval: 5000,
+                        getDrawingHorizontalLine: (value){
+                          return FlLine(
+                            color: Colors.grey.withOpacity(0.2),
+                            strokeWidth: 1,
+                          );
+                        }
                         ),
-                        bottomTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                            showTitles: false,
+                        titlesData: FlTitlesData(
+                          leftTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                            interval: 10000,
+                            reservedSize: 100,
                             getTitlesWidget: (value, meta) {
-                              switch(value.toInt()){
-                                case 0:
-                                return CustomText(text: 'Poush',
-                                color: Colors.blue[600],);
-                                case 1:
-                                return CustomText(text: 'Magh',
-                                color: Colors.blue[600],);
-                                case 2:
-                                return CustomText(text: 'Falgun',
-                                color: Colors.blue[600],);
-                                case 3:
-                                return CustomText(text: 'Chaitra',
-                                color: Colors.blue[600],);
-                                default:
-                               return CustomText(text: '');
-                              }
-                            },
-                          ),
-                        ),
-                        rightTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                            showTitles: false,
+                             return Padding(padding: EdgeInsets.only(right:0),
+                             child: CustomText(text: 'Rs${value.toInt().toString()}',
+                             fontSize: 12,
+                             color: Colors.grey,),);
+                            },),
                           
                           ),
-                        ),
-                        topTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                            showTitles: false,
-                          )
-                        ),
-                      ),
-                      borderData: FlBorderData(show: true,
-                      ),
-                      minX: 0,
-                      maxX: 4,
-                      minY: 0,
-                      maxY: 55000,
-                      lineBarsData: [
-                        LineChartBarData(
-                          spots: [
-                            FlSpot(0, dataPoints[0]),
-                            FlSpot(1, dataPoints[1]),
-                            FlSpot(2, dataPoints[2]),
-                            FlSpot(3, dataPoints[3]),
-                            FlSpot(4, dataPoints[4]),
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              getTitlesWidget: (value, meta) {
+                                switch(value.toInt()){
+                                  case 0:
+                                  return 
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 8),
+                                    child: CustomText(text: 'Poush',
+                                    color: Colors.blue[600],),
+                                  );
+                                  case 1:
+                                  return Padding(
+                                    padding: const EdgeInsets.only(top: 8),
+                                    child: CustomText(text: 'Magh',
+                                    color: Colors.blue[600],),
+                                  );
+                                  case 2:
+                                  return Padding(
+                                    padding: const EdgeInsets.only(top: 8),
+                                    child: CustomText(text: 'Falgun',
+                                    color: Colors.blue[600],),
+                                  );
+                                  case 3:
+                                  return Padding(
+                                    padding: const EdgeInsets.only(top:8 ),
+                                    child: CustomText(text: 'Chaitra',
+                                    color: Colors.blue[600],),
+                                  );
+                                  default:
+                                 return CustomText(text: '');
+                                }}
+                            ),
+                          ),
+                          rightTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: false,
                             
-                      ],
-                    isCurved: true,
-                    color: Colors.blue[600],
-                    dotData: FlDotData(show: true)
-                    ),
-                      ]),
-                                ),
-                ),)
-    
-    ],
+                            ),
+                          ),
+                          topTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: false,
+                            )
+                          ),
+                        ),
+                        borderData: FlBorderData(show: true,
+                        ),
+                        minX: 0,
+                        maxX: 4,
+                        minY: 0,
+                        maxY: 50000,
+                        lineBarsData: [
+                          LineChartBarData(
+                            spots: [
+                              FlSpot(0, dataPoints[0]),
+                              FlSpot(1, dataPoints[1]),
+                              FlSpot(2, dataPoints[2]),
+                              FlSpot(3, dataPoints[3]),
+                              FlSpot(4, dataPoints[4]),
+                              
+                        ],
+                      isCurved: true,
+                      color: Colors.blue[600],
+                      dotData: FlDotData(show: true)
+                      ),
+                        ]),
+                                  ),
+                  ),)
+      
+      ],
+      ),
     ),
   );
 }
-
+}
 class _PieChartCard extends StatefulWidget {
  const _PieChartCard({super.key});
 

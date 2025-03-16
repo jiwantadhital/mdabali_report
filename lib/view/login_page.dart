@@ -99,6 +99,7 @@ class LoginPage extends StatelessWidget {
                 CustomTextField(
                   hintText: 'Phone Number',
                   controller: _numberController,
+                  maxLength: 10,
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                   keyboardType: TextInputType.phone,
@@ -111,6 +112,9 @@ class LoginPage extends StatelessWidget {
                     }
                     else if(value.length>10){
                       return 'Number should not exceed 10 digit';
+                    }
+                    else if(value[0]!='9'){
+                      return 'Initial should start from 9';
                     }
                   }
                 ),

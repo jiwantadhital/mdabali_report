@@ -15,16 +15,15 @@ class DashBoardPage extends StatefulWidget {
 }
 
 class _DashBoardPageState extends State<DashBoardPage> {
-   bool _isTransactionExpanded=false;
-   bool _isSMSExpanded=false;
-   bool _ismDabbaliExpanded=false;
   int _selectedIndex=0;
   late final List<Widget> _pages;
 
   @override
   void initState() {
     // TODO: implement initState
-    _pages=[_buildTransactionPage(),
+    _pages=[
+      _buildHomePage(),
+      _buildTransactionPage(),
     _buildSMSPage(),
     _buildMDabbaliPage()];
     super.initState();
@@ -38,18 +37,52 @@ class _DashBoardPageState extends State<DashBoardPage> {
         'Shrawan'
     ];
     String dropDownValue='Baisakh';
+
+    List<String> Appbar=[
+      'mDabbali Next Gen Report',
+      'Transaction Summary',
+      'SMS Summary',
+      'mDabbali Summary'
+    ];
     return Scaffold(
-      appBar: AppBar(
+      appBar:_selectedIndex==0?  AppBar(
         surfaceTintColor: Colors.grey[100],
         elevation: 0,
         automaticallyImplyLeading: false,
         backgroundColor: Colors.grey[100],
-        title: CustomText(text: 'mDabbali Next Gen Report ',
+        title:CustomText(text: 'mDabbali Next Gen Report ',
         fontSize: 18,
         color: Colors.blue,
-        weight: FontWeight.w400,),
+        weight: FontWeight.bold,),
         centerTitle: true,
-      ),
+      ):_selectedIndex==1?AppBar(
+        surfaceTintColor: Colors.grey[100],
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.grey[100],
+        title:CustomText(text: Appbar[1],
+        fontSize: 18,
+        color: Colors.blue,
+        weight: FontWeight.bold,),
+        centerTitle: true,):_selectedIndex==2?AppBar(
+        surfaceTintColor: Colors.grey[100],
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.grey[100],
+        title:CustomText(text: Appbar[2],
+        fontSize: 18,
+        color: Colors.blue,
+        weight: FontWeight.bold,),
+        centerTitle: true,):AppBar(
+        surfaceTintColor: Colors.grey[100],
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.grey[100],
+        title:CustomText(text: Appbar[3],
+        fontSize: 18,
+        color: Colors.blue,
+        weight: FontWeight.bold,),
+        centerTitle: true,),
       backgroundColor: Colors.grey[100],
       body: AnimatedSwitcher(
         duration: const Duration(microseconds: 300),
@@ -59,210 +92,13 @@ class _DashBoardPageState extends State<DashBoardPage> {
          child: _pages[_selectedIndex],
          ),
          bottomNavigationBar: _buildBottomNavBar(),
-      // body: SingleChildScrollView(
-      //   child: Padding(
-      //    padding: EdgeInsets.all(16),
-      //   child: Column(
-      //     children: [
-      //       Row(mainAxisAlignment: MainAxisAlignment.end,
-      //       children: [
-      //        Container(
-      //         width: 100,
-      //         decoration: BoxDecoration(
-      //           color: Colors.grey[100],
-      //           borderRadius: BorderRadius.circular(13)
-      //         ),
-      //          child: DropdownButton(
-      //           focusColor: Colors.grey[100],
-      //           value: dropDownValue,
-      //           items: months.map((String months){
-      //             return DropdownMenuItem<String>(
-      //               value: months,
-      //               child:CustomText(text: months));
-      //           }).toList(),
-      //           onChanged:(String ? value){
-      //             setState(() {
-      //               dropDownValue= value!;
-      //             });
-      //           },
-      //           selectedItemBuilder:(BuildContext context){
-      //             return months.map((String value){
-      //               return Align(
-      //                 alignment: Alignment.centerLeft,
-      //                 child: CustomText(text: dropDownValue)
-      //                 ,
-      //               );
-      //             }).toList();
-      //          },
-      //           underline: const SizedBox(),
-      //           isExpanded: true,
-      //           dropdownColor: Colors.grey[100],
-      //           icon: Icon(Icons.keyboard_arrow_down,color: Colors.black,),
-      //           ),
-      //        )
-      //       ],),
-      //       Row(
-      //         children: [
-                
-      //           Container(
-      //             width: 50,
-      //             height: 50,
-      //             decoration: BoxDecoration(
-      //               color: Colors.blue[200],
-      //               borderRadius: BorderRadius.circular(8),
-      //             ),
-      //             child: Center(
-      //               child: Image.asset(ImagesConstants.arjnaLogo,scale: 1,)),
-      //           ),
-      //           const SizedBox(width: 12,),
-      //           Expanded(
-      //             child:Column(
-      //               crossAxisAlignment: CrossAxisAlignment.start,
-      //               children: [
-      //                 CustomText(text: 'Arjan Saving and Credit cooperative',
-      //                 fontSize: 20,
-      //                 weight:FontWeight.bold,
-      //                 color: Colors.black87,),
-                   
-      //                 ],
-      //             )),
-                  
-                 
-      //         ],
-      //       ),
-                  
-                
-                  
-      //               const SizedBox(height: 24,),
-      //              CustomText(text: 'At a Glance',
-                   
-      //             fontSize: 20,
-      //             weight: FontWeight.bold,
-      //             color: Colors.black87,),
-      //             const SizedBox(height: 10,),
-      //               const SizedBox(height: 24,),
-      //              _PieChartCard(),
-      //                 const SizedBox(height: 24,),
-      //               CustomText(text: 'Transaction Summary',fontSize: 20,weight: FontWeight.bold,
-      //               color: Colors.black87,),
-      //               const SizedBox(height: 24,),
-      //               _buildExpandedSection(isExpanded: _isTransactionExpanded,
-      //                onTap:()=> setState(() {
-      //                  _isTransactionExpanded=!_isTransactionExpanded;
-      //                }),
-      //               title: 'Transaction Details',
-      //               children: [
-      //           _buildTransactionCard('Data Pack', 6, 809, 110, 24546, 0, 0),
-      //           _buildTransactionCard('Electricity', 96, 133986, 328, 72079, 1, 0),
-      //           _buildTransactionCard('Internet', 8, 13670, 417, 95786, 6, 40122),
-      //           _buildTransactionCard('TopUp', 1084, 117990, 425, 82956, 84, 6054),
-      //           _buildTransactionCard('TV', 1, 846, 444, 54886, 2, 0),
-      //           _buildTransactionCard('Water', 24, 16423, 112, 73677, 2, 3684),
-      //           _buildTransactionCard('BANK_TRANSFER', 114, 3851498, 420, 213600, 392, 9008839),
-      //           _buildTransactionCard('QR', 1095, 4036716, 477, 997777, 158, 1141924),
-      //           _buildTransactionCard('WALLET', 201, 1679092, 495, 508556, 481, 2197637),
-      //               ]),
-      //                 const SizedBox(height: 24,),
-      //                 CustomText(text: 'Transaction Trends',
-      //       fontSize: 20,
-      //       weight: FontWeight.bold,
-      //       color: Colors.black87,
-      //       ),
-      //       const SizedBox(height: 24,),
-      //               _buildLineChartCard('Utility',
-      //               [25000,30000,35000,40000,45000]),
-      //               const SizedBox(height: 15,),
-      //               _buildLineChartCard('DFS(Dr)', [25000,30000,35000,40000,45000]),
-      //               const SizedBox(height: 15,),
-      //               _buildLineChartCard('DFS(Cr)', [25000,30000,35000,40000,45000]),
-      //            const SizedBox(height: 24,),
-      //            CustomText(text: 'mDabbali Details',
-      //            weight: FontWeight.bold,
-      //            fontSize: 20,
-      //            color: Colors.black87,),
-      //            const SizedBox(height: 5,),
-      //            Divider(thickness: 2,
-      //            color: Colors.black87,
-      //            indent: 20,
-      //            endIndent: 20,),
-      //            const SizedBox(height: 24,),
-      //            CustomText(text: 'SMS Summary',
-      //            fontSize: 20,
-      //            weight: FontWeight.bold,
-      //            color: Colors.black87,),
-      //            const SizedBox(height: 24,),
-      //            _buildExpandedSection(
-      //             isExpanded: _isSMSExpanded,
-      //              onTap: ()=> setState(() {
-      //                _isSMSExpanded=!_isSMSExpanded;
-      //              }),
-      //               title: 'SMS Details',
-      //               children: [
-      //                 _buildSMSCard(institute: 'Aarjan Saving and Credit Cooperative Limited',
-      //                  totalUsed: 100, 
-      //                  rate:'11.13%',
-      //                 totalAmount: 114,
-      //                 availableBalance: 500),
-      //               ]),
-      //                 const SizedBox(height: 24,),
-      //                 CustomText(text: 'mDabbali Summary',
-      //                 fontSize: 20,
-      //                 weight: FontWeight.bold,
-      //                 color: Colors.black87,
-      //                 ),
-      //                 const SizedBox(height: 24,),
-      //                 _buildExpandedSection(
-      //                   isExpanded: _ismDabbaliExpanded,
-      //                    onTap: ()=> setState(() {
-      //                      _ismDabbaliExpanded=!_ismDabbaliExpanded;
-      //                    }),
-      //                     title: 'mDabbali Details',
-      //                      children: [
-      //                     _buildMDabbaliCard(institute: 'Aarjan Saving and Credit Cooperative',
-      //                      membersLimit:500,
-      //                      verifiedUser: 500,
-      //                       closedUser: 500,
-      //                        totalUser:500)
-      //                      ])               
-      //     ],
-      //   ),),
-      // ),
+ 
     );
   }
 
  Widget _buildHeaderSection(){
   return Column(
       children: [
-
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-          Container(
-            width: 30,
-            height: 30,
-            decoration: BoxDecoration(
-              color: Colors.blue[200],
-              borderRadius:BorderRadius.circular(8) 
-            ),
-            child:  Center(
-              child:Image.asset('assets/images/arjan_logo.jpeg')
-            ),
-          ),
-          const SizedBox(width:5,),
-           CustomText(text:'Arjan saving and credit cooperative',
-           fontSize: 20,
-           weight: FontWeight.w600,),
-           const SizedBox(height: 24,),
-         
-                 
-                  
-        ],),
-          CustomText(text: 'All your transaction details',
-                      fontSize: 18,
-                      weight:FontWeight.w600,
-                      color: Colors.black87,),
-         const SizedBox(height: 24,),
-               
                   Card(
                     elevation: 2,
                     color: Colors.white,
@@ -349,6 +185,8 @@ Widget _buildBottomNavBar(){
       showSelectedLabels: true,
       type: BottomNavigationBarType.fixed,
       items:const [
+        BottomNavigationBarItem(icon: Icon(Icons.home),
+        label: 'HomePage'),
         BottomNavigationBarItem(
           icon: Icon(Icons.swap_horiz),
           label: 'Transaction'),
@@ -361,13 +199,43 @@ Widget _buildBottomNavBar(){
       ]),
   );
 }
-Widget _buildTransactionPage(){
+Widget _buildHomePage(){
   return SingleChildScrollView(
     child: Padding(padding: EdgeInsets.all(16),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildHeaderSection(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+          Container(
+            width: 30,
+            height: 30,
+            decoration: BoxDecoration(
+              color: Colors.blue[200],
+              borderRadius:BorderRadius.circular(8) 
+            ),
+            child:  Center(
+              child:Image.asset('assets/images/arjan_logo.jpeg')
+            ),
+          ),
+          const SizedBox(width:5,),
+           CustomText(text:'Arjan saving and credit cooperative',
+           fontSize: 20,
+           weight: FontWeight.w600,),
+           const SizedBox(height: 24,),
+         
+                 
+                  
+        ],),
+          Center(
+            child: CustomText(text: 'All your transaction details',
+                        fontSize: 18,
+                        weight:FontWeight.w600,
+                        color: Colors.black87,),
+          ),
+         const SizedBox(height: 24,),
+           _buildHeaderSection(),
         const SizedBox(height: 24,),
       
            _PieChartCard(),
@@ -376,12 +244,25 @@ Widget _buildTransactionPage(){
         fontSize: 20,
         weight: FontWeight.bold,),
         const SizedBox(height: 16,),
-        _buildLineChartCard('Utiliy', [20000,25000,30000,35000,40000,45000]),
+        _buildLineChartCard('Utility', [20000,25000,30000,35000,40000,45000]),
         const SizedBox(height: 24,),
           _buildLineChartCard('DFS(Dr)', [25000,30000,35000,40000,45000]),
                    const SizedBox(height: 24,),
                _buildLineChartCard('DFS(Cr)', [25000,30000,35000,40000,45000]),
                const SizedBox(height: 24,),
+
+      ],
+    ),),
+  );
+}
+Widget _buildTransactionPage(){
+  return SingleChildScrollView(
+    child: Padding(padding: EdgeInsets.all(16),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+             _buildHeaderSection(),
+        const SizedBox(height: 24,),
           CustomText(text: 'Transaction Summary',
         fontSize: 20,
         weight: FontWeight.w600,),
@@ -449,57 +330,12 @@ Widget _buildTransactionList(){
                 _buildTransactionCard('TopUp', 1084, 117990, 425, 82956, 84, 6054),
                 _buildTransactionCard('TV', 1, 846, 444, 54886, 2, 0),
                 _buildTransactionCard('Water', 24, 16423, 112, 73677, 2, 3684),
-                _buildTransactionCard('BANK_TRANSFER', 114, 3851498, 420, 213600, 392, 9008839),
+                _buildTransactionCard('Bank_Transfer', 114, 3851498, 420, 213600, 392, 9008839),
                 _buildTransactionCard('QR', 1095, 4036716, 477, 997777, 158, 1141924),
-                _buildTransactionCard('WALLET', 201, 1679092, 495, 508556, 481, 2197637),
+                _buildTransactionCard('Wallet', 201, 1679092, 495, 508556, 481, 2197637),
       ],
   );
 }
-//   Widget _buildExpandedSection({
-//     required bool isExpanded,
-//     required VoidCallback onTap,
-//     required String title,
-//     required List<Widget> children,
-//   }){
-
-//   return Column(
-//     children: [
-//       InkWell(
-//         onTap: onTap,
-//         child: Card(
-//           color: Colors.white,
-//           elevation: 4,
-//           shape: RoundedRectangleBorder(
-//             borderRadius: BorderRadius.circular(12),
-//           ),
-//           child: Padding(
-//             padding:EdgeInsets.all(16),
-//             child: Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//               children: [
-//                 CustomText(text: title,
-//                 fontSize: 18,
-//                 weight: FontWeight.bold,
-//                 color: Colors.blue[600],),
-//                 Icon(isExpanded? Icons.expand_less:Icons.expand_more,color: Colors.blue[900],)
-//               ],
-//             ), ),
-//         ),
-//       ),
-//       AnimatedContainer(
-//         duration: Duration(milliseconds: 300),
-//         height: isExpanded?children.length * 150:0,
-//         child: SingleChildScrollView(
-//           physics: NeverScrollableScrollPhysics(),
-//           child: Column(
-//                       children:children,
-//                     ),
-//         ),
-//         )
-//     ],
-//   );
-//   }
-// }
 Widget _buildSMSCard({
   required String institute,
   required  int totalUsed,
@@ -518,9 +354,10 @@ child: Container(
   decoration: BoxDecoration(
     gradient: LinearGradient(colors: [
 
-   Colors.blue[400]!,
-       Colors.tealAccent,
-        Colors.blue[300]!,
+  Colors.blue[500]!,
+       
+        const Color.fromARGB(255, 129, 193, 245),
+
         //Colors.blue[400]!,
     
     ],
@@ -554,7 +391,8 @@ child: Container(
                     availableBalance,
                      Icons.account_balance_wallet_rounded,
                       Colors.white
-                      )
+                      ),
+                      const SizedBox(height:12),
       ],
       )
     ],
@@ -580,10 +418,9 @@ shape: RoundedRectangleBorder(
 child: Container(
   decoration: BoxDecoration(
     gradient: LinearGradient(colors: [
-      Colors.blue[400]!,
-       Colors.tealAccent,
-        Colors.blue[300]!,
-       // Colors.blue[400]!,
+      Colors.blue[500]!,
+       
+        const Color.fromARGB(255, 129, 193, 245),
     
     ],
     begin: Alignment.topLeft,
@@ -616,7 +453,8 @@ child: Container(
                     totalUser,
                      Icons.person_2,
                       Colors.white
-                      )
+                      ),
+                      const SizedBox(height: 12,)
       ],
       )
     ],
@@ -655,10 +493,12 @@ return Card(
   child: Container(
     decoration: BoxDecoration(
       gradient: LinearGradient(colors: [
-        Colors.blue[400]!,
-         Colors.tealAccent,
-         Colors.blue[300]!,
-       // Colors.blue[400]!,
+    
+        Colors.blue[600]!,
+      //  const Color.fromARGB(255, 129, 193, 245),
+        Colors.blue[300]!
+       
+    
       ],
       begin: Alignment.topLeft,
       end: Alignment.bottomRight),
@@ -778,7 +618,7 @@ Widget _buildLineChartCard(String title,List<double> dataPoints){
                             sideTitles: SideTitles(
                               showTitles: true,
                             interval: 10000,
-                            reservedSize: 100,
+                            reservedSize:70,
                             getTitlesWidget: (value, meta) {
                              return Padding(padding: EdgeInsets.only(right:0),
                              child: CustomText(text: 'Rs${value.toInt().toString()}',
@@ -790,6 +630,7 @@ Widget _buildLineChartCard(String title,List<double> dataPoints){
                           bottomTitles: AxisTitles(
                             sideTitles: SideTitles(
                               showTitles: true,
+                              interval:1,
                               getTitlesWidget: (value, meta) {
                                 switch(value.toInt()){
                                   case 0:
@@ -864,6 +705,9 @@ Widget _buildLineChartCard(String title,List<double> dataPoints){
   );
 }
 }
+
+
+
 class _PieChartCard extends StatefulWidget {
  const _PieChartCard({super.key});
 

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,6 +8,8 @@ import 'package:mdabali_report/view/extracted_widgets/custom_text.dart';
 import 'package:path/path.dart';
 
 import '../resources/images_constants.dart';
+import 'homepage/charts/line_chart_card.dart';
+import 'homepage/charts/pie_chart_card.dart';
 
 class DashBoardPage extends StatefulWidget {
    DashBoardPage({super.key});
@@ -506,17 +510,17 @@ Widget _buildHomePage(){
            _buildHeaderSection(),
         const SizedBox(height: 24,),
       
-           _PieChartCard(),
+           PieChartCard(),
               const SizedBox(height: 24,),
                CustomText(text: 'Transaction Trends',
         fontSize: 20,
         weight: FontWeight.bold,),
         const SizedBox(height: 16,),
-        _buildLineChartCard('Utility', [20000,25000,30000,35000,40000,45000]),
+        LineChartCard(title: 'Utility',dataPoints: [20000,25000,30000,35000,40000,45000],),
         const SizedBox(height: 24,),
-          _buildLineChartCard('DFS(Dr)', [25000,30000,35000,40000,45000]),
-                   const SizedBox(height: 24,),
-               _buildLineChartCard('DFS(Cr)', [25000,30000,35000,40000,45000]),
+        LineChartCard(title: 'DFS(Dr)', dataPoints:[25000,30000,35000,40000,45000]),
+                    const SizedBox(height: 24,),
+        LineChartCard(title: 'DFS(Cr)', dataPoints: [25000,30000,35000,40000,45000]),
                const SizedBox(height: 24,),
 
       ],
@@ -578,11 +582,17 @@ Widget _buildMDabbaliPage(){
         fontSize: 20,
         weight: FontWeight.w600,),
         const SizedBox(height: 16,),
-          _buildMDabbaliCard(institute: 'Aarjan Saving and Credit Cooperative',
-                           membersLimit:'500',
-                           verifiedUser: '500',
-                            closedUser: '500',
-                             totalUser:'500')
+          // _buildMDabbaliCard(institute: 'Aarjan Saving and Credit Cooperative',
+          //                  membersLimit:'500',
+          //                  verifiedUser: '500',
+          //                   closedUser: '500',
+          //                    totalUser:'500')
+          buildPremiumInstituteDashboardCard(
+            institute: 'Aarjan Saving and Credit Cooperative',
+            membersLimit: '500',
+            verifiedUser: '500',
+            closedUser: '500',
+            totalUser: '500')
 
       
       ],
@@ -947,6 +957,436 @@ Widget _buildMetricRow(String label, String value, IconData icon, Color color, {
     ],
   );
 }
+Widget buildPremiumInstituteDashboardCard({
+  required String institute,
+  required String membersLimit,
+  required String verifiedUser,
+  required String closedUser,
+  required String totalUser,
+}) {
+  // Calculate usage percentage for progress indicator
+  double usagePercentage = double.tryParse(totalUser) != null && double.tryParse(membersLimit) != null
+      ? (double.parse(totalUser) / double.parse(membersLimit)).clamp(0.0, 1.0)
+      : 0.0;
+
+  return Container(
+    margin: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+    child: Stack(
+      children: [
+        // Main Card with Glassmorphism Effect
+        Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                //  Color(0xFF3366FF),
+                Colors.blue,
+                Color(0xFF00CCFF),
+                // Colors.white
+              ],
+              stops: [0.2, 1.0],
+            ),
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: Color(0xFF3366FF).withOpacity(0.3),
+                offset: Offset(0, 8),
+                blurRadius: 20,
+                spreadRadius: -2,
+              ),
+              BoxShadow(
+                color: Colors.white.withOpacity(0.05),
+                offset: Offset(0, -1),
+                blurRadius: 6,
+                spreadRadius: 0,
+              ),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(24),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.05),
+                  borderRadius: BorderRadius.circular(24),
+                  border: Border.all(
+                    color: Colors.white.withOpacity(0.2),
+                    width: 1.5,
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    // Institute Header with Animated Badge
+                    buildInstituteHeader(institute),
+                    
+                    SizedBox(height: 16),
+                    
+                    // Metrics Container with Glassmorphism
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 16),
+                      padding: EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.08),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: Colors.white.withOpacity(0.15),
+                          width: 1,
+                        ),
+                      ),
+                      child: Column(
+                        children: [
+                          buildMetricRow(
+                            'Members Limit',
+                            membersLimit,
+                            Icons.card_membership,
+                            Colors.white,
+                            iconBgColor: Colors.white.withOpacity(0.15),
+                          ),
+                          buildDivider(),
+                          buildMetricRow(
+                            'Verified Users',
+                            verifiedUser,
+                            Icons.verified_user_rounded,
+                            Colors.white,
+                            iconBgColor: Colors.greenAccent.withOpacity(0.25),
+                          ),
+                          buildDivider(),
+                          buildMetricRow(
+                            'Closed Users',
+                            closedUser,
+                            Icons.person_off_rounded,
+                            Colors.white,
+                            iconBgColor: Colors.redAccent.withOpacity(0.25),
+                          ),
+                          buildDivider(),
+                          buildMetricRow(
+                            'Total Users',
+                            totalUser,
+                            Icons.people_rounded,
+                            Colors.white,
+                            iconBgColor: Colors.amberAccent.withOpacity(0.25),
+                            isLast: true,
+                          ),
+                        ],
+                      ),
+                    ),
+                    
+                    SizedBox(height: 24),
+                    
+                    // Usage Indicator
+                    // buildUsageIndicator(totalUser, membersLimit, usagePercentage),
+                    
+                    // SizedBox(height: 24),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        
+        // Decorative Elements
+        Positioned(
+          top: -10,
+          right: -20,
+          child: Container(
+            width: 100,
+            height: 100,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white.withOpacity(0.1),
+            ),
+          ),
+        ),
+        Positioned(
+          bottom: 20,
+          left: -30,
+          child: Container(
+            width: 80,
+            height: 80,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white.withOpacity(0.05),
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget buildInstituteHeader(String institute) {
+  return Padding(
+    padding: const EdgeInsets.only(top: 28),
+    child: Column(
+      children: [
+        // Badge with Container
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 5),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.15),
+            borderRadius: BorderRadius.circular(18),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                offset: Offset(0, 4),
+                blurRadius: 12,
+              ),
+            ],
+            border: Border.all(
+              color: Colors.white.withOpacity(0.3),
+              width: 1,
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Institute Icon
+              // Container(
+              //   padding: EdgeInsets.all(8),
+              //   decoration: BoxDecoration(
+              //     color: Colors.white.withOpacity(0.2),
+              //     shape: BoxShape.circle,
+              //   ),
+              //   child: Icon(
+              //     Icons.school_rounded,
+              //     color: Colors.white,
+              //     size: 18,
+              //   ),
+              // ),
+              // SizedBox(width: 12),
+              // Institute Name with Text Shadow
+              Text(
+                institute,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  letterSpacing: 0.5,
+                  shadows: [
+                    Shadow(
+                      offset: Offset(0, 1),
+                      blurRadius: 3,
+                      color: Colors.black.withOpacity(0.3),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget buildMetricRow(
+  String label, 
+  String value, 
+  IconData icon, 
+  Color color, 
+  {
+    bool isLast = false,
+    Color? iconBgColor,
+  }
+) {
+  return AnimatedContainer(
+    duration: Duration(milliseconds: 300),
+    padding: EdgeInsets.symmetric(vertical: 6),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            // Icon with Custom Background
+            Container(
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: iconBgColor ?? Colors.white.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    offset: Offset(0, 2),
+                    blurRadius: 6,
+                  ),
+                ],
+              ),
+              child: Icon(
+                icon,
+                color: color,
+                size: 18,
+              ),
+            ),
+            SizedBox(width: 14),
+            // Label Text
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+                color: color.withOpacity(0.9),
+              ),
+            ),
+          ],
+        ),
+        // Value with Highlight
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: Colors.white.withOpacity(0.1),
+              width: 1,
+            ),
+          ),
+          child: Text(
+            value.toString(),
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: color,
+              letterSpacing: 0.5,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget buildDivider() {
+  return Padding(
+    padding: EdgeInsets.symmetric(vertical: 10),
+    child: Container(
+      height: 1,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Colors.white.withOpacity(0),
+            Colors.white.withOpacity(0.5),
+            Colors.white.withOpacity(0),
+          ],
+          stops: [0.0, 0.5, 1.0],
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+        ),
+      ),
+    ),
+  );
+}
+
+Widget buildUsageIndicator(String totalUser, String membersLimit, double usagePercentage) {
+  // Format percentage for display
+  final percentage = (usagePercentage * 100).toStringAsFixed(1);
+  
+  // Determine color based on usage
+  Color progressColor = Colors.greenAccent;
+  if (usagePercentage > 0.8) {
+    progressColor = Colors.redAccent;
+  } else if (usagePercentage > 0.6) {
+    progressColor = Colors.orangeAccent;
+  }
+
+  return Padding(
+    padding: EdgeInsets.symmetric(horizontal: 20),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Usage text with ratio
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Capacity Usage',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: Colors.white.withOpacity(0.9),
+              ),
+            ),
+            Text(
+              '$totalUser / $membersLimit',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 8),
+        
+        // Progress indicator
+        Stack(
+          children: [
+            // Background track
+            Container(
+              height: 10,
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            
+            // Animated progress
+            AnimatedContainer(
+              duration: Duration(milliseconds: 800),
+              curve: Curves.easeInOut,
+              height: 10,
+              width: usagePercentage * MediaQuery.of(Get.context!).size.width * 0.85,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    progressColor.withOpacity(0.7),
+                    progressColor,
+                  ],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                ),
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: progressColor.withOpacity(0.5),
+                    blurRadius: 8,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+            ),
+            
+            // Percentage label
+            Positioned(
+              right: 8,
+              top: -4,
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.4),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: Colors.white.withOpacity(0.2),
+                    width: 1,
+                  ),
+                ),
+                child: Text(
+                  '$percentage%',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    ),
+  );
+}
 
 // Widget _buildUsageIndicator(int totalUser, int membersLimit) {
 //   final double percentage = (totalUser / membersLimit).clamp(0.0, 1.0);
@@ -1306,329 +1746,136 @@ int _calculateSuccessRate(int successCount, int pendingCount, int failCount) {
 //     ],
 //   ),);
 // }
-Widget _buildLineChartCard(String title,List<double> dataPoints){
-  return Card(
-    elevation: 4,
-    color: Colors.white,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(16)
-    ),
-    child: Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: CustomText(text: title,
-                  fontSize: 16,
-                  weight: FontWeight.bold,
-                  color: Colors.blue[600],),
-                ),
-                const SizedBox(height: 8,),
-                SizedBox(
-                  height: 200,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: LineChart(
-                      LineChartData(
-                        gridData: FlGridData(
-                        show: true,
-                        drawVerticalLine: false,
-                        drawHorizontalLine: true,
-                        horizontalInterval: 5000,
-                        getDrawingHorizontalLine: (value){
-                          return FlLine(
-                            color: Colors.grey.withOpacity(0.2),
-                            strokeWidth: 1,
-                          );
-                        }
-                        ),
-                        titlesData: FlTitlesData(
-                          leftTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                              showTitles: true,
-                            interval: 10000,
-                            reservedSize:70,
-                            getTitlesWidget: (value, meta) {
-                             return Padding(padding: EdgeInsets.only(right:0),
-                             child: CustomText(text: 'Rs${value.toInt().toString()}',
-                             fontSize: 12,
-                             color: Colors.grey,),);
-                            },),
+// Widget _buildLineChartCard(String title,List<double> dataPoints){
+//   return Card(
+//     elevation: 4,
+//     color: Colors.white,
+//     shape: RoundedRectangleBorder(
+//       borderRadius: BorderRadius.circular(16)
+//     ),
+//     child: Padding(
+//       padding: const EdgeInsets.all(16.0),
+//       child: Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: [
+//                 Padding(
+//                   padding: const EdgeInsets.all(8.0),
+//                   child: CustomText(text: title,
+//                   fontSize: 16,
+//                   weight: FontWeight.bold,
+//                   color: Colors.blue[600],),
+//                 ),
+//                 const SizedBox(height: 8,),
+//                 SizedBox(
+//                   height: 200,
+//                   child: Padding(
+//                     padding: const EdgeInsets.all(8.0),
+//                     child: LineChart(
+//                       LineChartData(
+//                         gridData: FlGridData(
+//                         show: true,
+//                         drawVerticalLine: false,
+//                         drawHorizontalLine: true,
+//                         horizontalInterval: 5000,
+//                         getDrawingHorizontalLine: (value){
+//                           return FlLine(
+//                             color: Colors.grey.withOpacity(0.2),
+//                             strokeWidth: 1,
+//                           );
+//                         }
+//                         ),
+//                         titlesData: FlTitlesData(
+//                           leftTitles: AxisTitles(
+//                             sideTitles: SideTitles(
+//                               showTitles: true,
+//                             interval: 10000,
+//                             reservedSize:70,
+//                             getTitlesWidget: (value, meta) {
+//                              return Padding(padding: EdgeInsets.only(right:0),
+//                              child: CustomText(text: 'Rs${value.toInt().toString()}',
+//                              fontSize: 12,
+//                              color: Colors.grey,),);
+//                             },),
                           
-                          ),
-                          bottomTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                              showTitles: true,
-                              interval:1,
-                              getTitlesWidget: (value, meta) {
-                                switch(value.toInt()){
-                                  case 0:
-                                  return 
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 8),
-                                    child: CustomText(text: 'Poush',
-                                    color: Colors.blue[600],),
-                                  );
-                                  case 1:
-                                  return Padding(
-                                    padding: const EdgeInsets.only(top: 8),
-                                    child: CustomText(text: 'Magh',
-                                    color: Colors.blue[600],),
-                                  );
-                                  case 2:
-                                  return Padding(
-                                    padding: const EdgeInsets.only(top: 8),
-                                    child: CustomText(text: 'Falgun',
-                                    color: Colors.blue[600],),
-                                  );
-                                  case 3:
-                                  return Padding(
-                                    padding: const EdgeInsets.only(top:8 ),
-                                    child: CustomText(text: 'Chaitra',
-                                    color: Colors.blue[600],),
-                                  );
-                                  default:
-                                 return CustomText(text: '');
-                                }}
-                            ),
-                          ),
-                          rightTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                              showTitles: false,
+//                           ),
+//                           bottomTitles: AxisTitles(
+//                             sideTitles: SideTitles(
+//                               showTitles: true,
+//                               interval:1,
+//                               getTitlesWidget: (value, meta) {
+//                                 switch(value.toInt()){
+//                                   case 0:
+//                                   return 
+//                                   Padding(
+//                                     padding: const EdgeInsets.only(top: 8),
+//                                     child: CustomText(text: 'Poush',
+//                                     color: Colors.blue[600],),
+//                                   );
+//                                   case 1:
+//                                   return Padding(
+//                                     padding: const EdgeInsets.only(top: 8),
+//                                     child: CustomText(text: 'Magh',
+//                                     color: Colors.blue[600],),
+//                                   );
+//                                   case 2:
+//                                   return Padding(
+//                                     padding: const EdgeInsets.only(top: 8),
+//                                     child: CustomText(text: 'Falgun',
+//                                     color: Colors.blue[600],),
+//                                   );
+//                                   case 3:
+//                                   return Padding(
+//                                     padding: const EdgeInsets.only(top:8 ),
+//                                     child: CustomText(text: 'Chaitra',
+//                                     color: Colors.blue[600],),
+//                                   );
+//                                   default:
+//                                  return CustomText(text: '');
+//                                 }}
+//                             ),
+//                           ),
+//                           rightTitles: AxisTitles(
+//                             sideTitles: SideTitles(
+//                               showTitles: false,
                             
-                            ),
-                          ),
-                          topTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                              showTitles: false,
-                            )
-                          ),
-                        ),
-                        borderData: FlBorderData(show: true,
-                        ),
-                        minX: 0,
-                        maxX: 4,
-                        minY: 0,
-                        maxY: 50000,
-                        lineBarsData: [
-                          LineChartBarData(
-                            spots: [
-                              FlSpot(0, dataPoints[0]),
-                              FlSpot(1, dataPoints[1]),
-                              FlSpot(2, dataPoints[2]),
-                              FlSpot(3, dataPoints[3]),
-                              FlSpot(4, dataPoints[4]),
+//                             ),
+//                           ),
+//                           topTitles: AxisTitles(
+//                             sideTitles: SideTitles(
+//                               showTitles: false,
+//                             )
+//                           ),
+//                         ),
+//                         borderData: FlBorderData(show: true,
+//                         ),
+//                         minX: 0,
+//                         maxX: 4,
+//                         minY: 0,
+//                         maxY: 50000,
+//                         lineBarsData: [
+//                           LineChartBarData(
+//                             spots: [
+//                               FlSpot(0, dataPoints[0]),
+//                               FlSpot(1, dataPoints[1]),
+//                               FlSpot(2, dataPoints[2]),
+//                               FlSpot(3, dataPoints[3]),
+//                               FlSpot(4, dataPoints[4]),
                               
-                        ],
-                      isCurved: true,
-                      color: Colors.blue[200],
-                      dotData: FlDotData(show: true)
-                      ),
-                        ]),
-                                  ),
-                  ),)
+//                         ],
+//                       isCurved: true,
+//                       color: Colors.blue[200],
+//                       dotData: FlDotData(show: true)
+//                       ),
+//                         ]),
+//                                   ),
+//                   ),)
       
-      ],
-      ),
-    ),
-  );
-}
-}
-
-
-
-class _PieChartCard extends StatefulWidget {
- const _PieChartCard({super.key});
-
-  @override
-  State<_PieChartCard> createState() => __PieChartCardState();
+//       ],
+//       ),
+//     ),
+//   );
+// }
 }
 
-class __PieChartCardState extends State<_PieChartCard> {
-  int touchedIndex=-1;
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      color: Colors.white,
-      child: AspectRatio(
-        aspectRatio: 1.3,
-        child:Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-       
-          children: [
-              const SizedBox(height: 10,),
-             CustomText(text: 'Summary of successful transactions',
-            color: Colors.grey[600],
-            weight: FontWeight.bold,),
-            const SizedBox(height: 24,),
-            Row(
-              children: [
-               
-                 const SizedBox(width: 18,),
-                
-                
-                Expanded(
-                  child: AspectRatio(
-                    aspectRatio: 1,
-                    child: PieChart(
-                      PieChartData(
-                        pieTouchData: PieTouchData(
-                          touchCallback: (FlTouchEvent event,pieTouchResponse){
-                            setState(() {
-                              if(!event.isInterestedForInteractions|| pieTouchResponse==null||pieTouchResponse.touchedSection==null){
-                                touchedIndex=-1;
-                                return;
-                              }
-                              touchedIndex=pieTouchResponse.touchedSection!.touchedSectionIndex;
-                            });
-                          }
-                        ),
-                        borderData: FlBorderData(show: false),
-                        sectionsSpace: 2,
-                        centerSpaceRadius: 40,
-                        sections: _getPieChartSections(),
-                      )
-                      
-                    ),),
-                ),
-                 const SizedBox(width: 10,),
-                 Expanded(
-                   child: Padding(
-                    padding: EdgeInsets.only(bottom: 18,right: 15),
-                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildIndicator(color: Colors.brown, text: 'Data Pack: 41.9%'),
-                      const SizedBox(height: 8,),
-                      _buildIndicator(color: Colors.red, text: 'Electricity: 4%'),
-                      const SizedBox(height: 8,),
-                      _buildIndicator(color: Colors.pink, text: 'Internet: 8%'),
-                      const SizedBox(height: 8,),
-                      _buildIndicator(color: Colors.grey, text: 'TV: 0%'),
-                      const SizedBox(height: 8,),
-                      _buildIndicator(color: Colors.blue, text: 'Water: 5%'),
-                      const SizedBox(height: 8,),
-                      _buildIndicator(color: Colors.orange, text: 'Bank Transfer: 15%'),
-                      const SizedBox(height: 8,),
-                      _buildIndicator(color: Colors.purple, text: 'QR: 35%'),
-                     
-                    ],
-                   ),),
-                 )
-              
-              ],
-            ),
-          ],
-        ) ,
-        ),
-    ); 
-  }
-  List<PieChartSectionData> _getPieChartSections(){
-  return [
-    PieChartSectionData(
-      color: Colors.brown,
-      value: 41.9,
-      title: '41.9',
-      radius: touchedIndex==0?60.0:50.0,
-      titleStyle: TextStyle(
-        fontSize: touchedIndex==0?20.0:16.0,
-        fontWeight: FontWeight.bold,
-        color: Colors.white,
-      )
-    ),
-     PieChartSectionData(
-      color: Colors.red,
-      value: 4,
-      title: '4',
-      radius: touchedIndex==1?60.0:50.0,
-      titleStyle: TextStyle(
-        fontSize: touchedIndex==1?20.0:16.0,
-        fontWeight: FontWeight.bold,
-        color: Colors.white,
-      )
-    ),
-     PieChartSectionData(
-      color: Colors.pink,
-      value: 3,
-      title: '3',
-      radius: touchedIndex==2?60.0:50.0,
-      titleStyle: TextStyle(
-        fontSize: touchedIndex==2?20.0:16.0,
-        fontWeight: FontWeight.bold,
-        color: Colors.white,
-      )
-    ),
-     PieChartSectionData(
-      color: Colors.cyan,
-      value: 40,
-      title: '40',
-      radius: touchedIndex==3?60.0:50.0,
-      titleStyle: TextStyle(
-        fontSize: touchedIndex==3?20.0:16.0,
-        fontWeight: FontWeight.bold,
-        color: Colors.white,
-      )
-    ),
-     PieChartSectionData(
-      color: Colors.grey,
-      value: 0,
-      title: '0',
-      radius: touchedIndex==4?60.0:50.0,
-      titleStyle: TextStyle(
-        fontSize: touchedIndex==4?20.0:16.0,
-        fontWeight: FontWeight.bold,
-        color: Colors.white,
-      )
-    ),
-     PieChartSectionData(
-      color: Colors.blue,
-      value: 5,
-      title: '5',
-      radius: touchedIndex==5?60.0:50.0,
-      titleStyle: TextStyle(
-        fontSize: touchedIndex==5?20.0:16.0,
-        fontWeight: FontWeight.bold,
-        color: Colors.white,
-      )
-    ),
-     PieChartSectionData(
-      color: Colors.orange,
-      value: 15,
-      title: '15',
-      radius: touchedIndex==6?60.0:50.0,
-      titleStyle: TextStyle(
-        fontSize: touchedIndex==6?20.0:16.0,
-        fontWeight: FontWeight.bold,
-        color: Colors.white,
-      )
-    ),
-     PieChartSectionData(
-      color: Colors.purple,
-      value: 35,
-      title: '35',
-      radius: touchedIndex==7?60.0:50.0,
-      titleStyle: TextStyle(
-        fontSize: touchedIndex==7?20.0:16.0,
-        fontWeight: FontWeight.bold,
-        color: Colors.white,
-      )
-    )
-  ];
-}
 
-Widget _buildIndicator({required Color color,required String text}){
-  return Row(
-    children: [
-      Container(width: 16,height: 16,
-      color: color,),
-      const SizedBox(width: 8,),
-      CustomText(text: text,fontSize: 14,color: Colors.black87,)
-    ],
-  );
-}
-}
 

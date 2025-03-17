@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:mdabali_report/view/extracted_widgets/custom_text.dart';
 import 'package:path/path.dart';
@@ -95,74 +96,341 @@ class _DashBoardPageState extends State<DashBoardPage> {
  
     );
   }
-
- Widget _buildHeaderSection(){
+  Widget _buildHeaderSection() {
   return Column(
-      children: [
-                  Card(
-                    elevation: 2,
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Column(
-                        children: [
-                              _buildSummaryItem(
-                                title: 'Utility Payment',
-                                amount: 'Rs 45,678.30',
-                                change:'+20% month over month',
-                                isPositive: true,
-                                changeColor: Colors.green),
-                        ],
-                      ),),
-                  ),
-                  const SizedBox(height: 10,),
-                   Card(
-                    color: Colors.white,
-                    elevation: 2,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Column(
-                        children: [
-                                _buildSummaryItem(
-                                  title: 'DFS(Dr)',
-                                  amount: 'Rs 2,405',
-                                  change: '+33% month over month',
-                                  isPositive: true,
-                                  changeColor: Colors.green),
-                        ],
-                      ),),
-                  ),
-                  const SizedBox(height: 10,),
-                   Card(
-                    color: Colors.white,
-                    elevation: 2,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Column(
-                        children: [
-                                _buildSummaryItem(
-                                  title: 'DFS(Cr)',
-                                  amount: 'Rs 1,105',
-                                  change: '-10% month over month',
-                                  isPositive: true,
-                                  changeColor: Colors.red),
-                                
-                        ],
-                      ),),
-                  ),
-           
-      ],
+    children: [
+      _buildSummaryCard(
+        title: 'Utility Payment',
+        amount: 'Rs 45,678.30',
+        change: '+20% month over month',
+        isPositive: true,
+        icon: Icons.electric_bolt_rounded,
+      ),
+      SizedBox(height: 12),
+      _buildSummaryCard(
+        title: 'DFS(Dr)',
+        amount: 'Rs 2,405',
+        change: '+33% month over month',
+        isPositive: true,
+        icon: Icons.arrow_upward_rounded,
+      ),
+      SizedBox(height: 12),
+      _buildSummaryCard(
+        title: 'DFS(Cr)',
+        amount: 'Rs 1,105',
+        change: '-10% month over month',
+        isPositive: false,
+        icon: Icons.arrow_downward_rounded,
+      ),
+    ],
   );
- } 
+}
+
+Widget _buildSummaryCard({
+  required String title,
+  required String amount,
+  required String change,
+  required bool isPositive,
+  required IconData icon,
+}) {
+  return Container(
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(16),
+      boxShadow: [
+        BoxShadow(
+          color: Color(0xFF4285F4).withOpacity(0.1),
+          offset: Offset(0, 4),
+          blurRadius: 12,
+          spreadRadius: 0,
+        ),
+      ],
+    ),
+    child: Card(
+      elevation: 0,
+      color: Colors.white,
+      margin: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(
+          color: Color(0xFF4285F4).withOpacity(0.15),
+          width: 1,
+        ),
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(16),
+        child: IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                width: 4,
+                decoration: BoxDecoration(
+                  color: isPositive ? Color(0xFF34C759) : Color(0xFFFF3B30),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              SizedBox(width: 16),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: Color(0xFF4285F4).withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Icon(
+                                icon,
+                                color: Color(0xFF4285F4),
+                                size: 16,
+                              ),
+                            ),
+                            SizedBox(width: 10),
+                            Text(
+                              title,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xFF6C7A92),
+                                letterSpacing: 0.2,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 12),
+                        Text(
+                          amount,
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFF2C3E50),
+                            letterSpacing: 0.2,
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: isPositive
+                                ? Color(0xFF34C759).withOpacity(0.1)
+                                : Color(0xFFFF3B30).withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                isPositive
+                                    ? Icons.trending_up_rounded
+                                    : Icons.trending_down_rounded,
+                                color: isPositive ? Color(0xFF34C759) : Color(0xFFFF3B30),
+                                size: 12,
+                              ),
+                              SizedBox(width: 4),
+                              Text(
+                                change,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                  color: isPositive ? Color(0xFF34C759) : Color(0xFFFF3B30),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: isPositive
+                                ? Color(0xFF34C759).withOpacity(0.1)
+                                : Color(0xFFFF3B30).withOpacity(0.1),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            isPositive
+                                ? Icons.arrow_upward_rounded
+                                : Icons.arrow_downward_rounded,
+                            color: isPositive ? Color(0xFF34C759) : Color(0xFFFF3B30),
+                            size: 20,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
+// If you still need the original _buildSummaryItem for compatibility elsewhere
+Widget _buildSummaryItem({
+  required String title,
+  required String amount,
+  required String change,
+  required bool isPositive,
+  required Color changeColor,
+}) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: Color(0xFF6C7A92),
+            ),
+          ),
+          SizedBox(height: 4),
+          Text(
+            amount,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+              color: Color(0xFF2C3E50),
+            ),
+          ),
+          SizedBox(height: 4),
+          Text(
+            change,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: changeColor,
+            ),
+          ),
+        ],
+      ),
+      Icon(
+        isPositive ? Icons.arrow_upward : Icons.arrow_downward,
+        color: changeColor,
+        size: 20,
+      ),
+    ],
+  );
+}
+
+//  Widget _buildHeaderSection(){
+//   return Column(
+//       children: [
+//                   Card(
+//                     elevation: 2,
+//                     color: Colors.white,
+//                     shape: RoundedRectangleBorder(
+//                       borderRadius: BorderRadius.circular(12),
+//                     ),
+//                     child: Padding(
+//                       padding: EdgeInsets.all(16),
+//                       child: Column(
+//                         children: [
+//                               _buildSummaryItem(
+//                                 title: 'Utility Payment',
+//                                 amount: 'Rs 45,678.30',
+//                                 change:'+20% month over month',
+//                                 isPositive: true,
+//                                 changeColor: Colors.green),
+//                         ],
+//                       ),),
+//                   ),
+//                   const SizedBox(height: 10,),
+//                    Card(
+//                     color: Colors.white,
+//                     elevation: 2,
+//                     shape: RoundedRectangleBorder(
+//                       borderRadius: BorderRadius.circular(12),
+//                     ),
+//                     child: Padding(
+//                       padding: EdgeInsets.all(16),
+//                       child: Column(
+//                         children: [
+//                                 _buildSummaryItem(
+//                                   title: 'DFS(Dr)',
+//                                   amount: 'Rs 2,405',
+//                                   change: '+33% month over month',
+//                                   isPositive: true,
+//                                   changeColor: Colors.green),
+//                         ],
+//                       ),),
+//                   ),
+//                   const SizedBox(height: 10,),
+//                    Card(
+//                     color: Colors.white,
+//                     elevation: 2,
+//                     shape: RoundedRectangleBorder(
+//                       borderRadius: BorderRadius.circular(12),
+//                     ),
+//                     child: Padding(
+//                       padding: EdgeInsets.all(16),
+//                       child: Column(
+//                         children: [
+//                                 _buildSummaryItem(
+//                                   title: 'DFS(Cr)',
+//                                   amount: 'Rs 1,105',
+//                                   change: '-10% month over month',
+//                                   isPositive: true,
+//                                   changeColor: Colors.red),
+                                
+//                         ],
+//                       ),),
+//                   ),
+           
+//       ],
+//   );
+//  } 
+ 
+// Widget _buildSummaryItem({
+// required String title,
+// required String amount,
+// required String change,
+// required bool isPositive,
+// required Color changeColor,}){
+//   return Row(
+//     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//     children: [
+//       Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//             CustomText(text: title,
+//             fontSize: 12,
+//             color: Colors.grey[700],),
+//             const SizedBox(height: 4,),
+//             CustomText(
+//               text: amount,
+//               fontSize: 20,
+//               color: Colors.black87,
+//             ),
+//             const SizedBox(height: 4,),
+//             CustomText(
+//               text:change,
+//               fontSize: 10,
+//               color: changeColor, ),
+//             //  const SizedBox(height: 20,),
+              
+//         ],
+//       )
+//     ],
+//   );
+// }
 
 Widget _buildBottomNavBar(){
   return Container(
@@ -290,10 +558,10 @@ Widget _buildSMSPage(){
         weight: FontWeight.w600,),
         const SizedBox(height: 16,),
          _buildSMSCard(institute: 'Aarjan Saving and Credit Cooperative',
-                       totalUsed: 100, 
+                       totalUsed: '100', 
                        rate:'11.13%',
-                      totalAmount: 114,
-                      availableBalance: 500),
+                      totalAmount: '114',
+                      availableBalance: '500'),
               ],
     ),),
   );
@@ -306,15 +574,15 @@ Widget _buildMDabbaliPage(){
       children: [
         _buildHeaderSection(),
         const SizedBox(height: 24,),
-        CustomText(text: 'mDabbali Summary',
+        CustomText(text: 'mDabali Summary',
         fontSize: 20,
         weight: FontWeight.w600,),
         const SizedBox(height: 16,),
           _buildMDabbaliCard(institute: 'Aarjan Saving and Credit Cooperative',
-                           membersLimit:500,
-                           verifiedUser: 500,
-                            closedUser: 500,
-                             totalUser:500)
+                           membersLimit:'500',
+                           verifiedUser: '500',
+                            closedUser: '500',
+                             totalUser:'500')
 
       
       ],
@@ -338,130 +606,164 @@ Widget _buildTransactionList(){
 }
 Widget _buildSMSCard({
   required String institute,
-  required  int totalUsed,
+  required  String totalUsed,
   required String rate,
-  required int totalAmount,
-  required int availableBalance,
+  required String totalAmount,
+  required String availableBalance,
 }){
   return Card(
-elevation: 4,
-color: Colors.white,
+elevation: 0,
 margin: EdgeInsets.symmetric(vertical: 8),
 shape: RoundedRectangleBorder(
   borderRadius: BorderRadius.circular(12),
 ),
 child: Container(
   decoration: BoxDecoration(
-    gradient: LinearGradient(colors: [
-
-  Colors.blue[500]!,
-       
-        const Color.fromARGB(255, 129, 193, 245),
-
-        //Colors.blue[400]!,
-    
-    ],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight
+    gradient: LinearGradient( begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFF4285F4),
+              Color(0xFF64B5F6),
+            ],
     ),
-    borderRadius: BorderRadius.circular(12),
+    border: Border.all(
+      width: 1,
+      color: Colors.blue
+    ),
+    borderRadius: BorderRadius.circular(16),
+    boxShadow: [
+      BoxShadow(
+         color: Color(0xFF4285F4).withOpacity(0.25),
+              offset: Offset(0, 4),
+              blurRadius: 12,
+              spreadRadius: 0,
+      ),
+    ]
   ),
   child: Column(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
-      const SizedBox(height: 15,),
-      CustomText(text: institute,fontSize: 16,weight: FontWeight.bold,color: Colors.white,),
-      const SizedBox(height: 12,),
-      Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-          _buildDetails('Total Used',
-           totalUsed,
-            Icons.message,
-             Colors.white),
-             _buildDetails('Rate',
-              rate,
-               Icons.percent,
-                Colors.white),
-                _buildDetails('Total Amount',
-                 totalAmount,
-                  Icons.attach_money,
-                   Colors.white),
-                   _buildDetails('Available Balance',
-                    availableBalance,
-                     Icons.account_balance_wallet_rounded,
-                      Colors.white
-                      ),
-                      const SizedBox(height:12),
-      ],
-      )
+      // const SizedBox(height: 15,),
+      // CustomText(text: institute,fontSize: 16,weight: FontWeight.bold,color: Colors.white,),
+      // const SizedBox(height: 12,),
+      SizedBox(height: 20,),
+      _buildInstituteHeader(institute),
+      const SizedBox(height: 16,),
+      Container(
+      margin: EdgeInsets.symmetric(horizontal: 16),
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.15),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: Colors.white.withOpacity(0.2),
+                  width: 1,
+                ),
+              ),
+        child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildMetricRow('Total Used', totalUsed, Icons.summarize, Colors.white),
+          const SizedBox(height: 12,),
+            // _buildDetails('Total Used',
+            //  totalUsed,
+            //   Icons.message,
+            //    Colors.white),
+            // _buildMetricRow('Rate', rate.to, icon, color)
+            _buildMetricRow('Rate', rate, Icons.percent, Colors.white),
+            const SizedBox(height: 12,),
+            _buildMetricRow('Total Amount', totalAmount, Icons.attach_money, Colors.white),
+            const SizedBox(height: 12,),
+              //  _buildDetails('Rate',
+              //   rate,
+              //    Icons.percent,
+              //     Colors.white),
+              //     _buildDetails('Total Amount',
+              //      totalAmount,
+              //       Icons.attach_money,
+              //        Colors.white),
+              _buildMetricRow('Available Balance',
+               availableBalance,
+                Icons.account_balance_wallet_rounded,
+                 Colors.white,
+                 isLast: true)
+                    //  _buildDetails('Available Balance',
+                    //   availableBalance,
+                    //    Icons.account_balance_wallet_rounded,
+                    //     Colors.white
+                    //     ),
+        ],
+        
+        ),
+      ),
+      const SizedBox(height: 20,)
     ],
   ),
 ),
   );
 }
 
-Widget _buildMDabbaliCard({
-  required String institute,
-  required  int  membersLimit,
-  required int verifiedUser,
-  required int closedUser ,
-  required int totalUser,
-}){
-  return Card(
-elevation: 2,
-color: Colors.white,
-margin: EdgeInsets.symmetric(vertical: 8),
-shape: RoundedRectangleBorder(
-  borderRadius: BorderRadius.circular(12),
-),
-child: Container(
-  decoration: BoxDecoration(
-    gradient: LinearGradient(colors: [
-      Colors.blue[500]!,
+// Widget _buildMDabbaliCard({
+//   required String institute,
+//   required  int  membersLimit,
+//   required int verifiedUser,
+//   required int closedUser ,
+//   required int totalUser,
+// }){
+//   return Card(
+// elevation: 2,
+// color: Colors.white,
+// margin: EdgeInsets.symmetric(vertical: 8),
+// shape: RoundedRectangleBorder(
+//   borderRadius: BorderRadius.circular(12),
+// ),
+// child: Container(
+//   decoration: BoxDecoration(
+//     gradient: LinearGradient(colors: [
+//       Colors.blue[500]!,
        
-        const Color.fromARGB(255, 129, 193, 245),
+//         const Color.fromARGB(255, 129, 193, 245),
     
-    ],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight
-    ),
-    borderRadius: BorderRadius.circular(12),
-  ),
-  child: Column(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      const SizedBox(height: 15,),
-      CustomText(text: institute,fontSize: 16,weight: FontWeight.bold,color: Colors.white,),
-      const SizedBox(height: 12,),
-      Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-          _buildDetails('Members Limit',
-           membersLimit,
-            Icons.card_membership,
-             Colors.white),
-             _buildDetails('Verified Users',
-              verifiedUser,
-               Icons.verified_user_sharp,
-                Colors.white),
-                _buildDetails('Closed Users',
-                 closedUser,
-                  Icons.person,
-                   Colors.white),
-                   _buildDetails('Total Users',
-                    totalUser,
-                     Icons.person_2,
-                      Colors.white
-                      ),
-                      const SizedBox(height: 12,)
-      ],
-      )
-    ],
-  ),
-),
-  );
-}
+//     ],
+//     begin: Alignment.topLeft,
+//     end: Alignment.bottomRight
+//     ),
+//     borderRadius: BorderRadius.circular(12),
+//   ),
+//   child: Column(
+//     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//     children: [
+//       const SizedBox(height: 15,),
+//       CustomText(text: institute,fontSize: 16,weight: FontWeight.bold,color: Colors.white,),
+//       const SizedBox(height: 12,),
+//       Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: [
+//           _buildDetails('Members Limit',
+//            membersLimit,
+//             Icons.card_membership,
+//              Colors.white),
+//              _buildDetails('Verified Users',
+//               verifiedUser,
+//                Icons.verified_user_sharp,
+//                 Colors.white),
+//                 _buildDetails('Closed Users',
+//                  closedUser,
+//                   Icons.person,
+//                    Colors.white),
+//                    _buildDetails('Total Users',
+//                     totalUser,
+//                      Icons.person_2,
+//                       Colors.white
+//                       ),
+//                       const SizedBox(height: 12,)
+//       ],
+//       )
+//     ],
+//   ),
+// ),
+//   );
+// }
 
 Widget _buildDetails(String label,dynamic value,IconData icon,Color color){
   return Padding(padding: EdgeInsets.symmetric(vertical: 4,horizontal: 10),
@@ -475,6 +777,230 @@ Widget _buildDetails(String label,dynamic value,IconData icon,Color color){
     ],
   ) ,);
 }
+Widget _buildMDabbaliCard({
+  required String institute,
+  required String membersLimit,
+  required String verifiedUser,
+  required String closedUser,
+  required String totalUser,
+}) {
+  return Container(
+    margin: EdgeInsets.symmetric(vertical: 12),
+    child: Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFF4285F4),
+              Color(0xFF64B5F6),
+            ],
+          ),
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Color(0xFF4285F4).withOpacity(0.25),
+              offset: Offset(0, 4),
+              blurRadius: 12,
+              spreadRadius: 0,
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            SizedBox(height: 20),
+            _buildInstituteHeader(institute),
+            SizedBox(height: 16),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 16),
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.15),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: Colors.white.withOpacity(0.2),
+                  width: 1,
+                ),
+              ),
+              child: Column(
+                children: [
+                  _buildMetricRow(
+                    'Members Limit',
+                    membersLimit,
+                    Icons.card_membership,
+                    Colors.white,
+                  ),
+                  SizedBox(height: 12),
+                  _buildMetricRow(
+                    'Verified Users',
+                    verifiedUser,
+                    Icons.verified_user_rounded,
+                    Colors.white,
+                  ),
+                  SizedBox(height: 12),
+                  _buildMetricRow(
+                    'Closed Users',
+                    closedUser,
+                    Icons.person_off_rounded,
+                    Colors.white,
+                  ),
+                  SizedBox(height: 12),
+                  _buildMetricRow(
+                    'Total Users',
+                    totalUser,
+                    Icons.people_rounded,
+                    Colors.white,
+                    isLast: true,
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 20),
+            // _buildUsageIndicator(totalUser, membersLimit),
+            // SizedBox(height: 20),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+Widget _buildInstituteHeader(String institute) {
+  return Container(
+    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    decoration: BoxDecoration(
+      color: Colors.white.withOpacity(0.2),
+      borderRadius: BorderRadius.circular(30),
+    ),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+       
+        Text(
+          institute,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            letterSpacing: 0.5,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget _buildMetricRow(String label, String value, IconData icon, Color color, {bool isLast = false}) {
+  return Column(
+    children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(
+                  icon,
+                  color: color,
+                  size: 16,
+                ),
+              ),
+              SizedBox(width: 12),
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: color.withOpacity(0.9),
+                ),
+              ),
+            ],
+          ),
+          Text(
+            value.toString(),
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: color,
+            ),
+          ),
+        ],
+      ),
+      if (!isLast)
+        Padding(
+          padding: EdgeInsets.only(top: 12),
+          child: Divider(
+            color: Colors.white.withOpacity(0.2),
+            height: 1,
+          ),
+        ),
+    ],
+  );
+}
+
+// Widget _buildUsageIndicator(int totalUser, int membersLimit) {
+//   final double percentage = (totalUser / membersLimit).clamp(0.0, 1.0);
+  
+//   return Container(
+//     margin: EdgeInsets.symmetric(horizontal: 16),
+//     child: Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: [
+//         Row(
+//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//           children: [
+//             Text(
+//               'Usage',
+//               style: TextStyle(
+//                 fontSize: 14,
+//                 fontWeight: FontWeight.w500,
+//                 color: Colors.white.withOpacity(0.9),
+//               ),
+//             ),
+//             Text(
+//               '${(percentage * 100).toInt()}%',
+//               style: TextStyle(
+//                 fontSize: 14,
+//                 fontWeight: FontWeight.bold,
+//                 color: Colors.white,
+//               ),
+//             ),
+//           ],
+//         ),
+//         SizedBox(height: 8),
+//         Stack(
+//           children: [
+//             Container(
+//               height: 8,
+//               decoration: BoxDecoration(
+//                 color: Colors.white.withOpacity(0.2),
+//                 borderRadius: BorderRadius.circular(4),
+//               ),
+//             ),
+//             Container(
+//               height: 8,
+//               width: percentage * (MediaQuery.of(Get.context!).size.width - 32),
+//               decoration: BoxDecoration(
+//                 color: Colors.white,
+//                 borderRadius: BorderRadius.circular(4),
+//               ),
+//             ),
+//           ],
+//         ),
+//       ],
+//     ),
+//   );
+// }
 Widget _buildTransactionCard(
   String service,
   int successCount,
@@ -483,98 +1009,303 @@ Widget _buildTransactionCard(
   int pendingAmount,
   int failCount,
   int failAmount
-){
-return Card(
-  elevation: 2,
-  margin: EdgeInsets.symmetric(vertical: 8),
-  shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(12),
-  ),
-  child: Container(
-    decoration: BoxDecoration(
-      gradient: LinearGradient(colors: [
-    
-        Colors.blue[600]!,
-      //  const Color.fromARGB(255, 129, 193, 245),
-        Colors.blue[300]!
-       
-    
-      ],
-      begin: Alignment.topLeft,
-      end: Alignment.bottomRight),
-      borderRadius: BorderRadius.circular(12),
-    ),
-    padding: EdgeInsets.all(16),
-    child: Row(
-   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
+) {
+  return Container(
+    margin: EdgeInsets.symmetric(vertical: 12),
+    child: Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Colors.white,
+              Color(0xFFF5F9FF),
+            ],
+          ),
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Color(0xFF4285F4).withOpacity(0.1),
+              offset: Offset(0, 4),
+              blurRadius: 12,
+              spreadRadius: 0,
+            ),
+          ],
+          border: Border.all(
+            color: Color(0xFF4285F4).withOpacity(0.15),
+            width: 1.5,
+          ),
+        ),
+        padding: EdgeInsets.all(20),
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
- CustomText(text: service,fontSize: 16,weight: FontWeight.bold,color: Colors.white,),
-        SizedBox(height: 8,),
-        _buildstat('Success', 
-        successCount,
-         successAmount,
-          Colors.green),
-          _buildstat('Pending',pendingCount, pendingAmount, Colors.orange),
-    _buildstat('Failure', failCount, failAmount, Colors.red),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Color(0xFF4285F4).withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Icon(
+                        _getServiceIcon(service),
+                        color: Color(0xFF4285F4),
+                        size: 22,
+                      ),
+                    ),
+                    SizedBox(width: 12),
+                    Text(
+                      service,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF2C3E50),
+                        letterSpacing: 0.3,
+                      ),
+                    ),
+                  ],
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: Color(0xFF4285F4).withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.trending_up,
+                        color: Color(0xFF4285F4),
+                        size: 16,
+                      ),
+                      SizedBox(width: 4),
+                      Text(
+                        '${_calculateSuccessRate(successCount, pendingCount, failCount)}%',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFF4285F4),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 20),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.03),
+                    blurRadius: 6,
+                    spreadRadius: 0,
+                  ),
+                ],
+              ),
+              padding: EdgeInsets.all(16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _buildStatColumn('Success', successCount, successAmount, Color(0xFF34C759), Icons.check_circle_outline),
+                  _buildVerticalDivider(),
+                  _buildStatColumn('Pending', pendingCount, pendingAmount, Color(0xFFFF9500), Icons.hourglass_empty),
+                  _buildVerticalDivider(),
+                  _buildStatColumn('Failed', failCount, failAmount, Color(0xFFFF3B30), Icons.error_outline),
+                ],
+              ),
+            ),
           ],
         ),
-       
-      // Icon(Icons.trending_up,color: Colors.white,size: 30,)
-
-      ],
+      ),
     ),
-  ),
-
-);
-}
-Widget _buildstat(String label, int count,int amount,Color color){
-  return Padding(padding: EdgeInsets.symmetric(vertical: 4),
-  child: Row(
-    children: [
-      Icon(Icons.circle,color: color,size: 10,),
-      const SizedBox(width: 4,),
-      CustomText(text: '$label: $count (Rs $amount)',
-      fontSize: 14,
-      color: Colors.white,)
-    ],
-  ),);
-}
-Widget _buildSummaryItem({
-required String title,
-required String amount,
-required String change,
-required bool isPositive,
-required Color changeColor,}){
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-            CustomText(text: title,
-            fontSize: 12,
-            color: Colors.grey[700],),
-            const SizedBox(height: 4,),
-            CustomText(
-              text: amount,
-              fontSize: 20,
-              color: Colors.black87,
-            ),
-            const SizedBox(height: 4,),
-            CustomText(
-              text:change,
-              fontSize: 10,
-              color: changeColor, ),
-            //  const SizedBox(height: 20,),
-              
-        ],
-      )
-    ],
   );
 }
+
+Widget _buildVerticalDivider() {
+  return Container(
+    height: 50,
+    width: 1,
+    color: Colors.grey.withOpacity(0.2),
+  );
+}
+
+Widget _buildStatColumn(String label, int count, int amount, Color color, IconData icon) {
+  return Expanded(
+    child: Column(
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              color: color,
+              size: 16,
+            ),
+            SizedBox(width: 4),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                color: Color(0xFF6C7A92),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 8),
+        Text(
+          count.toString(),
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: Color(0xFF2C3E50),
+          ),
+        ),
+        SizedBox(height: 4),
+        Text(
+          'Rs${_formatAmount(amount)}',
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: color,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+// Helper functions
+IconData _getServiceIcon(String service) {
+  // Map service names to appropriate icons
+  switch (service) {
+    case 'Data Pack':
+      return Icons.money;
+    case 'Electricity':
+      return Icons.electrical_services;
+    case 'Internet':
+      return Icons.network_cell;
+    case 'Topup':
+      return Icons.arrow_upward;
+    case 'TV':
+    return  Icons.tv;
+    case 'Water':
+    return Icons.water;
+    case 'Bank_Transfer':
+    return Icons.balance_sharp;
+    case 'QR':
+    return Icons.qr_code;
+    case 'Wallet':
+    return Icons.wallet;
+    default:
+      return Icons.receipt_long;
+  }
+}
+
+String _formatAmount(int amount) {
+  if (amount >= 1000000) {
+    return '${(amount / 1000000).toStringAsFixed(1)}M';
+  } else if (amount >= 1000) {
+    return '${(amount / 1000).toStringAsFixed(1)}K';
+  } else {
+    return amount.toString();
+  }
+}
+
+int _calculateSuccessRate(int successCount, int pendingCount, int failCount) {
+  int total = successCount + pendingCount + failCount;
+  if (total == 0) return 0;
+  return ((successCount / total) * 100).round();
+}
+// Widget _buildTransactionCard(
+//   String service,
+//   int successCount,
+//   int successAmount,
+//   int pendingCount,
+//   int pendingAmount,
+//   int failCount,
+//   int failAmount
+// ){
+// return Card(
+//   elevation: 0,
+//   margin: EdgeInsets.symmetric(vertical: 8),
+//   shape: RoundedRectangleBorder(
+//     borderRadius: BorderRadius.circular(12),
+//   ),
+//   child: Container(
+//     decoration: BoxDecoration(
+//       gradient: LinearGradient(
+//            begin: Alignment.topLeft,
+//             end: Alignment.bottomRight,
+//         colors: [
+//          Colors.white,
+//               Color(0xFFF5F9FF),
+//       ]),
+//       boxShadow: [BoxShadow(
+//        color: Color(0xFF4285F4).withOpacity(0.1),
+//               offset: Offset(0, 4),
+//               blurRadius: 12,
+//               spreadRadius: 0,
+//       )
+
+//       ],
+//        border: Border.all(
+//             color: Color(0xFF4285F4).withOpacity(0.15),
+//             width: 1.5,
+//           ),
+//       borderRadius: BorderRadius.circular(12),
+//     ),
+//     padding: EdgeInsets.all(16),
+//     child: Row(
+//    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//       children: [
+//         Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//  CustomText(text: service,fontSize: 16,weight: FontWeight.bold,color: Colors.blue,),
+//         SizedBox(height: 8,),
+//         _buildstat('Success', 
+//         successCount,
+//          successAmount,
+//           Colors.green),
+//           _buildstat('Pending',pendingCount, pendingAmount, Colors.orange),
+//     _buildstat('Failure', failCount, failAmount, Colors.red),
+//           ],
+//         ),
+       
+//       // Icon(Icons.trending_up,color: Colors.white,size: 30,)
+
+//       ],
+//     ),
+//   ),
+
+// );
+// }
+
+// Widget _buildstat(String label, int count,int amount,Color color){
+//   return Padding(padding: EdgeInsets.symmetric(vertical: 4),
+//   child: Row(
+//     children: [
+//       Icon(Icons.circle,color: color,size: 10,),
+//       const SizedBox(width: 4,),
+//       CustomText(text: '$label: $count (Rs $amount)',
+//       fontSize: 14,
+//       color: Colors.blue)
+//     ],
+//   ),);
+// }
 Widget _buildLineChartCard(String title,List<double> dataPoints){
   return Card(
     elevation: 4,
@@ -595,7 +1326,7 @@ Widget _buildLineChartCard(String title,List<double> dataPoints){
                   color: Colors.blue[600],),
                 ),
                 const SizedBox(height: 8,),
-                Container(
+                SizedBox(
                   height: 200,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -692,7 +1423,7 @@ Widget _buildLineChartCard(String title,List<double> dataPoints){
                               
                         ],
                       isCurved: true,
-                      color: Colors.blue[600],
+                      color: Colors.blue[200],
                       dotData: FlDotData(show: true)
                       ),
                         ]),
@@ -726,6 +1457,7 @@ class __PieChartCardState extends State<_PieChartCard> {
         aspectRatio: 1.3,
         child:Column(
           mainAxisAlignment: MainAxisAlignment.start,
+       
           children: [
               const SizedBox(height: 10,),
              CustomText(text: 'Summary of successful transactions',
@@ -735,11 +1467,11 @@ class __PieChartCardState extends State<_PieChartCard> {
             Row(
               children: [
                
-                const SizedBox(width: 18,),
+                 const SizedBox(width: 18,),
                 
                 
                 Expanded(
-                  child:AspectRatio(
+                  child: AspectRatio(
                     aspectRatio: 1,
                     child: PieChart(
                       PieChartData(
@@ -760,8 +1492,8 @@ class __PieChartCardState extends State<_PieChartCard> {
                         sections: _getPieChartSections(),
                       )
                       
-                    ),)
-                 ),
+                    ),),
+                ),
                  const SizedBox(width: 10,),
                  Expanded(
                    child: Padding(
@@ -787,6 +1519,7 @@ class __PieChartCardState extends State<_PieChartCard> {
                     ],
                    ),),
                  )
+              
               ],
             ),
           ],

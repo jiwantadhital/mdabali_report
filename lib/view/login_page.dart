@@ -7,13 +7,38 @@ import 'package:mdabali_report/view/password_login_page.dart';
 
 import 'extracted_widgets/custom_text.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   final _numberController = TextEditingController();
+
    final _formKey = GlobalKey<FormState>();
+
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    final ValueNotifier<String> mobileNotifier= ValueNotifier<String>('');
+      String pattern = r'^9\d{9}$';
+
+  // Create a RegExp object
+  RegExp regExp = RegExp(pattern);
+
+    bool isValid(String mobile){
+      return mobile.length==10 && regExp.hasMatch(mobile);
+    }
+    
+   @override
+  void dispose() {
+    // TODO: implement dispose
+    mobileNotifier.dispose();
+    super.dispose();
+  }
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
@@ -103,20 +128,23 @@ class LoginPage extends StatelessWidget {
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                   keyboardType: TextInputType.phone,
-                  validator:(value){
-                    if(value.isEmpty){
-                      return 'Required Phone Number';
-                    }
-                    else if(value.length<10){
-                      return 'Number should be of 10 digit';
-                    }
-                    else if(value.length>10){
-                      return 'Number should not exceed 10 digit';
-                    }
-                    else if(value[0]!='9'){
-                      return 'Initial should start from 9';
-                    }
-                  }
+                  onchange: (value){
+                    mobileNotifier.value=value.toString();
+                  },
+                  // validator:(value){
+                  //   if(value.isEmpty){
+                  //     return 'Required Phone Number';
+                  //   }
+                  //   else if(value.length<10){
+                  //     return 'Number should be of 10 digit';
+                  //   }
+                  //   else if(value.length>10){
+                  //     return 'Number should not exceed 10 digit';
+                  //   }
+                  //   else if(value[0]!='9'){
+                  //     return 'Initial should start from 9';
+                  //   }
+                  // }
                 ),
             
                 const SizedBox(height: 60),
@@ -146,14 +174,32 @@ class LoginPage extends StatelessWidget {
                 ),
                 const Spacer(),
             
-                LoginButton(
-                  
-                  onPress: (){
-                    if(_formKey.currentState?.validate()?? false){
-                    Get.to(()=>PasswordLoginPage() );}
+                ValueListenableBuilder<String>(
+                  valueListenable: mobileNotifier,
+                  builder: (context,mobileNumber,child){
+
+                    print(mobileNumber);
+                    final isvalid= isValid(_numberController.text);
+                    print(isvalid);
+                    return LoginButton(
+                      onPress: isvalid? (){
+                        if(_formKey.currentState?.validate()??false){
+                          Get.off(()=> PasswordLoginPage());
+                        }
+                      }:null,
+                      text: 'Continue',
+                      color: isvalid? Colors.blue:Colors.transparent
+                    );
                   },
-                  color: Colors.blue,
-                  text: 'Continue',
+                  // child: LoginButton(
+                    
+                  //   onPress: (){
+                  //     if(_formKey.currentState?.validate()?? false){
+                  //     Get.off(()=>PasswordLoginPage() );}
+                  //   },
+                  //   color: Colors.blue,
+                  //   text: 'Continue',
+                  // ),
                 ),
                 const SizedBox(height: 20),
               ],

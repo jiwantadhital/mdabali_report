@@ -17,6 +17,10 @@ class PasswordLoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ValueNotifier<String> _passwordNotifier= ValueNotifier<String>('');
+    bool isValid(String password){
+      return password.isNotEmpty;
+    }
   return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
@@ -92,6 +96,10 @@ class PasswordLoginPage extends StatelessWidget {
             
                   hintText: 'Password',
                    controller:_passwordController,
+                   maxLength: 16,
+                   onchange: (value){
+                    _passwordNotifier.value=value;
+                   },
                    validator: (value){
                      if(value.isEmpty){
                       return 'Required password';
@@ -125,18 +133,23 @@ class PasswordLoginPage extends StatelessWidget {
                   decoration: TextDecoration.underline,),
                 ),
                 const Spacer(),
-                
-                LoginButton(
-                  onPress: (){
+                ValueListenableBuilder(
+                  valueListenable: _passwordNotifier,
+                   builder: (context,password,__){
+                    return LoginButton(
+                  onPress: isValid(_passwordController.text)?(){
                    if(_formKey.currentState?.validate()??false){
-                     Get.to(()=>DashBoardPage());
+                     Get.off(()=>DashBoardPage());
                    }
-                  },
-                  color: Colors.blue,
+                  }:null,
+                  color: isValid(_passwordController.text)?Colors.blue:Colors.transparent,
                   text: 'Login',
                   textcolor: Colors.black,
                                
-                ),
+                );
+                   }),
+                
+                
                 const SizedBox(height: 20),
                      
                

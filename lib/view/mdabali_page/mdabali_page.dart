@@ -15,12 +15,12 @@ class MdabaliPage extends StatelessWidget {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        HeaderSection(),
-        const SizedBox(height: 24,),
-        CustomText(text: 'mDabali Summary',
-        fontSize: 20,
-        weight: FontWeight.w600,),
-        const SizedBox(height: 16,),
+        // HeaderSection(),
+        // const SizedBox(height: 24,),
+        // CustomText(text: 'mDabali Summary',
+        // fontSize: 20,
+        // weight: FontWeight.w600,),
+        // const SizedBox(height: 16,),
           // _buildMDabbaliCard(institute: 'Aarjan Saving and Credit Cooperative',
           //                  membersLimit:'500',
           //                  verifiedUser: '500',
@@ -55,18 +55,10 @@ Widget buildMdabaliCard({
         // Main Card with Glassmorphism Effect
         Container(
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                  Color(0xFF3366FF),
-                // Colors.blue,
-                 Color(0xFF00CCFF),
-                Colors.tealAccent
-                // Colors.white
-              ],
-              // stops: [0.2, 1.0],
-            ),
+           border: Border.all(
+            color:Colors.blue.withOpacity(0.3),
+            width: 1.5
+           ),
             borderRadius: BorderRadius.circular(24),
           ),
           child: ClipRRect(
@@ -75,7 +67,7 @@ Widget buildMdabaliCard({
               filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.05),
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(24),
                   border: Border.all(
                     color: Colors.white.withOpacity(0.2),
@@ -85,20 +77,20 @@ Widget buildMdabaliCard({
                 child: Column(
                   children: [
                   
-                    buildInstituteHeader(institute),
+                    // buildInstituteHeader(institute),
                     
-                    SizedBox(height: 16),
+                    SizedBox(height: 24),
                     
                     
                     Container(
                       margin: EdgeInsets.symmetric(horizontal: 16),
                       padding: EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.white.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
-                          color: Colors.white.withOpacity(0.15),
-                          width: 1,
+                          color: Colors.blue.withOpacity(0.3),
+                          width: 1.5,
                         ),
                       ),
                       child: Column(
@@ -107,15 +99,15 @@ Widget buildMdabaliCard({
                             'Members Limit',
                             membersLimit,
                             Icons.card_membership,
-                            Colors.white,
-                            iconBgColor: Colors.white.withOpacity(0.15),
+                            Colors.black,
+                            iconBgColor: Colors.red.withOpacity(0.3),
                           ),
                           buildDivider(),
                           buildMetricRow(
                             'Verified Users',
                             verifiedUser,
                             Icons.verified_user_rounded,
-                            Colors.white,
+                            Colors.black,
                             iconBgColor: Colors.greenAccent.withOpacity(0.25),
                           ),
                           buildDivider(),
@@ -123,7 +115,7 @@ Widget buildMdabaliCard({
                             'Closed Users',
                             closedUser,
                             Icons.person_off_rounded,
-                            Colors.white,
+                            Colors.black,
                             iconBgColor: Colors.redAccent.withOpacity(0.25),
                           ),
                           buildDivider(),
@@ -131,7 +123,7 @@ Widget buildMdabaliCard({
                             'Total Users',
                             totalUser,
                             Icons.people_rounded,
-                            Colors.white,
+                            Colors.black,
                             iconBgColor: Colors.amberAccent.withOpacity(0.25),
                             isLast: true,
                           ),
@@ -150,14 +142,14 @@ Widget buildMdabaliCard({
         
         // Decorative bubble circle
         Positioned(
-          top: -10,
+          top: 10,
           right: -20,
           child: Container(
             width: 100,
             height: 100,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.white.withOpacity(0.1),
+              color: Colors.blue.withOpacity(0.1),
             ),
           ),
         ),
@@ -169,7 +161,7 @@ Widget buildMdabaliCard({
             height: 80,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.white.withOpacity(0.1),
+              color: Colors.blue.withOpacity(0.1),
             ),
           ),
         ),
@@ -289,7 +281,7 @@ Widget buildMetricRow(
             color: Colors.white.withOpacity(0.1),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: Colors.white.withOpacity(0.1),
+              color: Colors.blue.withOpacity(0.1),
               width: 1,
             ),
           ),
@@ -315,9 +307,9 @@ Widget buildDivider() {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Colors.white.withOpacity(0),
-            Colors.white.withOpacity(0.5),
-            Colors.white.withOpacity(0),
+            Colors.blue.withOpacity(0),
+            Colors.blue.withOpacity(0.5),
+            Colors.blue.withOpacity(0),
           ],
           stops: [0.0, 0.5, 1.0],
           begin: Alignment.centerLeft,

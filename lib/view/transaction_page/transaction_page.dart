@@ -13,11 +13,11 @@ class TransactionPage extends StatelessWidget {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-             HeaderSection(),
-        const SizedBox(height: 24,),
-          CustomText(text: 'Transaction Summary',
-        fontSize: 20,
-        weight: FontWeight.w600,),
+        //      HeaderSection(),
+        // const SizedBox(height: 24,),
+        //   CustomText(text: 'Transaction Summary',
+        // fontSize: 20,
+        // weight: FontWeight.w600,),
         _buildTransactionList(),
              
         const SizedBox(height: 24,),

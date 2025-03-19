@@ -21,7 +21,7 @@ class _PieChartCardState extends State<PieChartCard> {
     return SizedBox(
       //padding: EdgeInsets.all(8),
       // height: height,
-      width: double.infinity,
+      width: double.maxFinite,
       child: Card(
         elevation: 5,
         color: Colors.white,
@@ -72,26 +72,22 @@ class _PieChartCardState extends State<PieChartCard> {
             ),
              Padding(
               padding: EdgeInsets.only(bottom: 18,right: 15),
-             child: Column(
-              // mainAxisAlignment: MainAxisAlignment.end,
-              // crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildIndicator(color: Colors.brown, text: 'Data Pack: 41.9%'),
-                const SizedBox(height: 8,),
-                _buildIndicator(color: Colors.red, text: 'Electricity: 4%'),
-                const SizedBox(height: 8,),
-                _buildIndicator(color: Colors.pink, text: 'Internet: 8%'),
-                const SizedBox(height: 8,),
-                _buildIndicator(color: Colors.grey, text: 'TV: 0%'),
-                const SizedBox(height: 8,),
-                _buildIndicator(color: Colors.blue, text: 'Water: 5%'),
-                const SizedBox(height: 8,),
-                _buildIndicator(color: Colors.orange, text: 'Bank Transfer: 15%'),
-                const SizedBox(height: 8,),
-                _buildIndicator(color: Colors.purple, text: 'QR: 35%'),
+             child: Wrap(
+               spacing: 5,
+               runSpacing: 8,
+               direction: Axis.horizontal,
+               alignment: WrapAlignment.start,
+               children: [
+                  _buildIndicator(color: Colors.brown, text: 'Data Pack: 41.9%'),
+                  _buildIndicator(color: Colors.red, text: 'Electricity: 4%'),
+                  _buildIndicator(color: Colors.pink, text: 'Internet: 8%'),
+                  _buildIndicator(color: Colors.grey, text: 'TV: 0%'),
+                  _buildIndicator(color: Colors.blue, text: 'Water: 5%'),
+                  _buildIndicator(color: Colors.orange, text: 'Bank Transfer: 15%'),
+                                                   _buildIndicator(color: Colors.purple, text: 'QR: 35%'),
                
-              ],
-             ),)
+               ],
+             ))
           ],
           
         ),
@@ -193,9 +189,10 @@ class _PieChartCardState extends State<PieChartCard> {
 
 Widget _buildIndicator({required Color color,required String text}){
   return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 70),
+    padding: const EdgeInsets.symmetric(horizontal: 20),
     child: Row(
       children: [
+        
         Container(width: 16,height: 16,
         color: color,),
         const SizedBox(width: 8,),

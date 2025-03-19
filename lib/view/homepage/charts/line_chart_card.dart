@@ -129,6 +129,7 @@ class LineChartCard extends StatelessWidget {
                               
                         ],
                       isCurved: true,
+                      curveSmoothness: 0.5,
                       color: Colors.blue[200],
                       dotData: FlDotData(show: true)
                       ),

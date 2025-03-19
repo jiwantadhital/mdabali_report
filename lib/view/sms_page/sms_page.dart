@@ -15,12 +15,12 @@ class SmsPage extends StatelessWidget {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        HeaderSection(),
+       // HeaderSection(),
         // const SizedBox(height: 24,),
         // CustomText(text: 'SMS Summary',
         // fontSize: 20,
         // weight: FontWeight.w600,),
-        const SizedBox(height: 16,),
+       // const SizedBox(height: 16,),
          _buildSMSCard(institute: 'Aarjan Saving and Credit Cooperative',
                        totalUsed: '100', 
                        rate:'11.13%',
@@ -57,6 +57,11 @@ Widget _buildSMSCard({
             //   ],
             //   // stops: [0.2, 1.0],
             // ),
+           
+            border: Border.all(
+              color: Colors.blue.withOpacity(0.3),
+              width: 1.5
+            ),
             borderRadius: BorderRadius.circular(24),
           ),
           child: ClipRRect(
@@ -88,8 +93,8 @@ Widget _buildSMSCard({
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
-                          color: Colors.blue.withOpacity(0.1),
-                          width: 1,
+                          color: Colors.blue.withOpacity(0.3),
+                          width: 1.5,
                         ),
                       ),
                       child: Column(
@@ -141,7 +146,7 @@ Widget _buildSMSCard({
         
         // Decorative bubble circle
         Positioned(
-          top: -10,
+          top: 10,
           right: -20,
           child: Container(
             width: 100,
@@ -280,7 +285,7 @@ Widget buildMetricRow(
             color: Colors.white.withOpacity(0.1),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: Colors.white.withOpacity(0.1),
+              color: Colors.blue.withOpacity(0.1),
               width: 1,
             ),
           ),

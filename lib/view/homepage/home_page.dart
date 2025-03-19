@@ -31,19 +31,20 @@ class HomePage extends StatelessWidget {
           ),
           const SizedBox(width:5,),
            CustomText(text:'Arjan saving and credit cooperative',
-           fontSize: 20,
+           textOverflow:TextOverflow.ellipsis,
+           letterSpacing: 1,
+           fontSize: 16,
            weight: FontWeight.w600,),
            const SizedBox(height: 24,),
          
                  
                   
         ],),
-          Center(
-            child: CustomText(text: 'All your transaction details',
-                        fontSize: 18,
-                        weight:FontWeight.w600,
-                        color: Colors.black87,),
-          ),
+        const SizedBox(height: 24,),
+          CustomText(text: 'All your transaction details',
+                      fontSize: 16,
+                      weight:FontWeight.w600,
+                      color: Colors.black87,),
          const SizedBox(height: 24,),
            HeaderSection(),
         const SizedBox(height: 24,),

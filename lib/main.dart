@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:mdabali_report/view/login_page.dart';

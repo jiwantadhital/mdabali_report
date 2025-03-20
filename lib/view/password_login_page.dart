@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mdabali_report/view/dash_board_page.dart';
+import 'package:mdabali_report/view/o_t_p_verification_page.dart';
 
 import '../resources/images_constants.dart';
 import 'extracted_widgets/custom_text.dart';
@@ -12,7 +13,7 @@ class PasswordLoginPage extends StatelessWidget {
   PasswordLoginPage({super.key});
 
   final _passwordController = TextEditingController();
-  final _numberController =TextEditingController();
+  //final _numberController =TextEditingController();
   final _formKey = GlobalKey<FormState> ();
 
   @override
@@ -139,7 +140,7 @@ class PasswordLoginPage extends StatelessWidget {
                     return LoginButton(
                   onPress: isValid(_passwordController.text)?(){
                    if(_formKey.currentState?.validate()??false){
-                     Get.off(()=>DashBoardPage());
+                     Get.off(()=>OTPVerificationPage());
                    }
                   }:null,
                   color: isValid(_passwordController.text)?Colors.blue:Colors.transparent,

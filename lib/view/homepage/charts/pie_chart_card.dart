@@ -34,7 +34,7 @@ class _PieChartCardState extends State<PieChartCard> {
              fontSize: 18,
             color: Colors.grey[600],
             weight: FontWeight.bold,),
-           // const SizedBox(height: 24,),
+            const SizedBox(height: 24,),
             Row(
               children: [
                
@@ -120,8 +120,8 @@ class _PieChartCardState extends State<PieChartCard> {
     ),
      PieChartSectionData(
       color: Colors.pink,
-      value: 3,
-      title: '3',
+      value: 8,
+      title: '8',
       radius: touchedIndex==2?60.0:50.0,
       titleStyle: TextStyle(
         fontSize: touchedIndex==2?20.0:16.0,
@@ -131,8 +131,8 @@ class _PieChartCardState extends State<PieChartCard> {
     ),
      PieChartSectionData(
       color: Colors.cyan,
-      value: 40,
-      title: '40',
+      value: 0,
+      title: '0',
       radius: touchedIndex==3?60.0:50.0,
       titleStyle: TextStyle(
         fontSize: touchedIndex==3?20.0:16.0,
@@ -142,8 +142,8 @@ class _PieChartCardState extends State<PieChartCard> {
     ),
      PieChartSectionData(
       color: Colors.grey,
-      value: 0,
-      title: '0',
+      value: 5,
+      title: '5',
       radius: touchedIndex==4?60.0:50.0,
       titleStyle: TextStyle(
         fontSize: touchedIndex==4?20.0:16.0,
@@ -153,8 +153,8 @@ class _PieChartCardState extends State<PieChartCard> {
     ),
      PieChartSectionData(
       color: Colors.blue,
-      value: 5,
-      title: '5',
+      value: 15,
+      title: '15',
       radius: touchedIndex==5?60.0:50.0,
       titleStyle: TextStyle(
         fontSize: touchedIndex==5?20.0:16.0,
@@ -164,26 +164,26 @@ class _PieChartCardState extends State<PieChartCard> {
     ),
      PieChartSectionData(
       color: Colors.orange,
-      value: 15,
-      title: '15',
-      radius: touchedIndex==6?60.0:50.0,
+      value: 35,
+      title: '35',
+      radius: touchedIndex==5?60.0:50.0,
       titleStyle: TextStyle(
-        fontSize: touchedIndex==6?20.0:16.0,
+        fontSize: touchedIndex==5?20.0:16.0,
         fontWeight: FontWeight.bold,
         color: Colors.white,
       )
     ),
-     PieChartSectionData(
-      color: Colors.purple,
-      value: 35,
-      title: '35',
-      radius: touchedIndex==7?60.0:50.0,
-      titleStyle: TextStyle(
-        fontSize: touchedIndex==7?20.0:16.0,
-        fontWeight: FontWeight.bold,
-        color: Colors.white,
-      )
-    )
+    //  PieChartSectionData(
+    //   color: Colors.purple,
+    //   value: 35,
+    //   title: '35',
+    //   radius: touchedIndex==7?60.0:50.0,
+    //   titleStyle: TextStyle(
+    //     fontSize: touchedIndex==7?20.0:16.0,
+    //     fontWeight: FontWeight.bold,
+    //     color: Colors.white,
+    //   )
+    // )
   ];
 }
 

@@ -24,13 +24,14 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     final ValueNotifier<String> mobileNotifier= ValueNotifier<String>('');
-      String pattern = r'^9\d{9}$';
+   //   String pattern = r'^9\d{9}$';
 
   // Create a RegExp object
-  RegExp regExp = RegExp(pattern);
+  //RegExp regExp = RegExp(pattern);
 
     bool isValid(String mobile){
-      return mobile.length==10 && regExp.hasMatch(mobile);
+      return mobile.isNotEmpty;
+       //  mobile.length==10 && regExp.hasMatch(mobile);
     }
     
    @override
@@ -122,12 +123,11 @@ class _LoginPageState extends State<LoginPage> {
             
                 const SizedBox(height: 20),
                 CustomTextField(
-                  hintText: 'Phone Number',
+                  hintText: 'User name',
                   controller: _numberController,
-                  maxLength: 10,
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                  keyboardType: TextInputType.phone,
+                  keyboardType: TextInputType.name,
                   onchange: (value){
                     mobileNotifier.value=value.toString();
                   },

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mdabali_report/resources/colors.dart';
 import 'package:mdabali_report/resources/images_constants.dart';
 import 'package:mdabali_report/view/extracted_widgets/custom_textfield.dart';
 import 'package:mdabali_report/view/extracted_widgets/extracted_button.dart';
@@ -8,41 +9,36 @@ import 'package:mdabali_report/view/password_login_page.dart';
 import 'extracted_widgets/custom_text.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({super.key});
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _numberController = TextEditingController();
+  final usernameController = TextEditingController();
 
-   final _formKey = GlobalKey<FormState>();
-
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    final ValueNotifier<String> mobileNotifier= ValueNotifier<String>('');
-   //   String pattern = r'^9\d{9}$';
+    final ValueNotifier<String> mobileNotifier = ValueNotifier<String>('');
 
-  // Create a RegExp object
-  //RegExp regExp = RegExp(pattern);
-
-    bool isValid(String mobile){
+    bool isValid(String mobile) {
       return mobile.isNotEmpty;
-       //  mobile.length==10 && regExp.hasMatch(mobile);
     }
-    
-   @override
-  void dispose() {
-    // TODO: implement dispose
-    mobileNotifier.dispose();
-    super.dispose();
-  }
+
+    @override
+    void dispose() {
+      mobileNotifier.dispose();
+      super.dispose();
+    }
+
+    var colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.white,
+      backgroundColor: colorScheme.surfaceContainer,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -54,15 +50,13 @@ class _LoginPageState extends State<LoginPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      width: 40,
+                    Center(
+                        child: Image.asset(
+                      ImagesConstants.arjnaLogo,
+                      scale: 1,
                       height: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Center(
-                          child:Image.asset(ImagesConstants.arjnaLogo,scale: 1,)),
-                    ),
+                      width: 40,
+                    )),
                     Row(
                       children: [
                         Container(
@@ -71,17 +65,18 @@ class _LoginPageState extends State<LoginPage> {
                             vertical: 6,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.grey[200],
+                            color: colorScheme.surfaceContainerHighest,
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Row(
                             children: [
                               Icon(Icons.language,
-                                  size: 16, color: Colors.grey[600]),
+                                  size: 16,
+                                  color: colorScheme.onSecondaryContainer),
                               const SizedBox(width: 4),
                               CustomText(
                                 text: 'Eng',
-                                color: Colors.grey,
+                                color: colorScheme.onSurfaceVariant,
                               )
                             ],
                           ),
@@ -90,11 +85,11 @@ class _LoginPageState extends State<LoginPage> {
                         Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: Colors.grey[200],
+                            color: colorScheme.surfaceContainerHighest,
                             shape: BoxShape.circle,
                           ),
                           child: Icon(Icons.question_mark,
-                              size: 16, color: Colors.grey[600]),
+                              size: 16, color: colorScheme.onSurfaceVariant),
                         ),
                       ],
                     ),
@@ -120,86 +115,65 @@ class _LoginPageState extends State<LoginPage> {
                   fontSize: 24,
                   weight: FontWeight.bold,
                 ),
-            
+
                 const SizedBox(height: 20),
                 CustomTextField(
                   hintText: 'User name',
-                  controller: _numberController,
+                  controller: usernameController,
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                   keyboardType: TextInputType.name,
-                  onchange: (value){
-                    mobileNotifier.value=value.toString();
+                  onchange: (value) {
+                    mobileNotifier.value = value.toString();
                   },
-                  // validator:(value){
-                  //   if(value.isEmpty){
-                  //     return 'Required Phone Number';
-                  //   }
-                  //   else if(value.length<10){
-                  //     return 'Number should be of 10 digit';
-                  //   }
-                  //   else if(value.length>10){
-                  //     return 'Number should not exceed 10 digit';
-                  //   }
-                  //   else if(value[0]!='9'){
-                  //     return 'Initial should start from 9';
-                  //   }
-                  // }
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Username is required';
+                    }
+                    return null;
+                  },
                 ),
-            
+
                 const SizedBox(height: 60),
-            
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CustomText(
-                      text: 'Other Account Options',
-                      fontSize: 16,
-                      color: Colors.deepOrange,
-                    ),
-                    Icon(
-                      Icons.chevron_right,
-                      color: Colors.deepOrange,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 34),
-            
-                Center(
-                  child: CustomText(
-                    text: 'Not this cooperative?',
-                    color: Colors.grey[600],
-                    decoration: TextDecoration.underline,
-                  ),
-                ),
+
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     CustomText(
+                //       text: 'Other Account Options',
+                //       fontSize: 16,
+                //       color: Colors.deepOrange,
+                //     ),
+                //     Icon(
+                //       Icons.chevron_right,
+                //       color: Colors.deepOrange,
+                //     ),
+                //   ],
+                // ),
+                // const SizedBox(height: 34),
+
                 const Spacer(),
-            
+
                 ValueListenableBuilder<String>(
                   valueListenable: mobileNotifier,
-                  builder: (context,mobileNumber,child){
+                  builder: (context, mobileNumber, child) {
+                    final isvalid = isValid(usernameController.text);
 
-                    print(mobileNumber);
-                    final isvalid= isValid(_numberController.text);
-                    print(isvalid);
                     return LoginButton(
-                      onPress: isvalid? (){
-                        if(_formKey.currentState?.validate()??false){
-                          Get.off(()=> PasswordLoginPage());
-                        }
-                      }:null,
-                      text: 'Continue',
-                      color: isvalid? Colors.blue:Colors.transparent
-                    );
+                        onPress: isvalid
+                            ? () {
+                                if (_formKey.currentState?.validate() ??
+                                    false) {
+                                  Get.off(() => PasswordLoginPage(
+                                        username:
+                                            usernameController.text.trim(),
+                                      ));
+                                }
+                              }
+                            : null,
+                        text: 'Continue',
+                        color: isvalid ? Colors.blue : Colors.transparent);
                   },
-                  // child: LoginButton(
-                    
-                  //   onPress: (){
-                  //     if(_formKey.currentState?.validate()?? false){
-                  //     Get.off(()=>PasswordLoginPage() );}
-                  //   },
-                  //   color: Colors.blue,
-                  //   text: 'Continue',
-                  // ),
                 ),
                 const SizedBox(height: 20),
               ],
@@ -227,34 +201,27 @@ class BottomNavAuth extends StatelessWidget {
       height: 60,
       width: size.width,
       decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border(
-          top: BorderSide(color: Colors.grey[200]!),
-        ),
+        color: Theme.of(context).colorScheme.surface,
         boxShadow: [
-          BoxShadow(
-            color: Colors.grey[200]!,
-            blurRadius: 6,
-            spreadRadius: 5,
-          ),
+          kBoxShadow,
         ],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
+          SizedBox(
             width: 40,
             height: 40,
             child: Image.asset(
               ImagesConstants.info,
             ),
           ),
-          Container(
+          SizedBox(
             width: 40,
             height: 40,
             child: Image.asset(ImagesConstants.arjnaLogo),
           ),
-          Container(
+          SizedBox(
             width: 40,
             height: 40,
             child: Image.asset(ImagesConstants.info),

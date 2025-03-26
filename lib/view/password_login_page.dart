@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:mdabali_report/bloc/login_bloc/bloc/login_bloc.dart';
 import 'package:mdabali_report/view/dash_board_page.dart';
+import 'package:mdabali_report/view/extracted_widgets/custom_snackbar.dart';
 import 'package:mdabali_report/view/o_t_p_verification_page.dart';
 
 import '../resources/images_constants.dart';
@@ -9,158 +12,210 @@ import 'extracted_widgets/custom_textfield.dart';
 import 'extracted_widgets/extracted_button.dart';
 import 'login_page.dart';
 
-class PasswordLoginPage extends StatelessWidget {
-  PasswordLoginPage({super.key});
+class PasswordLoginPage extends StatefulWidget {
+  final String username;
+  const PasswordLoginPage({super.key, required this.username});
 
-  final _passwordController = TextEditingController();
+  @override
+  State<PasswordLoginPage> createState() => _PasswordLoginPageState();
+}
+
+class _PasswordLoginPageState extends State<PasswordLoginPage> {
+  final passwordController = TextEditingController();
+
   //final _numberController =TextEditingController();
-  final _formKey = GlobalKey<FormState> ();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    final ValueNotifier<String> _passwordNotifier= ValueNotifier<String>('');
-    bool isValid(String password){
+    final ValueNotifier<String> passwordNotifier = ValueNotifier<String>('');
+    bool isValid(String password) {
       return password.isNotEmpty;
     }
-  return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child:  Center(
-                        child:Image.asset(ImagesConstants.arjnaLogo,scale: 1,)),
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 6,
+
+    return Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
+          child: BlocConsumer<LoginBloc, LoginState>(
+            listener: (context, state) {
+              if (state is LoginSuccess) {
+                final loginData = state.loginModel;
+                loginData.isOTPRequired == true
+                    ? Get.off(() => OTPVerificationPage())
+                    : Get.off(DashBoardPage());
+              }
+              if (state is LoginFailure) {
+                CustomSnackbar(
+                        title: 'Error',
+                        message: state.error,
+                        snackPosition: SnackPosition.TOP)
+                    .show();
+              }
+            },
+            builder: (context, state) {
+              return Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            width: 40,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Center(
+                                child: Image.asset(
+                              ImagesConstants.arjnaLogo,
+                              scale: 1,
+                            )),
                           ),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Row(
+                          Row(
                             children: [
-                              Icon(Icons.language, size: 16, color: Colors.grey[600]),
-                              const SizedBox(width: 4),
-                              CustomText(text: 'Eng',
-                              color: Colors.grey,)
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 6,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.language,
+                                        size: 16, color: Colors.grey[600]),
+                                    const SizedBox(width: 4),
+                                    CustomText(
+                                      text: 'Eng',
+                                      color: Colors.grey,
+                                    )
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(Icons.question_mark,
+                                    size: 16, color: Colors.grey[600]),
+                              ),
                             ],
                           ),
-                        ),
-                        const SizedBox(width: 8),
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(Icons.question_mark, size: 16, color: Colors.grey[600]),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 40),
-                // Title section
-                CustomText(
-                  text: 'Secure and Convenient',
-                  fontSize: 24,
-                  color: Colors.grey,
-                  ),
-                const SizedBox(height: 8),
-                CustomText(text:'Mobile Banking',
-                fontSize: 32,
-                color: Colors.deepOrange,
-                weight: FontWeight.bold,),
-                const SizedBox(height: 40),
+                        ],
+                      ),
+                      const SizedBox(height: 40),
+                      // Title section
+                      CustomText(
+                        text: 'Secure and Convenient',
+                        fontSize: 24,
+                        color: Colors.grey,
+                      ),
+                      const SizedBox(height: 8),
+                      CustomText(
+                        text: 'Mobile Banking',
+                        fontSize: 32,
+                        color: Colors.deepOrange,
+                        weight: FontWeight.bold,
+                      ),
+                      const SizedBox(height: 40),
                       UserPhoneNum(),
-                const SizedBox(height: 20),
-                CustomTextField(
-            
-                  hintText: 'Password',
-                   controller:_passwordController,
-                   maxLength: 16,
-                   onchange: (value){
-                    _passwordNotifier.value=value;
-                   },
-                   validator: (value){
-                     if(value.isEmpty){
-                      return 'Required password';
-                     } 
-                                       },
-                   isPass: true,
-                   contentPadding: EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 16),
-                    keyboardType: TextInputType.text,
-                    suffixIconEnabled: true
-                    ),
-            
-                const SizedBox(height: 16),
-                
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    CustomText(text: 'Forgot Password?',
-                    fontSize: 16,
-                    color: Colors.black,
-                    decoration: TextDecoration.underline,),
-                    
-                  ],
+                      const SizedBox(height: 20),
+                      CustomTextField(
+                          hintText: 'Password',
+                          controller: passwordController,
+                          maxLength: 16,
+                          onchange: (value) {
+                            passwordNotifier.value = value;
+                          },
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Required password';
+                            }
+                          },
+                          isPass: true,
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 16),
+                          keyboardType: TextInputType.text,
+                          suffixIconEnabled: true),
+
+                      const SizedBox(height: 16),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          CustomText(
+                            text: 'Forgot Password?',
+                            fontSize: 16,
+                            color: Colors.black,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+
+                      Center(
+                        child: CustomText(
+                          text: 'Not you?',
+                          color: Colors.grey[600],
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                      const Spacer(),
+                      BlocBuilder<LoginBloc, LoginState>(
+                        builder: (context, state) {
+                          return ValueListenableBuilder(
+                            valueListenable: passwordNotifier,
+                            builder: (context, password, __) {
+                              return LoginButton(
+                                onPress: (state is LoginLoading ||
+                                        !isValid(passwordController.text))
+                                    ? null
+                                    : () {
+                                        if (_formKey.currentState?.validate() ??
+                                            false) {
+                                          context.read<LoginBloc>().add(
+                                                LoginButtonPressed(
+                                                  username: widget.username,
+                                                  password: passwordController
+                                                      .text
+                                                      .trim(),
+                                                ),
+                                              );
+                                        }
+                                      },
+                                color: isValid(passwordController.text)
+                                    ? Colors.blue
+                                    : Colors.transparent,
+                                text: 'Login',
+                                textcolor: Colors.white,
+                                isLoading: state
+                                    is LoginLoading, // Enable loading animation
+                              );
+                            },
+                          );
+                        },
+                      ),
+
+                      const SizedBox(height: 20),
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 16),
-                
-                Center(
-                  child:CustomText(text: 'Not you?',
-                  color: Colors.grey[600],
-                  decoration: TextDecoration.underline,),
-                ),
-                const Spacer(),
-                ValueListenableBuilder(
-                  valueListenable: _passwordNotifier,
-                   builder: (context,password,__){
-                    return LoginButton(
-                  onPress: isValid(_passwordController.text)?(){
-                   if(_formKey.currentState?.validate()??false){
-                     Get.off(()=>OTPVerificationPage());
-                   }
-                  }:null,
-                  color: isValid(_passwordController.text)?Colors.blue:Colors.transparent,
-                  text: 'Login',
-                  textcolor: Colors.black,
-                               
-                );
-                   }),
-                
-                
-                const SizedBox(height: 20),
-                     
-               
-              ],
-            ),
+              );
+            },
           ),
         ),
-      ),
-      bottomNavigationBar: BottomNavAuth(size: MediaQuery.of(context).size,)
-    );
+        bottomNavigationBar: BottomNavAuth(
+          size: MediaQuery.of(context).size,
+        ));
   }
 }
 
@@ -172,36 +227,38 @@ class UserPhoneNum extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 16),
-        decoration: BoxDecoration(
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30),
-          border: Border.all(
-            color: Colors.grey[600]!
-          )
-        ),
-        child: Row(
-          children: [
-            CircleAvatar(
-              backgroundColor:Colors.grey[200],
-              child: Icon(Icons.person,
-              color: Colors.grey,),
-              
+          border: Border.all(color: Colors.grey[600]!)),
+      child: Row(
+        children: [
+          CircleAvatar(
+            backgroundColor: Colors.grey[200],
+            child: Icon(
+              Icons.person,
+              color: Colors.grey,
             ),
-            const SizedBox(width: 12,),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CustomText(text: 'Info Developers Pvt Ltd',
+          ),
+          const SizedBox(
+            width: 12,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomText(
+                text: 'Info Developers Pvt Ltd',
                 weight: FontWeight.w400,
-                color: Colors.black,),
-                CustomText(text: '98*****93',
-                color: Colors.grey[600],)
-              ],
-            )
-          ],
-        ),
+                color: Colors.black,
+              ),
+              CustomText(
+                text: '98*****93',
+                color: Colors.grey[600],
+              )
+            ],
+          )
+        ],
+      ),
     );
   }
 }

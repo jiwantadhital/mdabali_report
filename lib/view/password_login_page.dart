@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:mdabali_report/bloc/login_bloc/bloc/login_bloc.dart';
+import 'package:mdabali_report/data/shared_preferences/shared_preferences.dart';
 import 'package:mdabali_report/view/dash_board_page.dart';
 import 'package:mdabali_report/view/extracted_widgets/custom_snackbar.dart';
 import 'package:mdabali_report/view/o_t_p_verification_page.dart';
@@ -23,7 +24,6 @@ class PasswordLoginPage extends StatefulWidget {
 class _PasswordLoginPageState extends State<PasswordLoginPage> {
   final passwordController = TextEditingController();
 
-  //final _numberController =TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -33,16 +33,20 @@ class _PasswordLoginPageState extends State<PasswordLoginPage> {
       return password.isNotEmpty;
     }
 
+    var colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
         resizeToAvoidBottomInset: false,
+        backgroundColor: colorScheme.surfaceContainer,
         body: SafeArea(
           child: BlocConsumer<LoginBloc, LoginState>(
-            listener: (context, state) {
+            listener: (context, state) async {
               if (state is LoginSuccess) {
                 final loginData = state.loginModel;
                 loginData.isOTPRequired == true
                     ? Get.off(() => OTPVerificationPage())
                     : Get.off(DashBoardPage());
+                final token = loginData.data?.accessToken ?? "";
+                await UserSimplePreferences.setToken(token);
               }
               if (state is LoginFailure) {
                 CustomSnackbar(
@@ -83,17 +87,19 @@ class _PasswordLoginPageState extends State<PasswordLoginPage> {
                                   vertical: 6,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: Colors.grey[200],
+                                  color: colorScheme.surfaceContainerHighest,
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Row(
                                   children: [
                                     Icon(Icons.language,
-                                        size: 16, color: Colors.grey[600]),
+                                        size: 16,
+                                        color:
+                                            colorScheme.onSecondaryContainer),
                                     const SizedBox(width: 4),
                                     CustomText(
                                       text: 'Eng',
-                                      color: Colors.grey,
+                                      color: colorScheme.onSurfaceVariant,
                                     )
                                   ],
                                 ),
@@ -102,11 +108,12 @@ class _PasswordLoginPageState extends State<PasswordLoginPage> {
                               Container(
                                 padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
-                                  color: Colors.grey[200],
+                                  color: colorScheme.surfaceContainerHighest,
                                   shape: BoxShape.circle,
                                 ),
                                 child: Icon(Icons.question_mark,
-                                    size: 16, color: Colors.grey[600]),
+                                    size: 16,
+                                    color: colorScheme.onSurfaceVariant),
                               ),
                             ],
                           ),
@@ -116,18 +123,20 @@ class _PasswordLoginPageState extends State<PasswordLoginPage> {
                       // Title section
                       CustomText(
                         text: 'Secure and Convenient',
-                        fontSize: 24,
-                        color: Colors.grey,
+                        fontSize: 16,
+                        color: colorScheme.onSurfaceVariant,
                       ),
                       const SizedBox(height: 8),
                       CustomText(
                         text: 'Mobile Banking',
-                        fontSize: 32,
+                        fontSize: 24,
                         color: Colors.deepOrange,
                         weight: FontWeight.bold,
                       ),
                       const SizedBox(height: 40),
-                      UserPhoneNum(),
+                      UserPhoneNum(
+                        username: widget.username,
+                      ),
                       const SizedBox(height: 20),
                       CustomTextField(
                           hintText: 'Password',
@@ -155,20 +164,20 @@ class _PasswordLoginPageState extends State<PasswordLoginPage> {
                           CustomText(
                             text: 'Forgot Password?',
                             fontSize: 16,
-                            color: Colors.black,
+                            color: colorScheme.onSurfaceVariant,
                             decoration: TextDecoration.underline,
                           ),
                         ],
                       ),
-                      const SizedBox(height: 16),
+                      // const SizedBox(height: 16),
 
-                      Center(
-                        child: CustomText(
-                          text: 'Not you?',
-                          color: Colors.grey[600],
-                          decoration: TextDecoration.underline,
-                        ),
-                      ),
+                      // Center(
+                      //   child: CustomText(
+                      //     text: 'Not you?',
+                      //     color: Colors.grey[600],
+                      //     decoration: TextDecoration.underline,
+                      //   ),
+                      // ),
                       const Spacer(),
                       BlocBuilder<LoginBloc, LoginState>(
                         builder: (context, state) {
@@ -196,7 +205,9 @@ class _PasswordLoginPageState extends State<PasswordLoginPage> {
                                     ? Colors.blue
                                     : Colors.transparent,
                                 text: 'Login',
-                                textcolor: Colors.white,
+                                textcolor: isValid(passwordController.text)
+                                    ? colorScheme.onPrimary
+                                    : colorScheme.onSurfaceVariant,
                                 isLoading: state
                                     is LoginLoading, // Enable loading animation
                               );
@@ -219,11 +230,18 @@ class _PasswordLoginPageState extends State<PasswordLoginPage> {
   }
 }
 
-class UserPhoneNum extends StatelessWidget {
+class UserPhoneNum extends StatefulWidget {
+  final String username;
   const UserPhoneNum({
     super.key,
+    required this.username,
   });
 
+  @override
+  State<UserPhoneNum> createState() => _UserPhoneNumState();
+}
+
+class _UserPhoneNumState extends State<UserPhoneNum> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -234,11 +252,10 @@ class UserPhoneNum extends StatelessWidget {
       child: Row(
         children: [
           CircleAvatar(
-            backgroundColor: Colors.grey[200],
-            child: Icon(
-              Icons.person,
-              color: Colors.grey,
-            ),
+            backgroundColor:
+                Theme.of(context).colorScheme.surfaceContainerHighest,
+            child: Icon(Icons.person,
+                color: Theme.of(context).colorScheme.onSurfaceVariant),
           ),
           const SizedBox(
             width: 12,
@@ -247,13 +264,16 @@ class UserPhoneNum extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomText(
-                text: 'Info Developers Pvt Ltd',
-                weight: FontWeight.w400,
-                color: Colors.black,
+                text: 'Arjan saving and credit cooperative',
+                weight: FontWeight.w500,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+              SizedBox(
+                height: 4,
               ),
               CustomText(
-                text: '98*****93',
-                color: Colors.grey[600],
+                text: widget.username,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
               )
             ],
           )

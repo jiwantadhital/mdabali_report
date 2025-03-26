@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:mdabali_report/bloc/login_bloc/bloc/login_bloc.dart';
+import 'package:mdabali_report/data/repos/repositories/login_repository.dart';
+import 'package:mdabali_report/resources/colors.dart';
 import 'package:mdabali_report/view/login_page.dart';
 
 void main() {
@@ -15,15 +19,26 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return FlutterSizer(
       builder: (context, orientation, deviceType) {
-        return GetMaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Flutter Demo',
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-            useMaterial3: true,
-          ),
-          home:LoginPage()
-          // const MyHomePage(),
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => LoginBloc(LoginRepository()),
+            ),
+          ],
+          child: GetMaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Flutter Demo',
+              darkTheme: darkColorScheme.copyWith(
+                bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+                    backgroundColor: Colors.red),
+              ),
+              theme: lightColorScheme.copyWith(
+                bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+                    backgroundColor: Colors.red),
+              ),
+              home: LoginPage()
+              // const MyHomePage(),
+              ),
         );
       },
     );

@@ -172,6 +172,9 @@ class _LoginPageState extends State<LoginPage> {
                               }
                             : null,
                         text: 'Continue',
+                        textcolor: isvalid
+                            ? colorScheme.onPrimary
+                            : colorScheme.onSurfaceVariant,
                         color: isvalid ? Colors.blue : Colors.transparent);
                   },
                 ),

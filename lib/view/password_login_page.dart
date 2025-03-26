@@ -52,7 +52,9 @@ class _PasswordLoginPageState extends State<PasswordLoginPage> {
                 CustomSnackbar(
                         title: 'Error',
                         message: state.error,
-                        snackPosition: SnackPosition.TOP)
+                        snackPosition: SnackPosition.TOP,
+                        backgroundColor: colorScheme.surface,
+                        textColor: colorScheme.onSurfaceVariant)
                     .show();
               }
             },

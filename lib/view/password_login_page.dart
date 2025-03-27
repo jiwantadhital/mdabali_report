@@ -191,6 +191,8 @@ class _PasswordLoginPageState extends State<PasswordLoginPage> {
                                         !isValid(passwordController.text))
                                     ? null
                                     : () {
+                                        FocusScope.of(context)
+                                            .unfocus(); // Close keyboard
                                         if (_formKey.currentState?.validate() ??
                                             false) {
                                           context.read<LoginBloc>().add(

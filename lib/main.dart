@@ -30,11 +30,12 @@ class MyApp extends StatelessWidget {
               title: 'Flutter Demo',
               darkTheme: darkColorScheme.copyWith(
                 bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-                    backgroundColor: Colors.red),
+                    backgroundColor: Color(0xFF000000)),
               ),
               theme: lightColorScheme.copyWith(
                 bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-                    backgroundColor: Colors.red),
+                  backgroundColor: Color(0xFFFFFFFF),
+                ),
               ),
               home: LoginPage()
               // const MyHomePage(),

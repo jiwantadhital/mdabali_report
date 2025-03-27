@@ -47,7 +47,8 @@ var lightColorScheme = ThemeData(
     outline: Color(0xFFACB8C3),
     outlineVariant: Color(0xFFDBE1E5),
 //success
-    tertiary: Color(0xFF117E2A),
+    tertiary: Color(0xFF34C759),
+    tertiaryFixedDim: Color(0xFF34C759).withOpacity(0.1),
 //on_success
     onTertiary: Color(0xFFFFFFFF),
 //success_container
@@ -103,7 +104,8 @@ var darkColorScheme = ThemeData(
     outline: Color(0xFF525252),
     outlineVariant: Color(0xFF3D3D3D),
 //success
-    tertiary: Color(0xFF117E2A),
+    tertiary: Color(0xFF34C759),
+    tertiaryFixedDim: Color(0xFF34C759).withOpacity(0.1),
 //on_success
     onTertiary: Color(0xFFFFFFFF),
 //success_container

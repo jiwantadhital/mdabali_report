@@ -7,7 +7,7 @@ import 'sms_page/sms_page.dart';
 import 'transaction_page/transaction_page.dart';
 
 class DashBoardPage extends StatefulWidget {
-  DashBoardPage({super.key});
+  const DashBoardPage({super.key});
 
   @override
   State<DashBoardPage> createState() => _DashBoardPageState();

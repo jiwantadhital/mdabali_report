@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mdabali_report/bloc/monthly_aggregate_bloc/bloc/monthly_aggregate_bloc.dart';
 import 'package:mdabali_report/resources/colors.dart';
 import 'package:mdabali_report/view/extracted_widgets/custom_text.dart';
 import 'homepage/home_page.dart';
@@ -20,6 +22,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
   @override
   void initState() {
     _pages = [HomePage(), TransactionPage(), SmsPage(), MdabaliPage()];
+    context.read<MonthlyAggregateBloc>().add(FetchMonthlyAggregate());
     super.initState();
   }
 

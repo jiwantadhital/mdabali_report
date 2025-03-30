@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:mdabali_report/data/models/login_model.dart';
+import 'package:mdabali_report/resources/constants.dart';
 
 class LoginRepository {
   Future<LoginModel> login(String username, String password) async {
     try {
-      var uri = Uri.parse("http://172.31.1.20/gateway/web-login");
+      var uri = Uri.parse("${ApiClass.testUrl}/web-login");
 
       var request = http.MultipartRequest('POST', uri);
       request.fields['grant_type'] = 'password';

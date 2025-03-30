@@ -44,7 +44,7 @@ class _PasswordLoginPageState extends State<PasswordLoginPage> {
                 final loginData = state.loginModel;
                 loginData.isOTPRequired == true
                     ? Get.off(() => OTPVerificationPage())
-                    : Get.off(DashBoardPage());
+                    : Get.off(() => DashBoardPage());
                 final token = loginData.data?.accessToken ?? "";
                 await UserSimplePreferences.setToken(token);
               }

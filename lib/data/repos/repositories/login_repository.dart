@@ -6,7 +6,7 @@ import 'package:mdabali_report/resources/constants.dart';
 class LoginRepository {
   Future<LoginModel> login(String username, String password) async {
     try {
-      var uri = Uri.parse("${ApiClass.testUrl}/web-login");
+      var uri = Uri.parse("${ApiClass.testUrl}/gateway/web-login");
 
       var request = http.MultipartRequest('POST', uri);
       request.fields['grant_type'] = 'password';

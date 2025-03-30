@@ -21,8 +21,8 @@ class GetRepo {
             'Error', 400); // Request Timeout response status code
       },
     );
-    ;
     print(response.statusCode);
+    print(response.body);
     if (response.statusCode == 200) {
       return response;
     }

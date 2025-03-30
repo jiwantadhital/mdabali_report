@@ -1,53 +1,127 @@
 import 'package:flutter/material.dart';
-import 'package:mdabali_report/view/extracted_widgets/custom_text.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mdabali_report/bloc/monthly_aggregate_bloc/bloc/monthly_aggregate_bloc.dart';
+import 'package:mdabali_report/utils/number_formatter.dart';
 
-class HeaderSection extends StatelessWidget {
+import 'package:mdabali_report/view/extracted_widgets/custom_text.dart';
+import 'package:shimmer/shimmer.dart';
+
+class HeaderSection extends StatefulWidget {
   const HeaderSection({super.key});
 
   @override
+  State<HeaderSection> createState() => _HeaderSectionState();
+}
+
+class _HeaderSectionState extends State<HeaderSection> {
+  @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        buildSummaryCard(
-          context: context,
-          title: 'Utility Payment',
-          amount: 'Rs 45,678.30',
-          change: '+20% month over month',
-          isPositive: true,
-          // icon: Icons.electric_bolt_rounded,
-        ),
-        SizedBox(height: 12),
-        buildSummaryCard(
-          context: context,
-          title: 'DFS(Dr)',
-          amount: 'Rs 2,405',
-          change: '+33% month over month',
-          isPositive: true,
-          // icon: Icons.arrow_upward_rounded,
-        ),
-        SizedBox(height: 12),
-        buildSummaryCard(
-          context: context,
-          title: 'DFS(Cr)',
-          amount: 'Rs 1,105',
-          change: '-10% month over month',
-          isPositive: false,
-          // icon: Icons.arrow_downward_rounded,
-        ),
-      ],
+    return BlocBuilder<MonthlyAggregateBloc, MonthlyAggregateState>(
+      builder: (context, state) {
+        if (state is MonthlyAggregateLoading) {
+          return Column(
+            children:
+                List.generate(3, (index) => buildShimmerSummaryCard(context)),
+          );
+        } else if (state is MonthlyAggregateLoaded) {
+          final aggergateData = state.monthlyAggregate.data;
+          return Column(
+            children: [
+              buildSummaryCard(
+                context: context,
+                title: 'Utility Payment',
+                currentMonthAmount: aggergateData?.utility?.currentMonth ?? 0,
+                previousMonthAmount: aggergateData?.utility?.previousMonth ?? 0,
+              ),
+              SizedBox(height: 12),
+              buildSummaryCard(
+                context: context,
+                title: 'DFS(Dr)',
+                currentMonthAmount: aggergateData!.dfsDebit!.currentMonth ?? 0,
+                previousMonthAmount: aggergateData.dfsDebit?.previousMonth ?? 0,
+              ),
+              SizedBox(height: 12),
+              buildSummaryCard(
+                context: context,
+                title: 'DFS(Cr)',
+                currentMonthAmount: aggergateData.dfsCredit!.currentMonth ?? 0,
+                previousMonthAmount:
+                    aggergateData.dfsCredit!.previousMonth ?? 0,
+              ),
+            ],
+          );
+        }
+        if (state is MonthlyAggregateError) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.error_outline,
+                    color: Theme.of(context).colorScheme.error, size: 24),
+                SizedBox(height: 8),
+                CustomText(
+                  text: state.error,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontSize: 16,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          );
+        } else {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.error_outline,
+                    color: Theme.of(context).colorScheme.error, size: 24),
+                SizedBox(height: 8),
+                CustomText(
+                  text: 'Something went wrong',
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontSize: 16,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          );
+        }
+      },
     );
+  }
+
+  Map<String, dynamic> calculateGrowth(
+      num previousMonthAmount, num currentMonth) {
+    if (previousMonthAmount == 0) {
+      // Handle special case where previous value is zero to avoid division by zero
+      return {
+        'change': currentMonth > 0 ? '100%' : '0%',
+        'isPositive': currentMonth > 0
+      };
+    }
+
+    num percentageChange =
+        ((currentMonth - previousMonthAmount) / previousMonthAmount) * 100;
+    bool isPositive =
+        percentageChange >= 0; // True if growth, false if decrement
+
+    return {
+      'change':
+          '${percentageChange.abs().toStringAsFixed(2)}%', // Keep two decimal places
+      'isPositive': isPositive,
+    };
   }
 
   Widget buildSummaryCard({
     required BuildContext context,
     required String title,
-    required String amount,
-    required String change,
-    required bool isPositive,
-
-    // required IconData icon,
+    required num currentMonthAmount,
+    required num previousMonthAmount,
   }) {
     var colorScheme = Theme.of(context).colorScheme;
+    var result = calculateGrowth(previousMonthAmount, currentMonthAmount);
+    String change = result['change'];
+    bool isPositive = result['isPositive'];
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
@@ -93,36 +167,22 @@ class HeaderSection extends StatelessWidget {
                         children: [
                           Row(
                             children: [
-                              // Container(
-                              //   padding: EdgeInsets.all(8),
-                              //   decoration: BoxDecoration(
-                              //     color: Color(0xFF4285F4).withOpacity(0.1),
-                              //     borderRadius: BorderRadius.circular(10),
-                              //   ),
-                              //   child: Icon(
-                              //     icon,
-                              //     color: Color(0xFF4285F4),
-                              //     size: 16,
-                              //   ),
-                              // ),
-                              // SizedBox(width: 10),
                               CustomText(
                                 text: title,
                                 fontSize: 14,
                                 weight: FontWeight.w500,
                                 color: colorScheme.onSurface,
-                                //Color(0xFF6C7A92),
                                 letterSpacing: 0.5,
                               ),
                             ],
                           ),
                           SizedBox(height: 12),
                           CustomText(
-                            text: amount,
+                            text:
+                                'Rs ${NumberFormatter.formatAmount(currentMonthAmount)}',
                             fontSize: 20,
                             weight: FontWeight.w700,
                             color: colorScheme.onSurface,
-                            //Color(0xFF2C3E50),
                             letterSpacing: 0.2,
                           ),
                           SizedBox(height: 8),
@@ -149,7 +209,7 @@ class HeaderSection extends StatelessWidget {
                                 ),
                                 SizedBox(width: 4),
                                 CustomText(
-                                  text: change,
+                                  text: '$change over month',
                                   fontSize: 12,
                                   weight: FontWeight.w500,
                                   color: isPositive
@@ -183,6 +243,134 @@ class HeaderSection extends StatelessWidget {
                             ),
                           ),
                         ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildShimmerSummaryCard(BuildContext context) {
+    var colorScheme = Theme.of(context).colorScheme;
+    var brightness = Theme.of(context).brightness;
+
+    // Determine shimmer colors based on theme brightness
+    Color baseColor = brightness == Brightness.light
+        ? colorScheme.surfaceContainerHighest.withOpacity(0.5)
+        : colorScheme.surfaceContainerHighest.withOpacity(0.3);
+
+    Color highlightColor = brightness == Brightness.light
+        ? colorScheme.onSurface
+        : colorScheme.onSurface.withOpacity(0.6);
+
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Color(0xFF4285F4)
+                .withOpacity(brightness == Brightness.light ? 0.1 : 0.2),
+            offset: Offset(0, 4),
+            blurRadius: 12,
+            spreadRadius: 0,
+          ),
+        ],
+      ),
+      child: Card(
+        elevation: 0,
+        color: colorScheme.surfaceContainer,
+        margin: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Shimmer for the left colored bar
+                Shimmer.fromColors(
+                  baseColor: baseColor,
+                  highlightColor: highlightColor,
+                  child: Container(
+                    width: 4,
+                    decoration: BoxDecoration(
+                      color: colorScheme.surface,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 16),
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Left column with title and values
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // Title shimmer
+                          Shimmer.fromColors(
+                            baseColor: baseColor,
+                            highlightColor: highlightColor,
+                            child: Container(
+                              width: 100,
+                              height: 14,
+                              decoration: BoxDecoration(
+                                color: colorScheme.surface,
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 12),
+                          // Amount shimmer
+                          Shimmer.fromColors(
+                            baseColor: baseColor,
+                            highlightColor: highlightColor,
+                            child: Container(
+                              width: 140,
+                              height: 20,
+                              decoration: BoxDecoration(
+                                color: colorScheme.surface,
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 8),
+                          // Percentage change shimmer
+                          Shimmer.fromColors(
+                            baseColor: baseColor,
+                            highlightColor: highlightColor,
+                            child: Container(
+                              width: 120,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                color: colorScheme.surface,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      // Right icon shimmer
+                      Shimmer.fromColors(
+                        baseColor: baseColor,
+                        highlightColor: highlightColor,
+                        child: Container(
+                          width: 36,
+                          height: 36,
+                          decoration: BoxDecoration(
+                            color: colorScheme.surface,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
                       ),
                     ],
                   ),

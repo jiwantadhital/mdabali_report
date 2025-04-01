@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mdabali_report/bloc/five_month_data_bloc/bloc/five_month_data_bloc.dart';
 import 'package:mdabali_report/resources/images_constants.dart';
 
 import '../extracted_widgets/custom_text.dart';
@@ -79,28 +81,211 @@ class HomePage extends StatelessWidget {
             const SizedBox(
               height: 16,
             ),
-            LineChartCard(
-              title: 'Utility',
-              dataPoints: [20000, 25000, 30000, 35000, 40000, 45000],
-            ),
+            //line chart for Utility
+            UtilityLineChartSection(),
             const SizedBox(
               height: 24,
             ),
-            LineChartCard(
-                title: 'DFS(Dr)',
-                dataPoints: [25000, 30000, 35000, 40000, 45000]),
+            //line chart for Dfs(Dr)
+            DfsDrLineChartSection(),
             const SizedBox(
               height: 24,
             ),
-            LineChartCard(
-                title: 'DFS(Cr)',
-                dataPoints: [25000, 30000, 35000, 40000, 45000]),
+            //line chart for Dfs(cr   )
+            DfsCrLineChartSection(),
             const SizedBox(
               height: 24,
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class DfsCrLineChartSection extends StatelessWidget {
+  const DfsCrLineChartSection({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<FiveMonthDataBloc, FiveMonthDataState>(
+      builder: (context, state) {
+        if (state is FiveMonthDataLoading) {
+          return ShimmerLineChartCard();
+        } else if (state is FiveMonthDataLoaded) {
+          return LineChartCard(
+            title: 'DFS(Cr)',
+            dataPoints: state.data.data?.dfsCredit
+                    ?.map((e) => e.amount ?? 0.0)
+                    .toList() ??
+                [],
+            months: state.data.data?.dfsCredit
+                    ?.map((e) => e.month ?? '')
+                    .toList() ??
+                [],
+          );
+        } else if (state is FiveMonthDataError) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.error_outline,
+                    color: Theme.of(context).colorScheme.error, size: 24),
+                SizedBox(height: 8),
+                CustomText(
+                  text: state.message,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontSize: 16,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          );
+        } else {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.error_outline,
+                    color: Theme.of(context).colorScheme.error, size: 24),
+                SizedBox(height: 8),
+                CustomText(
+                  text: 'Failed to load Data',
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontSize: 16,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          );
+        }
+      },
+    );
+  }
+}
+
+class UtilityLineChartSection extends StatelessWidget {
+  const UtilityLineChartSection({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<FiveMonthDataBloc, FiveMonthDataState>(
+      builder: (context, state) {
+        if (state is FiveMonthDataLoading) {
+          return ShimmerLineChartCard();
+        } else if (state is FiveMonthDataLoaded) {
+          return LineChartCard(
+            title: 'Utility',
+            dataPoints: state.data.data?.utility
+                    ?.map((e) => e.amount ?? 0.0)
+                    .toList() ??
+                [],
+            months:
+                state.data.data?.utility?.map((e) => e.month ?? '').toList() ??
+                    [],
+          );
+        } else if (state is FiveMonthDataError) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.error_outline,
+                    color: Theme.of(context).colorScheme.error, size: 24),
+                SizedBox(height: 8),
+                CustomText(
+                  text: state.message,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontSize: 16,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          );
+        } else {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.error_outline,
+                    color: Theme.of(context).colorScheme.error, size: 24),
+                SizedBox(height: 8),
+                CustomText(
+                  text: 'Failed to load Data',
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontSize: 16,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          );
+        }
+      },
+    );
+  }
+}
+
+class DfsDrLineChartSection extends StatelessWidget {
+  const DfsDrLineChartSection({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<FiveMonthDataBloc, FiveMonthDataState>(
+      builder: (context, state) {
+        if (state is FiveMonthDataLoading) {
+          return ShimmerLineChartCard();
+        } else if (state is FiveMonthDataLoaded) {
+          return LineChartCard(
+            title: 'DFS(Dr)',
+            dataPoints: state.data.data?.dfsDebit
+                    ?.map((e) => e.amount ?? 0.0)
+                    .toList() ??
+                [],
+            months:
+                state.data.data?.dfsDebit?.map((e) => e.month ?? '').toList() ??
+                    [],
+          );
+        } else if (state is FiveMonthDataError) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.error_outline,
+                    color: Theme.of(context).colorScheme.error, size: 24),
+                SizedBox(height: 8),
+                CustomText(
+                  text: state.message,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontSize: 16,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          );
+        } else {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.error_outline,
+                    color: Theme.of(context).colorScheme.error, size: 24),
+                SizedBox(height: 8),
+                CustomText(
+                  text: 'Failed to load Data',
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontSize: 16,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          );
+        }
+      },
     );
   }
 }

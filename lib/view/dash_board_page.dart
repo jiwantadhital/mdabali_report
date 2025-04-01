@@ -43,7 +43,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
     List<String> appBar = [
       'mDabali Next Gen Report',
       'Transaction Summary',
-      'SMS Summary',
+      'SMS & TopUP Summary',
       'mDabali Summary'
     ];
     var colorScheme = Theme.of(context).colorScheme;
@@ -93,7 +93,8 @@ class _DashBoardPageState extends State<DashBoardPage> {
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'HomePage'),
             BottomNavigationBarItem(
                 icon: Icon(Icons.swap_horiz), label: 'Transaction'),
-            BottomNavigationBarItem(icon: Icon(Icons.message), label: 'SMS'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.message), label: 'SMS & TopUp'),
             BottomNavigationBarItem(icon: Icon(Icons.people), label: 'mDabbali')
           ]),
     );

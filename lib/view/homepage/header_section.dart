@@ -269,6 +269,7 @@ class _HeaderSectionState extends State<HeaderSection> {
         : colorScheme.onSurface.withOpacity(0.6);
 
     return Container(
+      margin: EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         boxShadow: [

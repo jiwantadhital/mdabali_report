@@ -4,12 +4,26 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mdabali_report/bloc/topup_summary_bloc/bloc/topup_summary_bloc.dart';
 import 'package:mdabali_report/utils/number_formatter.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../extracted_widgets/custom_text.dart';
 
-class SmsPage extends StatelessWidget {
+class SmsPage extends StatefulWidget {
   const SmsPage({super.key});
+
+  @override
+  State<SmsPage> createState() => _SmsPageState();
+}
+
+class _SmsPageState extends State<SmsPage> {
+  @override
+  void initState() {
+    context.read<TopupSummaryBloc>().add(FetchTopupSummary());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,11 +61,58 @@ class SmsPage extends StatelessWidget {
             const SizedBox(
               height: 16,
             ),
-            _buildTopupCard(
-                transactionAmount: 600.0,
-                remainingBalance: 977028.00,
-                transactionCount: 4,
-                context: context),
+            BlocBuilder<TopupSummaryBloc, TopupSummaryState>(
+              builder: (context, state) {
+                if (state is TopupSummaryLoading) {
+                  return ShimmerTopupCard(
+                    context: context,
+                  );
+                } else if (state is TopupSummaryLoaded) {
+                  final topupData = state.topupSummaryModel.data;
+                  return _buildTopupCard(
+                      transactionAmount: topupData?.transactionAmount ?? 0,
+                      remainingBalance: topupData?.remainingBalance ?? 0,
+                      transactionCount: topupData?.transactionCount ?? 0,
+                      context: context);
+                } else if (state is TopupSummaryError) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.error_outline,
+                            color: Theme.of(context).colorScheme.error,
+                            size: 24),
+                        SizedBox(height: 8),
+                        CustomText(
+                          text: state.error,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          fontSize: 16,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  );
+                } else {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.error_outline,
+                            color: Theme.of(context).colorScheme.error,
+                            size: 24),
+                        SizedBox(height: 8),
+                        CustomText(
+                          text: 'Failed to load Data',
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          fontSize: 16,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              },
+            ),
             const SizedBox(
               height: 16,
             ),
@@ -388,6 +449,39 @@ class SmsPage extends StatelessWidget {
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class ShimmerTopupCard extends StatelessWidget {
+  final BuildContext context;
+
+  const ShimmerTopupCard({required this.context, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    var colorScheme = Theme.of(context).colorScheme;
+    var brightness = Theme.of(context).brightness;
+
+    Color baseColor = brightness == Brightness.light
+        ? colorScheme.surfaceContainerHighest.withOpacity(0.5)
+        : colorScheme.surfaceContainerHighest.withOpacity(0.3);
+
+    Color highlightColor = brightness == Brightness.light
+        ? colorScheme.onSurface
+        : colorScheme.onSurface.withOpacity(0.6);
+
+    return Shimmer.fromColors(
+      baseColor: baseColor,
+      highlightColor: highlightColor,
+      child: Container(
+        height: 180,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: baseColor,
+          borderRadius: BorderRadius.circular(24),
         ),
       ),
     );

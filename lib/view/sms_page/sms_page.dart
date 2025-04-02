@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mdabali_report/bloc/sms_summary_bloc/bloc/sms_summary_bloc.dart';
 import 'package:mdabali_report/bloc/topup_summary_bloc/bloc/topup_summary_bloc.dart';
 import 'package:mdabali_report/utils/number_formatter.dart';
 import 'package:shimmer/shimmer.dart';
@@ -22,6 +23,7 @@ class _SmsPageState extends State<SmsPage> {
   @override
   void initState() {
     context.read<TopupSummaryBloc>().add(FetchTopupSummary());
+    context.read<SmsSummaryBloc>().add(FetchSmsSummary());
     super.initState();
   }
 
@@ -43,12 +45,57 @@ class _SmsPageState extends State<SmsPage> {
             const SizedBox(
               height: 16,
             ),
-            _buildSMSCard(
-                totalUsed: '100',
-                rate: '11.13%',
-                totalAmount: '114',
-                availableBalance: '500',
-                context: context),
+            BlocBuilder<SmsSummaryBloc, SmsSummaryState>(
+              builder: (context, state) {
+                if (state is SmsSummaryLoading) {
+                  return ShimmerTopupCard(context: context);
+                } else if (state is SmsSummaryLoaded) {
+                  final smsData = state.smsSummaryModel.data;
+                  return _buildSMSCard(
+                      smsCount: smsData!.smsCount ?? 0,
+                      rate: smsData.smsRate ?? 0,
+                      totalAmount: smsData.totalAmount ?? 0,
+                      availableBalance: smsData.availableCount ?? 0,
+                      context: context);
+                } else if (state is SmsSummaryError) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.error_outline,
+                            color: Theme.of(context).colorScheme.error,
+                            size: 24),
+                        SizedBox(height: 8),
+                        CustomText(
+                          text: state.error,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          fontSize: 16,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  );
+                } else {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.error_outline,
+                            color: Theme.of(context).colorScheme.error,
+                            size: 24),
+                        SizedBox(height: 8),
+                        CustomText(
+                          text: 'Failed to load Data',
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          fontSize: 16,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              },
+            ),
             const SizedBox(
               height: 16,
             ),
@@ -124,10 +171,10 @@ class _SmsPageState extends State<SmsPage> {
 
   Widget _buildSMSCard({
     required BuildContext context,
-    required String totalUsed,
-    required String rate,
-    required String totalAmount,
-    required String availableBalance,
+    required int smsCount,
+    required double rate,
+    required double totalAmount,
+    required int availableBalance,
   }) {
     var colorScheme = Theme.of(context).colorScheme;
     return Container(
@@ -173,8 +220,16 @@ class _SmsPageState extends State<SmsPage> {
                         child: Column(
                           children: [
                             buildMetricRow(
-                              'Total Used',
-                              totalUsed,
+                              'Total Amount',
+                              NumberFormatter.formatAmount(totalAmount),
+                              Icons.money,
+                              colorScheme.onSurface,
+                              iconBgColor: Colors.redAccent.withOpacity(0.5),
+                            ),
+                            buildDivider(),
+                            buildMetricRow(
+                              'Sms Count',
+                              smsCount.toString(),
                               Icons.add,
                               colorScheme.onSurface,
                               iconBgColor:
@@ -183,23 +238,15 @@ class _SmsPageState extends State<SmsPage> {
                             buildDivider(),
                             buildMetricRow(
                               'Rate',
-                              rate,
+                              '$rate%',
                               Icons.percent,
                               colorScheme.onSurface,
                               iconBgColor: Colors.greenAccent.withOpacity(0.25),
                             ),
                             buildDivider(),
                             buildMetricRow(
-                              'Total Amount',
-                              totalAmount,
-                              Icons.money,
-                              colorScheme.onSurface,
-                              iconBgColor: Colors.redAccent.withOpacity(0.5),
-                            ),
-                            buildDivider(),
-                            buildMetricRow(
                               'Available Balance',
-                              availableBalance,
+                              NumberFormatter.formatAmount(availableBalance),
                               Icons.balance,
                               colorScheme.onSurface,
                               iconBgColor: Colors.amberAccent.withOpacity(0.5),

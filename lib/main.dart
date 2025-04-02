@@ -6,11 +6,13 @@ import 'package:mdabali_report/bloc/five_month_data_bloc/bloc/five_month_data_bl
 import 'package:mdabali_report/bloc/login_bloc/bloc/login_bloc.dart';
 import 'package:mdabali_report/bloc/monthly_aggregate_bloc/bloc/monthly_aggregate_bloc.dart';
 import 'package:mdabali_report/bloc/summary_report_bloc/bloc/summary_report_bloc.dart';
+import 'package:mdabali_report/bloc/topup_summary_bloc/bloc/topup_summary_bloc.dart';
 import 'package:mdabali_report/data/repos/get_repo.dart';
 import 'package:mdabali_report/data/repos/repositories/five_month_data_repository.dart';
 import 'package:mdabali_report/data/repos/repositories/login_repository.dart';
 import 'package:mdabali_report/data/repos/repositories/monthly_aggreagate_repository.dart';
 import 'package:mdabali_report/data/repos/repositories/summary_report_repository.dart';
+import 'package:mdabali_report/data/repos/repositories/topup_summary_repository.dart';
 import 'package:mdabali_report/data/shared_preferences/shared_preferences.dart';
 import 'package:mdabali_report/resources/colors.dart';
 import 'package:mdabali_report/view/login_page.dart';
@@ -43,6 +45,9 @@ class MyApp extends StatelessWidget {
             BlocProvider(
                 create: (context) => FiveMonthDataBloc(
                     FiveMonthDataRepository(getRepo: GetRepo()))),
+            BlocProvider(
+                create: (context) => TopupSummaryBloc(
+                    TopupSummaryRepository(getRepo: GetRepo()))),
           ],
           child: GetMaterialApp(
               debugShowCheckedModeBanner: false,

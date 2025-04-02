@@ -4,4 +4,5 @@ class ApiClass {
       '/gateway/reportingApi/transaction/past-five-month';
   static const String topupUrl =
       '/gateway/reportingApi/transaction/today-aggregate';
+  static const String smsUrl = '/gateway/mdabaliApi/sms/aggregate-report';
 }

@@ -29,12 +29,6 @@ class _LoginPageState extends State<LoginPage> {
       return mobile.isNotEmpty;
     }
 
-    @override
-    void dispose() {
-      mobileNotifier.dispose();
-      super.dispose();
-    }
-
     var colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -107,13 +101,13 @@ class _LoginPageState extends State<LoginPage> {
                   text: 'Mobile Banking',
                   fontSize: 24,
                   color: Colors.deepOrange,
-                  weight: FontWeight.bold,
+                  weight: FontWeight.w500,
                 ),
                 const SizedBox(height: 60),
                 CustomText(
                   text: 'Login or register',
-                  fontSize: 24,
-                  weight: FontWeight.bold,
+                  fontSize: 20,
+                  weight: FontWeight.w400,
                 ),
 
                 const SizedBox(height: 20),
@@ -133,24 +127,6 @@ class _LoginPageState extends State<LoginPage> {
                     return null;
                   },
                 ),
-
-                const SizedBox(height: 60),
-
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //   children: [
-                //     CustomText(
-                //       text: 'Other Account Options',
-                //       fontSize: 16,
-                //       color: Colors.deepOrange,
-                //     ),
-                //     Icon(
-                //       Icons.chevron_right,
-                //       color: Colors.deepOrange,
-                //     ),
-                //   ],
-                // ),
-                // const SizedBox(height: 34),
 
                 const Spacer(),
 

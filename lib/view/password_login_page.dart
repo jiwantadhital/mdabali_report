@@ -133,7 +133,7 @@ class _PasswordLoginPageState extends State<PasswordLoginPage> {
                         text: 'Mobile Banking',
                         fontSize: 24,
                         color: Colors.deepOrange,
-                        weight: FontWeight.bold,
+                        weight: FontWeight.w500,
                       ),
                       const SizedBox(height: 40),
                       UserPhoneNum(

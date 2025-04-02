@@ -4,6 +4,7 @@ import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:mdabali_report/bloc/five_month_data_bloc/bloc/five_month_data_bloc.dart';
 import 'package:mdabali_report/bloc/login_bloc/bloc/login_bloc.dart';
+import 'package:mdabali_report/bloc/member_limit_bloc/bloc/member_limit_bloc.dart';
 import 'package:mdabali_report/bloc/monthly_aggregate_bloc/bloc/monthly_aggregate_bloc.dart';
 import 'package:mdabali_report/bloc/sms_summary_bloc/bloc/sms_summary_bloc.dart';
 import 'package:mdabali_report/bloc/summary_report_bloc/bloc/summary_report_bloc.dart';
@@ -11,6 +12,7 @@ import 'package:mdabali_report/bloc/topup_summary_bloc/bloc/topup_summary_bloc.d
 import 'package:mdabali_report/data/repos/get_repo.dart';
 import 'package:mdabali_report/data/repos/repositories/five_month_data_repository.dart';
 import 'package:mdabali_report/data/repos/repositories/login_repository.dart';
+import 'package:mdabali_report/data/repos/repositories/member_limit_repository.dart';
 import 'package:mdabali_report/data/repos/repositories/monthly_aggreagate_repository.dart';
 import 'package:mdabali_report/data/repos/repositories/sms_summary_repository.dart';
 import 'package:mdabali_report/data/repos/repositories/summary_report_repository.dart';
@@ -53,6 +55,9 @@ class MyApp extends StatelessWidget {
             BlocProvider(
                 create: (context) =>
                     SmsSummaryBloc(SmsSummaryRepository(getRepo: GetRepo()))),
+            BlocProvider(
+                create: (context) =>
+                    MemberLimitBloc(MemberLimitRepository(getRepo: GetRepo()))),
           ],
           child: GetMaterialApp(
               debugShowCheckedModeBanner: false,

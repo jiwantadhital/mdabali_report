@@ -3,11 +3,24 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mdabali_report/bloc/member_limit_bloc/bloc/member_limit_bloc.dart';
+import 'package:mdabali_report/view/sms_page/sms_page.dart';
 import '../extracted_widgets/custom_text.dart';
 
-class MdabaliPage extends StatelessWidget {
+class MdabaliPage extends StatefulWidget {
   const MdabaliPage({super.key});
+
+  @override
+  State<MdabaliPage> createState() => _MdabaliPageState();
+}
+
+class _MdabaliPageState extends State<MdabaliPage> {
+  @override
+  void initState() {
+    context.read<MemberLimitBloc>().add(FetchMemberLimit());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,12 +30,56 @@ class MdabaliPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            buildMdabaliCard(
-                membersLimit: '500',
-                verifiedUser: '500',
-                closedUser: '500',
-                totalUser: '500',
-                context: context)
+            BlocBuilder<MemberLimitBloc, MemberLimitState>(
+                builder: (context, state) {
+              if (state is MemberLimitLoading) {
+                return ShimmerTopupCard(
+                  context: context,
+                );
+              } else if (state is MemberLimitLoaded) {
+                final memberData = state.memeberLimitModel.data;
+                return buildMdabaliCard(
+                    membersLimit: memberData!.memberLimit.toString(),
+                    verifiedUser: memberData.verifiedUser.toString(),
+                    closedUser: memberData.closedUser.toString(),
+                    totalUser: memberData.totalUser.toString(),
+                    context: context);
+              } else if (state is MemberLimitError) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.error_outline,
+                          color: Theme.of(context).colorScheme.error, size: 24),
+                      SizedBox(height: 8),
+                      CustomText(
+                        text: state.error,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        fontSize: 16,
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                );
+              } else {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.error_outline,
+                          color: Theme.of(context).colorScheme.error, size: 24),
+                      SizedBox(height: 8),
+                      CustomText(
+                        text: 'Failed to load Data',
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        fontSize: 16,
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                );
+              }
+            })
           ],
         ),
       ),

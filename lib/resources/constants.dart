@@ -5,4 +5,5 @@ class ApiClass {
   static const String topupUrl =
       '/gateway/reportingApi/transaction/today-aggregate';
   static const String smsUrl = '/gateway/mdabaliApi/sms/aggregate-report';
+  static const String memberLimitUrl = '/gateway/mdabaliApi/customer/limit';
 }

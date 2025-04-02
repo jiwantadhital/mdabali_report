@@ -5,6 +5,7 @@ import 'package:mdabali_report/bloc/five_month_data_bloc/bloc/five_month_data_bl
 import 'package:mdabali_report/bloc/monthly_aggregate_bloc/bloc/monthly_aggregate_bloc.dart';
 import 'package:mdabali_report/bloc/summary_report_bloc/bloc/summary_report_bloc.dart';
 import 'package:mdabali_report/resources/colors.dart';
+import 'package:mdabali_report/view/extracted_widgets/custom_drawer.dart';
 import 'package:mdabali_report/view/extracted_widgets/custom_text.dart';
 import 'homepage/home_page.dart';
 import 'mdabali_page/mdabali_page.dart';
@@ -49,12 +50,19 @@ class _DashBoardPageState extends State<DashBoardPage> {
     var colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       backgroundColor: colorScheme.surface,
+      drawer: CustomDrawer(),
       appBar: AppBar(
         surfaceTintColor: colorScheme.surfaceTint,
         elevation: 0,
-        automaticallyImplyLeading: false,
         backgroundColor: colorScheme.surfaceDim,
-        //Colors.grey[100],
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: Icon(Icons.menu, color: colorScheme.primary),
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            },
+          ),
+        ),
         title: CustomText(
           text: appBar[_selectedIndex],
           fontSize: 18,
@@ -62,6 +70,16 @@ class _DashBoardPageState extends State<DashBoardPage> {
           weight: FontWeight.bold,
         ),
         centerTitle: true,
+        // Actions for notification icon on the right
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: IconButton(
+              icon: Icon(Icons.notifications, color: colorScheme.primary),
+              onPressed: () {},
+            ),
+          ),
+        ],
       ),
       body: AnimatedSwitcher(
         duration: const Duration(microseconds: 300),

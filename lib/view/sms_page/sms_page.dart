@@ -524,11 +524,51 @@ class ShimmerTopupCard extends StatelessWidget {
       baseColor: baseColor,
       highlightColor: highlightColor,
       child: Container(
-        height: 180,
-        width: double.infinity,
+        padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: baseColor,
           borderRadius: BorderRadius.circular(24),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: List.generate(
+              3,
+              (index) => Column(
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            width: 40,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              color: baseColor,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          SizedBox(width: 14),
+                          Expanded(
+                            child: Container(
+                              height: 16,
+                              color: baseColor,
+                            ),
+                          ),
+                          SizedBox(width: 14),
+                          Container(
+                            height: 16,
+                            width: 50,
+                            color: baseColor,
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      if (index < 2)
+                        Container(
+                          height: 1,
+                          color: baseColor,
+                        ),
+                      SizedBox(height: 10),
+                    ],
+                  )),
         ),
       ),
     );

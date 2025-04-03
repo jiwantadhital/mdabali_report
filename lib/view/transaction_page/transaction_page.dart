@@ -1,11 +1,21 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mdabali_report/bloc/summary_report_bloc/bloc/summary_report_bloc.dart';
 import 'package:mdabali_report/resources/colors.dart';
+import 'package:mdabali_report/view/transaction_page/shimmer_transaction_cards.dart';
 
 import '../extracted_widgets/custom_text.dart';
 
-class TransactionPage extends StatelessWidget {
+class TransactionPage extends StatefulWidget {
   const TransactionPage({super.key});
 
+  @override
+  State<TransactionPage> createState() => _TransactionPageState();
+}
+
+class _TransactionPageState extends State<TransactionPage> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -27,24 +37,61 @@ class TransactionPage extends StatelessWidget {
   Widget _buildTransactionList(
     BuildContext context,
   ) {
-    return Column(
-      children: [
-        _buildTransactionCard(context, 'Data Pack', 6, 809, 110, 24546, 0, 0),
-        _buildTransactionCard(
-            context, 'Electricity', 96, 133986, 328, 72079, 1, 0),
-        _buildTransactionCard(
-            context, 'Internet', 8, 13670, 417, 95786, 6, 40122),
-        _buildTransactionCard(
-            context, 'TopUp', 1084, 117990, 425, 82956, 84, 6054),
-        _buildTransactionCard(context, 'TV', 1, 846, 444, 54886, 2, 0),
-        _buildTransactionCard(context, 'Water', 24, 16423, 112, 73677, 2, 3684),
-        _buildTransactionCard(
-            context, 'Bank_Transfer', 114, 3851498, 420, 213600, 392, 9008839),
-        _buildTransactionCard(
-            context, 'QR', 1095, 4036716, 477, 997777, 158, 1141924),
-        _buildTransactionCard(
-            context, 'Wallet', 201, 1679092, 495, 508556, 481, 2197637),
-      ],
+    return BlocBuilder<SummaryReportBloc, SummaryReportState>(
+      builder: (context, state) {
+        if (state is SummaryReportLoading) {
+          return ShimmerTransactionList();
+        } else if (state is SummaryReportLoaded) {
+          final summaryReportData = state.summaryReportModel.data;
+          int index = summaryReportData?.length ?? 0;
+          return Column(
+              children: List.generate(
+                  index,
+                  (index) => _buildTransactionCard(
+                      context,
+                      summaryReportData?[index].services ?? 'Not found',
+                      summaryReportData?[index].successCount ?? 0,
+                      summaryReportData?[index].successAmount ?? 0,
+                      summaryReportData?[index].pendingCount ?? 0,
+                      summaryReportData?[index].pendingAmount ?? 0,
+                      summaryReportData?[index].failedCount ?? 0,
+                      summaryReportData?[index].failedAmount ?? 0)));
+        } else if (state is SummaryReportError) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.error_outline,
+                    color: Theme.of(context).colorScheme.error, size: 24),
+                SizedBox(height: 8),
+                CustomText(
+                  text: state.error,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontSize: 16,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          );
+        } else {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.error_outline,
+                    color: Theme.of(context).colorScheme.error, size: 24),
+                SizedBox(height: 8),
+                CustomText(
+                  text: 'Failed to load Data',
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontSize: 16,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          );
+        }
+      },
     );
   }
 
@@ -52,11 +99,11 @@ class TransactionPage extends StatelessWidget {
       BuildContext context,
       String service,
       int successCount,
-      int successAmount,
+      double successAmount,
       int pendingCount,
-      int pendingAmount,
+      double pendingAmount,
       int failCount,
-      int failAmount) {
+      double failAmount) {
     var colorScheme = Theme.of(context).colorScheme;
     return Container(
       margin: EdgeInsets.symmetric(vertical: 12),
@@ -130,7 +177,7 @@ class TransactionPage extends StatelessWidget {
                         SizedBox(width: 4),
                         CustomText(
                           text:
-                              '${_calculateSuccessRate(successCount, pendingCount, failCount)}',
+                              '${_calculateSuccessRate(successCount, pendingCount, failCount)} %',
                           fontSize: 14,
                           weight: FontWeight.w600,
                           color: colorScheme.primary,
@@ -197,7 +244,7 @@ class TransactionPage extends StatelessWidget {
   Widget _buildStatColumn(
     String label,
     int count,
-    int amount,
+    double amount,
     Color color,
     IconData icon,
     BuildContext context,
@@ -258,18 +305,18 @@ class TransactionPage extends StatelessWidget {
         return Icons.tv;
       case 'Water':
         return Icons.water;
-      case 'Bank_Transfer':
-        return Icons.balance_sharp;
+      case 'BANK_TRANSFER':
+        return Icons.compare_arrows_rounded;
       case 'QR':
         return Icons.qr_code;
-      case 'Wallet':
+      case 'WALLET':
         return Icons.wallet;
       default:
         return Icons.receipt_long;
     }
   }
 
-  String _formatAmount(int amount) {
+  String _formatAmount(double amount) {
     if (amount >= 1000000) {
       return '${(amount / 1000000).toStringAsFixed(1)}M';
     } else if (amount >= 1000) {

@@ -28,10 +28,13 @@ class _DashBoardPageState extends State<DashBoardPage> {
     _pages = [HomePage(), TransactionPage(), SmsPage(), MdabaliPage()];
     // Get today's date
     String todayDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    DateTime now = DateTime.now();
+    DateTime oneMonthAgo = DateTime(now.year, now.month - 1, now.day);
+    String dateFrom = DateFormat('yyyy-MM-dd').format(oneMonthAgo);
     context.read<MonthlyAggregateBloc>().add(FetchMonthlyAggregate());
     context
         .read<SummaryReportBloc>()
-        .add(FetchSummaryReport(dateFrom: '2025-03-14', dateTo: todayDate));
+        .add(FetchSummaryReport(dateFrom: dateFrom, dateTo: todayDate));
 
     //this is for line chart data
     context

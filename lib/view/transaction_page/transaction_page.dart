@@ -2,8 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:mdabali_report/bloc/summary_report_bloc/bloc/summary_report_bloc.dart';
 import 'package:mdabali_report/resources/colors.dart';
+import 'package:mdabali_report/view/extracted_widgets/date_range_picker_card.dart';
 import 'package:mdabali_report/view/transaction_page/shimmer_transaction_cards.dart';
 
 import '../extracted_widgets/custom_text.dart';
@@ -18,12 +20,56 @@ class TransactionPage extends StatefulWidget {
 class _TransactionPageState extends State<TransactionPage> {
   @override
   Widget build(BuildContext context) {
+    var colorScheme = Theme.of(context).colorScheme;
     return SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Align(
+              alignment: Alignment.centerRight,
+              child: GestureDetector(
+                onTap: () async {
+                  final range = await ThreeMonthRangePicker.show(context);
+                  if (range != null) {
+                    // Format the start and end dates to 'yyyy-MM-dd' format
+                    String startFormatted =
+                        DateFormat('yyyy-MM-dd').format(range.startDate!);
+                    String endFormatted = DateFormat('yyyy-MM-dd')
+                        .format(range.endDate ?? range.startDate!);
+                    // ignore: use_build_context_synchronously
+                    context.read<SummaryReportBloc>().add(FetchSummaryReport(
+                        dateFrom: startFormatted, dateTo: endFormatted));
+                  }
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: colorScheme.surface,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                        color: colorScheme.onSurfaceVariant, width: 1),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.calendar_today,
+                        size: 14,
+                        color: colorScheme.primaryFixedDim,
+                      ),
+                      SizedBox(width: 8),
+                      Text(
+                        "Select date Range",
+                        style: TextStyle(
+                            fontSize: 12, color: colorScheme.onSurfaceVariant),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
             _buildTransactionList(context = context),
             const SizedBox(
               height: 24,
@@ -136,30 +182,34 @@ class _TransactionPageState extends State<TransactionPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: colorScheme.primaryFixedDim.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(10),
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: colorScheme.primaryFixedDim.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Icon(
+                            _getServiceIcon(service),
+                            color: colorScheme.primary,
+                            //Color(0xFF4285F4),
+                            size: 22,
+                          ),
                         ),
-                        child: Icon(
-                          _getServiceIcon(service),
-                          color: colorScheme.primary,
-                          //Color(0xFF4285F4),
-                          size: 22,
+                        SizedBox(width: 12),
+                        Expanded(
+                          child: CustomText(
+                            text: service,
+                            fontSize: 18,
+                            weight: FontWeight.w700,
+                            color: colorScheme.onSurface,
+                            letterSpacing: 0.3,
+                          ),
                         ),
-                      ),
-                      SizedBox(width: 12),
-                      CustomText(
-                        text: service,
-                        fontSize: 18,
-                        weight: FontWeight.w700,
-                        color: colorScheme.onSurface,
-                        letterSpacing: 0.3,
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),

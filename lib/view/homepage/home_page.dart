@@ -3,14 +3,71 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mdabali_report/bloc/five_month_data_bloc/bloc/five_month_data_bloc.dart';
 import 'package:mdabali_report/bloc/monthly_aggregate_bloc/bloc/monthly_aggregate_bloc.dart';
 import 'package:mdabali_report/resources/images_constants.dart';
+import 'package:nepali_date_picker/nepali_date_picker.dart';
 
 import '../extracted_widgets/custom_text.dart';
 import 'charts/line_chart_card.dart';
 import 'charts/pie_chart_card.dart';
 import 'header_section.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final TextEditingController summaryDateController = TextEditingController();
+
+  @override
+  void dispose() {
+    // Always dispose controllers
+    summaryDateController.dispose();
+    super.dispose();
+  }
+
+  Future<void> selectNepaliDate(BuildContext context) async {
+    NepaliDateTime currentNepaliDate = NepaliDateTime.now();
+
+    final NepaliDateTime? picked = await showMaterialDatePicker(
+      context: context,
+      initialDate: currentNepaliDate,
+      firstDate: NepaliDateTime(2075),
+      lastDate: currentNepaliDate,
+      initialDatePickerMode: DatePickerMode.day,
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.dark(
+              primary: Theme.of(context).colorScheme.primary,
+              onPrimary: Theme.of(context).colorScheme.onPrimary,
+              surface: Theme.of(context).colorScheme.surfaceContainer,
+              onSurface: Theme.of(context).colorScheme.onSurface,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (picked != null) {
+      String nepaliDateFormatted =
+          "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
+
+      setState(() {
+        summaryDateController.text = nepaliDateFormatted;
+      });
+
+      DateTime englishDate = picked.toDateTime();
+      String englishDateFormatted =
+          "${englishDate.year}-${englishDate.month.toString().padLeft(2, '0')}-${englishDate.day.toString().padLeft(2, '0')}";
+      print(englishDateFormatted);
+      context
+          .read<FiveMonthDataBloc>()
+          .add(FetchFiveMonthData(toDate: englishDateFormatted));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +130,7 @@ class HomePage extends StatelessWidget {
                 color: colorScheme.onSurface,
                 weight: FontWeight.w600,
               ),
+
               const SizedBox(
                 height: 24,
               ),
@@ -80,11 +138,51 @@ class HomePage extends StatelessWidget {
               const SizedBox(
                 height: 24,
               ),
-              CustomText(
-                text: 'Transaction Trends',
-                fontSize: 16,
-                weight: FontWeight.bold,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CustomText(
+                    text: 'Transaction Trends',
+                    fontSize: 16,
+                    weight: FontWeight.bold,
+                  ),
+                  GestureDetector(
+                    onTap: () => selectNepaliDate(context),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: colorScheme.surface,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                            color: colorScheme.onSurfaceVariant, width: 1),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.calendar_today,
+                            size: 14,
+                            color: colorScheme.primaryFixedDim,
+                          ),
+                          SizedBox(width: 8),
+                          Text(
+                            summaryDateController.text.isEmpty
+                                ? "Select date"
+                                : summaryDateController.text,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: summaryDateController.text.isEmpty
+                                  ? colorScheme.onSurfaceVariant
+                                  : colorScheme.onSurface,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
+
               const SizedBox(
                 height: 16,
               ),

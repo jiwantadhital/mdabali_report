@@ -68,8 +68,8 @@ class _PieChartCardState extends State<PieChartCard> {
               title: percentage.toStringAsFixed(1),
               radius: touchedIndex == i ? 65.0 : 50.0,
               titleStyle: TextStyle(
-                fontSize: touchedIndex == i ? 18.0 : 14.0,
-                fontWeight: FontWeight.bold,
+                fontSize: touchedIndex == i ? 12.0 : 12.0,
+                fontWeight: FontWeight.w500,
                 color: Colors.white,
               ),
             ));

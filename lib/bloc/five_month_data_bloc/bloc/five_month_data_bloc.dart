@@ -21,6 +21,11 @@ class FiveMonthDataBloc extends Bloc<FiveMonthDataEvent, FiveMonthDataState> {
     try {
       final data = await fiveMonthDataRepository.fetchFiveMonthData(
           toDate: event.toDate);
+      if (data.data == null) {
+        emit(FiveMonthDataError(
+            message:
+                'No data Found for this date \n Please select other dates'));
+      }
       data.status == true
           ? emit(FiveMonthDataLoaded(data: data))
           : emit(FiveMonthDataError(message: data.message.toString()));

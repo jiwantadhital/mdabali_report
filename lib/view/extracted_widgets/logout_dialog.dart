@@ -76,7 +76,7 @@ void showLogoutDialog(BuildContext context) {
                     },
                     child: CustomText(
                       text: 'Logout',
-                      color: colorScheme.onError,
+                      color: Colors.white,
                       fontSize: 16,
                     ),
                   ),

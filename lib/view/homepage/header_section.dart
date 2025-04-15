@@ -37,16 +37,17 @@ class _HeaderSectionState extends State<HeaderSection> {
               buildSummaryCard(
                 context: context,
                 title: 'DFS(Dr)',
-                currentMonthAmount: aggergateData!.dfsDebit!.currentMonth ?? 0,
-                previousMonthAmount: aggergateData.dfsDebit?.previousMonth ?? 0,
+                currentMonthAmount: aggergateData?.dfsDebit!.currentMonth ?? 0,
+                previousMonthAmount:
+                    aggergateData?.dfsDebit?.previousMonth ?? 0,
               ),
               SizedBox(height: 12),
               buildSummaryCard(
                 context: context,
                 title: 'DFS(Cr)',
-                currentMonthAmount: aggergateData.dfsCredit!.currentMonth ?? 0,
+                currentMonthAmount: aggergateData?.dfsCredit!.currentMonth ?? 0,
                 previousMonthAmount:
-                    aggergateData.dfsCredit!.previousMonth ?? 0,
+                    aggergateData?.dfsCredit?.previousMonth ?? 0,
               ),
             ],
           );

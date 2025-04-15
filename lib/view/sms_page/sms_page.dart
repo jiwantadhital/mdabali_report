@@ -185,6 +185,7 @@ class _SmsPageState extends State<SmsPage> {
         children: [
           // Main Card with Glassmorphism Effect
           Container(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             decoration: BoxDecoration(
               border: Border.all(
                   color: colorScheme.primary.withOpacity(0.3), width: 1.5),
@@ -205,57 +206,38 @@ class _SmsPageState extends State<SmsPage> {
                   ),
                   child: Column(
                     children: [
-                      SizedBox(height: 24),
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 16),
-                        padding: EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          color: colorScheme.surfaceContainerLow,
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: Colors.blue.withOpacity(0.3),
-                            width: 1.5,
-                          ),
-                        ),
-                        child: Column(
-                          children: [
-                            buildMetricRow(
-                              'Total Amount',
-                              NumberFormatter.formatAmount(totalAmount),
-                              Icons.money,
-                              colorScheme.onSurface,
-                              iconBgColor: Colors.redAccent.withOpacity(0.5),
-                            ),
-                            buildDivider(),
-                            buildMetricRow(
-                              'Sms Count',
-                              smsCount.toString(),
-                              Icons.add,
-                              colorScheme.onSurface,
-                              iconBgColor:
-                                  colorScheme.onSurface.withOpacity(0.15),
-                            ),
-                            buildDivider(),
-                            buildMetricRow(
-                              'Rate',
-                              '$rate%',
-                              Icons.percent,
-                              colorScheme.onSurface,
-                              iconBgColor: Colors.greenAccent.withOpacity(0.25),
-                            ),
-                            buildDivider(),
-                            buildMetricRow(
-                              'Available Balance',
-                              NumberFormatter.formatAmount(availableBalance),
-                              Icons.balance,
-                              colorScheme.onSurface,
-                              iconBgColor: Colors.amberAccent.withOpacity(0.5),
-                              isLast: true,
-                            ),
-                          ],
-                        ),
+                      buildMetricRow(
+                        'Sms Count',
+                        smsCount.toString(),
+                        Icons.sms_outlined,
+                        colorScheme.onSurface,
+                        iconBgColor: colorScheme.onSurface.withOpacity(0.15),
                       ),
-                      SizedBox(height: 24),
+                      buildDivider(),
+                      buildMetricRow(
+                        'SMS Rate',
+                        'Rs $rate',
+                        Icons.attach_money_outlined,
+                        colorScheme.onSurface,
+                        iconBgColor: Colors.greenAccent.withOpacity(0.25),
+                      ),
+                      buildDivider(),
+                      buildMetricRow(
+                        'Total Cost',
+                        NumberFormatter.formatAmount(totalAmount),
+                        Icons.money,
+                        colorScheme.onSurface,
+                        iconBgColor: Colors.redAccent.withOpacity(0.5),
+                      ),
+                      buildDivider(),
+                      buildMetricRow(
+                        'Available Count',
+                        NumberFormatter.formatAmount(availableBalance),
+                        Icons.balance,
+                        colorScheme.onSurface,
+                        iconBgColor: Colors.amberAccent.withOpacity(0.5),
+                        isLast: true,
+                      ),
                     ],
                   ),
                 ),
@@ -308,70 +290,46 @@ class _SmsPageState extends State<SmsPage> {
         children: [
           // Main Card with Glassmorphism Effect
           Container(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             decoration: BoxDecoration(
               border: Border.all(
                   color: colorScheme.primary.withOpacity(0.3), width: 1.5),
-              borderRadius: BorderRadius.circular(24),
+              borderRadius: BorderRadius.circular(20),
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(24),
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: colorScheme.surfaceContainerHigh,
-                    borderRadius: BorderRadius.circular(24),
-                    border: Border.all(
-                      color: Colors.blue.withOpacity(0.1),
-                      width: 1.5,
+                child: Column(
+                  children: [
+                    Column(
+                      children: [
+                        buildMetricRow(
+                          'Transaction Count',
+                          transactionCount.toString(),
+                          Icons.format_list_numbered_rtl_outlined,
+                          colorScheme.onSurface,
+                          iconBgColor: Colors.redAccent.withOpacity(0.5),
+                        ),
+                        buildDivider(),
+                        buildMetricRow(
+                          'Transaction Amount',
+                          NumberFormatter.formatAmount(transactionAmount),
+                          CupertinoIcons.creditcard,
+                          colorScheme.onSurface,
+                          iconBgColor: colorScheme.onSurface.withOpacity(0.15),
+                        ),
+                        buildDivider(),
+                        buildMetricRow(
+                          'Available Balance',
+                          NumberFormatter.formatAmount(remainingBalance),
+                          Icons.balance,
+                          colorScheme.onSurface,
+                          iconBgColor: Colors.greenAccent.withOpacity(0.25),
+                        ),
+                      ],
                     ),
-                  ),
-                  child: Column(
-                    children: [
-                      SizedBox(height: 24),
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 16),
-                        padding: EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          color: colorScheme.surfaceContainerLow,
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: Colors.blue.withOpacity(0.3),
-                            width: 1.5,
-                          ),
-                        ),
-                        child: Column(
-                          children: [
-                            buildMetricRow(
-                              'Transaction Amount',
-                              NumberFormatter.formatAmount(transactionAmount),
-                              CupertinoIcons.creditcard,
-                              colorScheme.onSurface,
-                              iconBgColor:
-                                  colorScheme.onSurface.withOpacity(0.15),
-                            ),
-                            buildDivider(),
-                            buildMetricRow(
-                              'Available Balance',
-                              NumberFormatter.formatAmount(remainingBalance),
-                              Icons.balance,
-                              colorScheme.onSurface,
-                              iconBgColor: Colors.greenAccent.withOpacity(0.25),
-                            ),
-                            buildDivider(),
-                            buildMetricRow(
-                              'Transaction Count',
-                              transactionCount.toString(),
-                              Icons.format_list_numbered_rtl_outlined,
-                              colorScheme.onSurface,
-                              iconBgColor: Colors.redAccent.withOpacity(0.5),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 24),
-                    ],
-                  ),
+                  ],
                 ),
               ),
             ),
@@ -417,7 +375,7 @@ class _SmsPageState extends State<SmsPage> {
   }) {
     return AnimatedContainer(
       duration: Duration(milliseconds: 300),
-      padding: EdgeInsets.symmetric(vertical: 6),
+      padding: EdgeInsets.symmetric(vertical: 4),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -473,7 +431,7 @@ class _SmsPageState extends State<SmsPage> {
                 fontSize: 16,
                 weight: FontWeight.bold,
                 color: color,
-                letterSpacing: 0.5,
+                letterSpacing: 0.1,
               )),
         ],
       ),

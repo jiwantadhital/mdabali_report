@@ -130,7 +130,10 @@ class _HomePageState extends State<HomePage> {
                 color: colorScheme.onSurface,
                 weight: FontWeight.w600,
               ),
-
+              //   const SizedBox(
+              //     height: 24,
+              //   ),
+              //   BarGraphCard(),
               const SizedBox(
                 height: 24,
               ),

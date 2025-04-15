@@ -18,9 +18,12 @@ class PieChartCard extends StatefulWidget {
 class _PieChartCardState extends State<PieChartCard> {
   int touchedIndex = -1;
 
+  bool _showAllOthers = false;
+
   @override
   Widget build(BuildContext context) {
     var colorScheme = Theme.of(context).colorScheme;
+
     return BlocBuilder<SummaryReportBloc, SummaryReportState>(
       builder: (context, state) {
         if (state is SummaryReportLoading) {
@@ -56,12 +59,24 @@ class _PieChartCardState extends State<PieChartCard> {
 
           List<PieChartSectionData> sections = [];
           List<Widget> indicators = [];
+          double othersPercentage = 0.0;
+          List<_OthersEntry> othersEntries = [];
 
           for (int i = 0; i < data.length; i++) {
             double percentage = totalSuccessAmount > 0
                 ? ((data[i].successAmount ?? 0) / totalSuccessAmount) * 100
                 : 0;
 
+            if (percentage < 5.0) {
+              othersEntries.add(_OthersEntry(
+                label: data[i].services ?? 'Unknown',
+                percentage: percentage,
+              ));
+              othersPercentage += percentage;
+              continue;
+            }
+
+            // Normal section
             sections.add(PieChartSectionData(
               color: chartColors[i % chartColors.length],
               value: percentage,
@@ -76,8 +91,30 @@ class _PieChartCardState extends State<PieChartCard> {
 
             indicators.add(_buildIndicator(
               color: chartColors[i % chartColors.length],
-              text: '${data[i].services}',
-              percentage: '${percentage.toStringAsFixed(1)} %',
+              text: data[i].services ?? 'Unknown',
+              percentage: '${percentage.toStringAsFixed(1)}%',
+              context: context,
+            ));
+          }
+
+// ✅ Add "Others" once, after loop
+          if (othersEntries.isNotEmpty) {
+            sections.add(PieChartSectionData(
+              color: Colors.grey,
+              value: othersPercentage,
+              title: othersPercentage.toStringAsFixed(1),
+              radius: 50.0,
+              titleStyle: const TextStyle(
+                fontSize: 12.0,
+                fontWeight: FontWeight.w500,
+                color: Colors.white,
+              ),
+            ));
+
+            indicators.add(_buildIndicator(
+              color: Colors.grey,
+              text: 'Others',
+              percentage: '${othersPercentage.toStringAsFixed(1)}%',
               context: context,
             ));
           }
@@ -108,6 +145,9 @@ class _PieChartCardState extends State<PieChartCard> {
                                 FetchSummaryReport(
                                     dateFrom: startFormatted,
                                     dateTo: endFormatted));
+                            setState(() {
+                              _showAllOthers = false;
+                            });
                           }
                         },
                         child: Container(
@@ -140,7 +180,7 @@ class _PieChartCardState extends State<PieChartCard> {
                             aspectRatio: 1.5,
                             child: PieChart(PieChartData(
                               borderData: FlBorderData(show: false),
-                              sectionsSpace: 0.5,
+                              sectionsSpace: 0.8,
                               centerSpaceRadius: 80,
                               sections: sections,
                             )),
@@ -151,7 +191,11 @@ class _PieChartCardState extends State<PieChartCard> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(
-                          top: 40, bottom: 20, right: 15, left: 15),
+                        top: 40,
+                        bottom: 8,
+                        right: 15,
+                        left: 15,
+                      ),
                       child: LayoutBuilder(
                         builder: (context, constraints) {
                           return GridView.builder(
@@ -174,6 +218,153 @@ class _PieChartCardState extends State<PieChartCard> {
                         },
                       ),
                     ),
+                    if (othersEntries.isNotEmpty) ...[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Divider(
+                            thickness: 1,
+                            color: Theme.of(context).dividerColor),
+                      ),
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(top: 12, left: 16, right: 16),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: CustomText(
+                            text: 'Others includes:',
+                            fontSize: 14,
+                            weight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: LayoutBuilder(
+                          builder: (context, constraints) {
+                            final displayedEntries = _showAllOthers
+                                ? othersEntries
+                                : othersEntries
+                                    .take(4)
+                                    .toList(); // limit to 4 if collapsed
+
+                            return Wrap(
+                              spacing: 24,
+                              runSpacing: 8,
+                              children: List.generate(
+                                (displayedEntries.length / 2).ceil(),
+                                (rowIndex) {
+                                  final first = displayedEntries[rowIndex * 2];
+                                  final second =
+                                      rowIndex * 2 + 1 < displayedEntries.length
+                                          ? displayedEntries[rowIndex * 2 + 1]
+                                          : null;
+
+                                  return Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Expanded(
+                                          child:
+                                              _buildOthersItem(context, first)),
+                                      if (second != null)
+                                        Expanded(
+                                            child: _buildOthersItem(
+                                                context, second))
+                                      else
+                                        const Spacer(),
+                                    ],
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      if (othersEntries.length > 4)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _showAllOthers = !_showAllOthers;
+                                });
+                              },
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    _showAllOthers ? 'Show less' : 'View all',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  Icon(
+                                    _showAllOthers
+                                        ? Icons.expand_less
+                                        : Icons.expand_more,
+                                    size: 16,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      const SizedBox(height: 16),
+                    ],
+
+                    // if (othersEntries.isNotEmpty) ...[
+                    //   const SizedBox(height: 12),
+                    //   Padding(
+                    //     padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    //     child: Align(
+                    //       alignment: Alignment.centerLeft,
+                    //       child: CustomText(
+                    //         text: 'Other includes:',
+                    //         fontSize: 14,
+                    //         weight: FontWeight.bold,
+                    //         color: Theme.of(context).colorScheme.onSurface,
+                    //       ),
+                    //     ),
+                    //   ),
+                    //   const SizedBox(height: 8),
+                    //   Padding(
+                    //     padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    //     child: Align(
+                    //       alignment: Alignment.centerLeft,
+                    //       child: Column(
+                    //         crossAxisAlignment: CrossAxisAlignment.start,
+                    //         children: othersEntries.map((entry) {
+                    //           return Padding(
+                    //             padding: const EdgeInsets.only(bottom: 8),
+                    //             child: CustomText(
+                    //               text:
+                    //                   '• ${entry.label} (${entry.percentage.toStringAsFixed(1)}%)',
+                    //               fontSize: 13,
+                    //               color: Theme.of(context)
+                    //                   .colorScheme
+                    //                   .onSurfaceVariant,
+                    //               textOverflow: TextOverflow.ellipsis,
+                    //               maxLine: 2,
+                    //             ),
+                    //           );
+                    //         }).toList(),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ],
+                    SizedBox(
+                      height: 20,
+                    )
                   ],
                 ),
               ),
@@ -245,4 +436,34 @@ class _PieChartCardState extends State<PieChartCard> {
       ],
     );
   }
+}
+
+Widget _buildOthersItem(BuildContext context, _OthersEntry entry) {
+  return Row(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      CustomText(
+        text: '• ',
+        fontSize: 14,
+        weight: FontWeight.bold,
+        color: Theme.of(context).colorScheme.onSurfaceVariant,
+      ),
+      Expanded(
+        child: CustomText(
+          text: '${entry.label} (${entry.percentage.toStringAsFixed(1)}%)',
+          fontSize: 13,
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+          maxLine: 2,
+          textOverflow: TextOverflow.ellipsis,
+        ),
+      ),
+    ],
+  );
+}
+
+class _OthersEntry {
+  final String label;
+  final double percentage;
+
+  _OthersEntry({required this.label, required this.percentage});
 }

@@ -38,12 +38,15 @@ class _MdabaliPageState extends State<MdabaliPage> {
                 );
               } else if (state is MemberLimitLoaded) {
                 final memberData = state.memeberLimitModel.data;
+                final remainingLimit =
+                    memberData!.memberLimit! - memberData.verifiedUser!.toInt();
                 return buildMdabaliCard(
-                    membersLimit: memberData!.memberLimit.toString(),
+                    membersLimit: memberData.memberLimit.toString(),
                     verifiedUser: memberData.verifiedUser.toString(),
                     closedUser: memberData.closedUser.toString(),
                     totalUser: memberData.totalUser.toString(),
-                    context: context);
+                    context: context,
+                    remainingLimit: remainingLimit.toString());
               } else if (state is MemberLimitError) {
                 return Center(
                   child: Column(
@@ -91,6 +94,7 @@ class _MdabaliPageState extends State<MdabaliPage> {
     required String verifiedUser,
     required String closedUser,
     required String totalUser,
+    required String remainingLimit,
     required BuildContext context,
   }) {
     var colorScheme = Theme.of(context).colorScheme;
@@ -102,6 +106,7 @@ class _MdabaliPageState extends State<MdabaliPage> {
         children: [
           // Main Card with Glassmorphism Effect
           Container(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             decoration: BoxDecoration(
               border: Border.all(
                   color: colorScheme.primary.withOpacity(0.3), width: 1.5),
@@ -111,70 +116,54 @@ class _MdabaliPageState extends State<MdabaliPage> {
               borderRadius: BorderRadius.circular(24),
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: colorScheme.surfaceContainerHigh,
-                    borderRadius: BorderRadius.circular(24),
-                    border: Border.all(
-                      color: Colors.blue.withOpacity(0.1),
-                      width: 1.5,
+                child: Column(
+                  children: [
+                    Column(
+                      children: [
+                        buildMetricRow(
+                          'Members Limit',
+                          membersLimit,
+                          Icons.card_membership,
+                          colorScheme.onSurface,
+                          iconBgColor: Colors.red.withOpacity(0.5),
+                        ),
+                        buildDivider(),
+                        buildMetricRow(
+                          'Verified Users',
+                          verifiedUser,
+                          Icons.verified_user_rounded,
+                          colorScheme.onSurface,
+                          iconBgColor: Colors.greenAccent.withOpacity(0.5),
+                        ),
+                        buildDivider(),
+                        buildMetricRow(
+                          'Closed Users',
+                          closedUser,
+                          Icons.person_off_rounded,
+                          colorScheme.onSurface,
+                          iconBgColor: Colors.deepOrangeAccent.withOpacity(0.5),
+                        ),
+                        buildDivider(),
+                        buildMetricRow(
+                          'Total Users',
+                          totalUser,
+                          Icons.people_rounded,
+                          colorScheme.onSurface,
+                          iconBgColor: Colors.amberAccent.withOpacity(0.5),
+                          isLast: true,
+                        ),
+                        buildDivider(),
+                        buildMetricRow(
+                          'Remaining Limit',
+                          remainingLimit,
+                          Icons.linear_scale_outlined,
+                          colorScheme.onSurface,
+                          iconBgColor: Colors.cyan.withOpacity(0.5),
+                          isLast: true,
+                        ),
+                      ],
                     ),
-                  ),
-                  child: Column(
-                    children: [
-                      SizedBox(height: 24),
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 16),
-                        padding: EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          color: colorScheme.surfaceContainerLow,
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: Colors.blue.withOpacity(0.3),
-                            width: 1.5,
-                          ),
-                        ),
-                        child: Column(
-                          children: [
-                            buildMetricRow(
-                              'Members Limit',
-                              membersLimit,
-                              Icons.card_membership,
-                              colorScheme.onSurface,
-                              iconBgColor: Colors.red.withOpacity(0.5),
-                            ),
-                            buildDivider(),
-                            buildMetricRow(
-                              'Verified Users',
-                              verifiedUser,
-                              Icons.verified_user_rounded,
-                              colorScheme.onSurface,
-                              iconBgColor: Colors.greenAccent.withOpacity(0.5),
-                            ),
-                            buildDivider(),
-                            buildMetricRow(
-                              'Closed Users',
-                              closedUser,
-                              Icons.person_off_rounded,
-                              colorScheme.onSurface,
-                              iconBgColor:
-                                  Colors.deepOrangeAccent.withOpacity(0.5),
-                            ),
-                            buildDivider(),
-                            buildMetricRow(
-                              'Total Users',
-                              totalUser,
-                              Icons.people_rounded,
-                              colorScheme.onSurface,
-                              iconBgColor: Colors.amberAccent.withOpacity(0.5),
-                              isLast: true,
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 24),
-                    ],
-                  ),
+                  ],
                 ),
               ),
             ),

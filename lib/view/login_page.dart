@@ -141,8 +141,8 @@ class _LoginPageState extends State<LoginPage> {
                                 if (_formKey.currentState?.validate() ??
                                     false) {
                                   Get.off(() => PasswordLoginPage(
-                                        username:
-                                            usernameController.text.trim(),
+                                      // username:
+                                      //     usernameController.text.trim(),
                                       ));
                                 }
                               }
@@ -192,14 +192,14 @@ class BottomNavAuth extends StatelessWidget {
             width: 40,
             height: 40,
             child: Image.asset(
-              ImagesConstants.info,
+              ImagesConstants.mdabaliLogo,
             ),
           ),
-          SizedBox(
-            width: 40,
-            height: 40,
-            child: Image.asset(ImagesConstants.arjnaLogo),
-          ),
+          //   SizedBox(
+          //     width: 40,
+          //     height: 40,
+          //     child: Image.asset(ImagesConstants.arjnaLogo),
+          //   ),
           SizedBox(
             width: 40,
             height: 40,

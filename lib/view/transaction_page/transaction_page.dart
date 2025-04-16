@@ -211,30 +211,30 @@ class _TransactionPageState extends State<TransactionPage> {
                       ],
                     ),
                   ),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: colorScheme.primaryFixedDim.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.trending_up,
-                          color: colorScheme.primary,
-                          size: 16,
-                        ),
-                        SizedBox(width: 4),
-                        CustomText(
-                          text:
-                              '${_calculateSuccessRate(successCount, pendingCount, failCount)} %',
-                          fontSize: 14,
-                          weight: FontWeight.w600,
-                          color: colorScheme.primary,
-                        ),
-                      ],
-                    ),
-                  ),
+                  //   Container(
+                  //     padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  //     decoration: BoxDecoration(
+                  //       color: colorScheme.primaryFixedDim.withOpacity(0.1),
+                  //       borderRadius: BorderRadius.circular(20),
+                  //     ),
+                  //     child: Row(
+                  //       children: [
+                  //         Icon(
+                  //           Icons.trending_up,
+                  //           color: colorScheme.primary,
+                  //           size: 16,
+                  //         ),
+                  //         SizedBox(width: 4),
+                  //         CustomText(
+                  //           text:
+                  //               '${_calculateSuccessRate(successCount, pendingCount, failCount)} %',
+                  //           fontSize: 14,
+                  //           weight: FontWeight.w600,
+                  //           color: colorScheme.primary,
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
                 ],
               ),
               SizedBox(height: 20),
@@ -244,11 +244,6 @@ class _TransactionPageState extends State<TransactionPage> {
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     kBoxShadow,
-                    // BoxShadow(
-                    //   color: Colors.black.withOpacity(0.03),
-                    //   blurRadius: 6,
-                    //   spreadRadius: 0,
-                    // ),
                   ],
                 ),
                 padding: EdgeInsets.all(16),
@@ -376,9 +371,9 @@ class _TransactionPageState extends State<TransactionPage> {
     }
   }
 
-  int _calculateSuccessRate(int successCount, int pendingCount, int failCount) {
-    int total = successCount + pendingCount + failCount;
-    if (total == 0) return 0;
-    return ((successCount / total) * 100).round();
-  }
+//   int _calculateSuccessRate(int successCount, int pendingCount, int failCount) {
+//     int total = successCount + pendingCount + failCount;
+//     if (total == 0) return 0;
+//     return ((successCount / total) * 100).round();
+//   }
 }

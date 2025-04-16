@@ -14,14 +14,19 @@ import 'extracted_widgets/extracted_button.dart';
 import 'login_page.dart';
 
 class PasswordLoginPage extends StatefulWidget {
-  final String username;
-  const PasswordLoginPage({super.key, required this.username});
+//   final String username;
+  const PasswordLoginPage({
+    super.key,
+    //required this.username
+  });
 
   @override
   State<PasswordLoginPage> createState() => _PasswordLoginPageState();
 }
 
 class _PasswordLoginPageState extends State<PasswordLoginPage> {
+  final usernameController = TextEditingController();
+
   final passwordController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
@@ -29,6 +34,7 @@ class _PasswordLoginPageState extends State<PasswordLoginPage> {
   @override
   Widget build(BuildContext context) {
     final ValueNotifier<String> passwordNotifier = ValueNotifier<String>('');
+    final ValueNotifier<String> mobileNotifier = ValueNotifier<String>('');
     bool isValid(String password) {
       return password.isNotEmpty;
     }
@@ -81,65 +87,52 @@ class _PasswordLoginPageState extends State<PasswordLoginPage> {
                               scale: 1,
                             )),
                           ),
-                          Row(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 6,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: colorScheme.surfaceContainerHighest,
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.language,
-                                        size: 16,
-                                        color:
-                                            colorScheme.onSecondaryContainer),
-                                    const SizedBox(width: 4),
-                                    CustomText(
-                                      text: 'Eng',
-                                      color: colorScheme.onSurfaceVariant,
-                                    )
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Container(
-                                padding: const EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  color: colorScheme.surfaceContainerHighest,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Icon(Icons.question_mark,
-                                    size: 16,
-                                    color: colorScheme.onSurfaceVariant),
-                              ),
-                            ],
-                          ),
                         ],
                       ),
                       const SizedBox(height: 40),
                       // Title section
                       CustomText(
-                        text: 'Secure and Convenient',
+                        text: 'Welcome To',
                         fontSize: 16,
                         color: colorScheme.onSurfaceVariant,
                       ),
                       const SizedBox(height: 8),
                       CustomText(
-                        text: 'Mobile Banking',
+                        text: 'Mdabali Report App',
                         fontSize: 24,
                         color: Colors.deepOrange,
                         weight: FontWeight.w500,
                       ),
+                      //const SizedBox(height: 40),
+                      //   UserPhoneNum(
+                      //     username: widget.username,
+                      //   ),
                       const SizedBox(height: 40),
-                      UserPhoneNum(
-                        username: widget.username,
+                      CustomText(
+                        text: 'Login or register',
+                        fontSize: 20,
+                        weight: FontWeight.w400,
                       ),
                       const SizedBox(height: 20),
+                      CustomTextField(
+                        hintText: 'User name',
+                        controller: usernameController,
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                        keyboardType: TextInputType.name,
+                        onchange: (value) {
+                          mobileNotifier.value = value.toString();
+                        },
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Username is required';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(
+                        height: 16,
+                      ),
                       CustomTextField(
                           hintText: 'Password',
                           controller: passwordController,
@@ -163,12 +156,12 @@ class _PasswordLoginPageState extends State<PasswordLoginPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          CustomText(
-                            text: 'Forgot Password?',
-                            fontSize: 16,
-                            color: colorScheme.onSurfaceVariant,
-                            decoration: TextDecoration.underline,
-                          ),
+                          //   CustomText(
+                          //     text: 'Forgot Password?',
+                          //     fontSize: 16,
+                          //     color: colorScheme.onSurfaceVariant,
+                          //     decoration: TextDecoration.underline,
+                          //   ),
                         ],
                       ),
                       // const SizedBox(height: 16),
@@ -188,7 +181,8 @@ class _PasswordLoginPageState extends State<PasswordLoginPage> {
                             builder: (context, password, __) {
                               return LoginButton(
                                 onPress: (state is LoginLoading ||
-                                        !isValid(passwordController.text))
+                                        !isValid(passwordController.text) ||
+                                        usernameController.text.isEmpty)
                                     ? null
                                     : () {
                                         FocusScope.of(context)
@@ -197,7 +191,9 @@ class _PasswordLoginPageState extends State<PasswordLoginPage> {
                                             false) {
                                           context.read<LoginBloc>().add(
                                                 LoginButtonPressed(
-                                                  username: widget.username,
+                                                  username: usernameController
+                                                      .text
+                                                      .trim(),
                                                   password: passwordController
                                                       .text
                                                       .trim(),

@@ -62,7 +62,8 @@ class _HomePageState extends State<HomePage> {
       DateTime englishDate = picked.toDateTime();
       String englishDateFormatted =
           "${englishDate.year}-${englishDate.month.toString().padLeft(2, '0')}-${englishDate.day.toString().padLeft(2, '0')}";
-      print(englishDateFormatted);
+
+      // ignore: use_build_context_synchronously
       context
           .read<FiveMonthDataBloc>()
           .add(FetchFiveMonthData(toDate: englishDateFormatted));
@@ -224,16 +225,16 @@ class DfsCrLineChartSection extends StatelessWidget {
         if (state is FiveMonthDataLoading) {
           return ShimmerLineChartCard();
         } else if (state is FiveMonthDataLoaded) {
+          final dfsCrData = state.data.data?.dfsCredit ?? [];
           return LineChartCard(
             title: 'DFS(Cr)',
-            dataPoints: state.data.data?.dfsCredit
-                    ?.map((e) => e.amount ?? 0.0)
-                    .toList() ??
-                [],
-            months: state.data.data?.dfsCredit
-                    ?.map((e) => e.month ?? '')
-                    .toList() ??
-                [],
+            dataPoints: dfsCrData
+                .map((e) => e.amount ?? 0.0)
+                .toList()
+                .reversed
+                .toList(),
+            months:
+                dfsCrData.map((e) => e.month ?? '').toList().reversed.toList(),
           );
         } else if (state is FiveMonthDataError) {
           return Center(
@@ -287,15 +288,19 @@ class UtilityLineChartSection extends StatelessWidget {
         if (state is FiveMonthDataLoading) {
           return ShimmerLineChartCard();
         } else if (state is FiveMonthDataLoaded) {
+          final utilityData = state.data.data?.utility ?? [];
           return LineChartCard(
             title: 'Utility',
-            dataPoints: state.data.data?.utility
-                    ?.map((e) => e.amount ?? 0.0)
-                    .toList() ??
-                [],
-            months:
-                state.data.data?.utility?.map((e) => e.month ?? '').toList() ??
-                    [],
+            dataPoints: utilityData
+                .map((e) => e.amount ?? 0.0)
+                .toList()
+                .reversed
+                .toList(),
+            months: utilityData
+                .map((e) => e.month ?? '')
+                .toList()
+                .reversed
+                .toList(),
           );
         } else if (state is FiveMonthDataError) {
           return Center(
@@ -349,15 +354,16 @@ class DfsDrLineChartSection extends StatelessWidget {
         if (state is FiveMonthDataLoading) {
           return ShimmerLineChartCard();
         } else if (state is FiveMonthDataLoaded) {
+          final dfsDrData = state.data.data?.dfsDebit ?? [];
           return LineChartCard(
             title: 'DFS(Dr)',
-            dataPoints: state.data.data?.dfsDebit
-                    ?.map((e) => e.amount ?? 0.0)
-                    .toList() ??
-                [],
+            dataPoints: dfsDrData
+                .map((e) => e.amount ?? 0.0)
+                .toList()
+                .reversed
+                .toList(),
             months:
-                state.data.data?.dfsDebit?.map((e) => e.month ?? '').toList() ??
-                    [],
+                dfsDrData.map((e) => e.month ?? '').toList().reversed.toList(),
           );
         } else if (state is FiveMonthDataError) {
           return Center(

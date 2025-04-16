@@ -117,7 +117,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
                 icon: Icon(Icons.swap_horiz), label: 'Transaction'),
             BottomNavigationBarItem(
                 icon: Icon(Icons.message), label: 'SMS & TopUp'),
-            BottomNavigationBarItem(icon: Icon(Icons.people), label: 'mDabbali')
+            BottomNavigationBarItem(icon: Icon(Icons.people), label: 'mDabali')
           ]),
     );
   }

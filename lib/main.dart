@@ -19,7 +19,7 @@ import 'package:mdabali_report/data/repos/repositories/summary_report_repository
 import 'package:mdabali_report/data/repos/repositories/topup_summary_repository.dart';
 import 'package:mdabali_report/data/shared_preferences/shared_preferences.dart';
 import 'package:mdabali_report/resources/colors.dart';
-import 'package:mdabali_report/view/login_page.dart';
+import 'package:mdabali_report/view/password_login_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -71,7 +71,7 @@ class MyApp extends StatelessWidget {
                   backgroundColor: Color(0xFFFFFFFF),
                 ),
               ),
-              home: LoginPage()),
+              home: PasswordLoginPage()),
         );
       },
     );

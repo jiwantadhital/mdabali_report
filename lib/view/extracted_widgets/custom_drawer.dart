@@ -19,7 +19,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
   // Static values for user information
   final String _userName = "Aakash Sah";
   final String _cooperativeName = "Aarjan saving and credit Cooperative";
-  final String _userImagePath = ImagesConstants.info;
+  final String _userImagePath = ImagesConstants.mdabaliLogo;
 
   // Handle theme change internally
   void _handleThemeChange(ThemeMode themeMode) {

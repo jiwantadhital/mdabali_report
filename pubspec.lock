@@ -473,13 +473,13 @@ packages:
     source: hosted
     version: "6.0.1"
   nepali_utils:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: nepali_utils
-      sha256: f4c46a4d217520313c9dfebe633dcbddd5d7bc5057e0a5697d4813f2555c59ff
+      sha256: "686ac878ca844e0ec264a7c0da6404ab7992db5b9120d3ffe1356a3b1de266f4"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.7"
+    version: "3.0.8"
   nested:
     dependency: transitive
     description:

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mdabali_report/data/shared_preferences/shared_preferences.dart';
 import 'package:mdabali_report/view/extracted_widgets/custom_text.dart';
-import 'package:mdabali_report/view/login_page.dart';
+import 'package:mdabali_report/view/password_login_page.dart';
 
 void showLogoutDialog(BuildContext context) {
   final colorScheme = Theme.of(context).colorScheme;
@@ -70,7 +70,7 @@ void showLogoutDialog(BuildContext context) {
                         // ignore: use_build_context_synchronously
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const LoginPage()),
+                            builder: (context) => const PasswordLoginPage()),
                         (route) => false,
                       );
                     },

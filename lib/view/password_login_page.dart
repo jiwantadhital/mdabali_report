@@ -83,7 +83,7 @@ class _PasswordLoginPageState extends State<PasswordLoginPage> {
                             ),
                             child: Center(
                                 child: Image.asset(
-                              ImagesConstants.arjnaLogo,
+                              ImagesConstants.mdabaliLogo,
                               scale: 1,
                             )),
                           ),

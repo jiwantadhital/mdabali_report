@@ -1,323 +1,295 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mdabali_report/bloc/member_limit_bloc/bloc/member_limit_bloc.dart';
+import 'package:mdabali_report/view/sms_page/sms_page.dart';
 import '../extracted_widgets/custom_text.dart';
-import '../homepage/header_section.dart';
 
-class MdabaliPage extends StatelessWidget {
+class MdabaliPage extends StatefulWidget {
   const MdabaliPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-   return SingleChildScrollView(
-    child: Padding(padding: EdgeInsets.all(16),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // HeaderSection(),
-        // const SizedBox(height: 24,),
-        // CustomText(text: 'mDabali Summary',
-        // fontSize: 20,
-        // weight: FontWeight.w600,),
-        // const SizedBox(height: 16,),
-          // _buildMDabbaliCard(institute: 'Aarjan Saving and Credit Cooperative',
-          //                  membersLimit:'500',
-          //                  verifiedUser: '500',
-          //                   closedUser: '500',
-          //                    totalUser:'500')
-          buildMdabaliCard(
-            institute: 'Aarjan Saving and Credit Cooperative',
-            membersLimit: '500',
-            verifiedUser: '500',
-            closedUser: '500',
-            totalUser: '500')
+  State<MdabaliPage> createState() => _MdabaliPageState();
+}
 
-      
-      ],
-    ),),
-  );
+class _MdabaliPageState extends State<MdabaliPage> {
+  @override
+  void initState() {
+    context.read<MemberLimitBloc>().add(FetchMemberLimit());
+    super.initState();
   }
-  
-Widget buildMdabaliCard({
-  required String institute,
-  required String membersLimit,
-  required String verifiedUser,
-  required String closedUser,
-  required String totalUser,
-}) {
 
-
-  return Container(
-    margin: EdgeInsets.symmetric(vertical: 16,),
-    child: Stack(
-      children: [
-        // Main Card with Glassmorphism Effect
-        Container(
-          decoration: BoxDecoration(
-           border: Border.all(
-            color:Colors.blue.withOpacity(0.3),
-            width: 1.5
-           ),
-            borderRadius: BorderRadius.circular(24),
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(24),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(24),
-                  border: Border.all(
-                    color: Colors.white.withOpacity(0.2),
-                    width: 1.5,
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            BlocBuilder<MemberLimitBloc, MemberLimitState>(
+                builder: (context, state) {
+              if (state is MemberLimitLoading) {
+                return ShimmerTopupCard(
+                  context: context,
+                );
+              } else if (state is MemberLimitLoaded) {
+                final memberData = state.memeberLimitModel.data;
+                final remainingLimit =
+                    memberData!.memberLimit! - memberData.verifiedUser!.toInt();
+                return buildMdabaliCard(
+                    membersLimit: memberData.memberLimit.toString(),
+                    verifiedUser: memberData.verifiedUser.toString(),
+                    closedUser: memberData.closedUser.toString(),
+                    totalUser: memberData.totalUser.toString(),
+                    context: context,
+                    remainingLimit: remainingLimit.toString());
+              } else if (state is MemberLimitError) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.error_outline,
+                          color: Theme.of(context).colorScheme.error, size: 24),
+                      SizedBox(height: 8),
+                      CustomText(
+                        text: state.error,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        fontSize: 16,
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
                   ),
-                ),
+                );
+              } else {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.error_outline,
+                          color: Theme.of(context).colorScheme.error, size: 24),
+                      SizedBox(height: 8),
+                      CustomText(
+                        text: 'Failed to load Data',
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        fontSize: 16,
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                );
+              }
+            })
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildMdabaliCard({
+    required String membersLimit,
+    required String verifiedUser,
+    required String closedUser,
+    required String totalUser,
+    required String remainingLimit,
+    required BuildContext context,
+  }) {
+    var colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      margin: EdgeInsets.symmetric(
+        vertical: 16,
+      ),
+      child: Stack(
+        children: [
+          // Main Card with Glassmorphism Effect
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            decoration: BoxDecoration(
+              border: Border.all(
+                  color: colorScheme.primary.withOpacity(0.3), width: 1.5),
+              borderRadius: BorderRadius.circular(24),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(24),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
                 child: Column(
                   children: [
-                  
-                    // buildInstituteHeader(institute),
-                    
-                    SizedBox(height: 24),
-                    
-                    
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 16),
-                      padding: EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: Colors.blue.withOpacity(0.3),
-                          width: 1.5,
+                    Column(
+                      children: [
+                        buildMetricRow(
+                          'Members Limit',
+                          membersLimit,
+                          Icons.card_membership,
+                          colorScheme.onSurface,
+                          iconBgColor: Colors.red.withOpacity(0.5),
                         ),
-                      ),
-                      child: Column(
-                        children: [
-                          buildMetricRow(
-                            'Members Limit',
-                            membersLimit,
-                            Icons.card_membership,
-                            Colors.black,
-                            iconBgColor: Colors.red.withOpacity(0.3),
-                          ),
-                          buildDivider(),
-                          buildMetricRow(
-                            'Verified Users',
-                            verifiedUser,
-                            Icons.verified_user_rounded,
-                            Colors.black,
-                            iconBgColor: Colors.greenAccent.withOpacity(0.25),
-                          ),
-                          buildDivider(),
-                          buildMetricRow(
-                            'Closed Users',
-                            closedUser,
-                            Icons.person_off_rounded,
-                            Colors.black,
-                            iconBgColor: Colors.redAccent.withOpacity(0.25),
-                          ),
-                          buildDivider(),
-                          buildMetricRow(
-                            'Total Users',
-                            totalUser,
-                            Icons.people_rounded,
-                            Colors.black,
-                            iconBgColor: Colors.amberAccent.withOpacity(0.25),
-                            isLast: true,
-                          ),
-                        ],
-                      ),
+                        buildDivider(),
+                        buildMetricRow(
+                          'Verified Users',
+                          verifiedUser,
+                          Icons.verified_user_rounded,
+                          colorScheme.onSurface,
+                          iconBgColor: Colors.greenAccent.withOpacity(0.5),
+                        ),
+                        buildDivider(),
+                        buildMetricRow(
+                          'Closed Users',
+                          closedUser,
+                          Icons.person_off_rounded,
+                          colorScheme.onSurface,
+                          iconBgColor: Colors.deepOrangeAccent.withOpacity(0.5),
+                        ),
+                        buildDivider(),
+                        buildMetricRow(
+                          'Total Users',
+                          totalUser,
+                          Icons.people_rounded,
+                          colorScheme.onSurface,
+                          iconBgColor: Colors.amberAccent.withOpacity(0.5),
+                          isLast: true,
+                        ),
+                        buildDivider(),
+                        buildMetricRow(
+                          'Remaining Limit',
+                          remainingLimit,
+                          Icons.linear_scale_outlined,
+                          colorScheme.onSurface,
+                          iconBgColor: Colors.cyan.withOpacity(0.5),
+                          isLast: true,
+                        ),
+                      ],
                     ),
-                    
-                    SizedBox(height: 24),
-                    
                   ],
                 ),
               ),
             ),
           ),
-        ),
-        
-        // Decorative bubble circle
-        Positioned(
-          top: 10,
-          right: -20,
-          child: Container(
-            width: 100,
-            height: 100,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.blue.withOpacity(0.1),
-            ),
-          ),
-        ),
-        Positioned(
-          bottom: 20,
-          left: -30,
-          child: Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.blue.withOpacity(0.1),
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
-}
 
-Widget buildInstituteHeader(String institute) {
-  return Padding(
-    padding: const EdgeInsets.only(top: 28),
-    child: Column(
-      children: [
-        // Badge with Container
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 5),
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.15),
-            borderRadius: BorderRadius.circular(18),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                offset: Offset(0, 4),
-                blurRadius: 12,
+          // Decorative bubble circle
+          Positioned(
+            top: 10,
+            right: -20,
+            child: Container(
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.blue.withOpacity(0.1),
               ),
-            ],
-            border: Border.all(
-              color: Colors.white.withOpacity(0.3),
-              width: 1,
             ),
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Institute Icon
-              // Container(
-              //   padding: EdgeInsets.all(8),
-              //   decoration: BoxDecoration(
-              //     color: Colors.white.withOpacity(0.2),
-              //     shape: BoxShape.circle,
-              //   ),
-              //   child: Icon(
-              //     Icons.school_rounded,
-              //     color: Colors.white,
-              //     size: 18,
-              //   ),
-              // ),
-              // SizedBox(width: 12),
-              // Institute Name with Text Shadow,
-              CustomText(text: institute,
-              fontSize: 15,
-              weight: FontWeight.bold,
-              color: Colors.white,
-              letterSpacing: 0.5,
-            
-              )
-            
-            ],
+          Positioned(
+            bottom: 20,
+            left: -30,
+            child: Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.blue.withOpacity(0.1),
+              ),
+            ),
           ),
-        ),
-      ],
-    ),
-  );
-}
+        ],
+      ),
+    );
+  }
 
-Widget buildMetricRow(
-  String label, 
-  String value, 
-  IconData icon, 
-  Color color, 
-  {
+  Widget buildMetricRow(
+    String label,
+    String value,
+    IconData icon,
+    Color color, {
     bool isLast = false,
     Color? iconBgColor,
-  }
-) {
-  return AnimatedContainer(
-    duration: Duration(milliseconds: 300),
-    padding: EdgeInsets.symmetric(vertical: 6),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            // Icon with Custom Background
-            Container(
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: iconBgColor ?? Colors.white.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    offset: Offset(0, 2),
-                    blurRadius: 6,
+  }) {
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 300),
+      padding: EdgeInsets.symmetric(vertical: 6),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Row(
+              children: [
+                // Icon with Custom Background
+                Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: iconBgColor ?? Colors.white.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        offset: Offset(0, 2),
+                        blurRadius: 6,
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              child: Icon(
-                icon,
-                color: color,
-                size: 18,
-              ),
-            ),
-            SizedBox(width: 14),
-            // Label Text
-            CustomText(text: label,
-            fontSize: 15,
-            weight: FontWeight.w500,
-            color: color.withOpacity(0.9),)
-        
-          ],
-        ),
-        // Value with Highlight
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: Colors.blue.withOpacity(0.1),
-              width: 1,
+                  child: Icon(
+                    icon,
+                    color: color,
+                    size: 18,
+                  ),
+                ),
+                SizedBox(width: 14),
+                // Label Text
+                Expanded(
+                  child: CustomText(
+                    text: label,
+                    fontSize: 15,
+                    weight: FontWeight.w500,
+                    color: color.withOpacity(0.9),
+                  ),
+                )
+              ],
             ),
           ),
-          child: CustomText(
-            text: value.toString(),
-            fontSize: 16,
-            weight: FontWeight.bold,
-            color: color,
-            letterSpacing: 0.5,
-            )
+          // Value with Highlight
+          Container(
+              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: Colors.blue.withOpacity(0.1),
+                  width: 1,
+                ),
+              ),
+              child: CustomText(
+                text: value.toString(),
+                fontSize: 16,
+                weight: FontWeight.bold,
+                color: color,
+                letterSpacing: 0.5,
+              )),
+        ],
+      ),
+    );
+  }
 
-        ),
-      ],
-    ),
-  );
-}
-
-Widget buildDivider() {
-  return Padding(
-    padding: EdgeInsets.symmetric(vertical: 10),
-    child: Container(
-      height: 1,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Colors.blue.withOpacity(0),
-            Colors.blue.withOpacity(0.5),
-            Colors.blue.withOpacity(0),
-          ],
-          stops: [0.0, 0.5, 1.0],
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
+  Widget buildDivider() {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 10),
+      child: Container(
+        height: 1,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Colors.blue.withOpacity(0),
+              Colors.blue.withOpacity(0.5),
+              Colors.blue.withOpacity(0),
+            ],
+            stops: [0.0, 0.5, 1.0],
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+          ),
         ),
       ),
-    ),
-  );
-}
-
+    );
+  }
 }

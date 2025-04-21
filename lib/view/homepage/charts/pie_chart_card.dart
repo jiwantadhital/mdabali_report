@@ -1,204 +1,469 @@
-
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
-
-import '../../extracted_widgets/custom_text.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:mdabali_report/bloc/summary_report_bloc/bloc/summary_report_bloc.dart';
+import 'package:mdabali_report/resources/colors.dart';
+import 'package:mdabali_report/view/extracted_widgets/custom_text.dart';
+import 'package:mdabali_report/view/extracted_widgets/date_range_picker_card.dart';
+import 'package:mdabali_report/view/homepage/charts/pie_chart_shimmer.dart';
 
 class PieChartCard extends StatefulWidget {
- const PieChartCard({super.key});
+  const PieChartCard({super.key});
 
   @override
   State<PieChartCard> createState() => _PieChartCardState();
 }
 
 class _PieChartCardState extends State<PieChartCard> {
-  int touchedIndex=-1;
-  
+  int touchedIndex = -1;
+
+  bool _showAllOthers = false;
+
   @override
   Widget build(BuildContext context) {
-    var height= MediaQuery.of(context).size.height;
-    return SizedBox(
-      //padding: EdgeInsets.all(8),
-      // height: height,
-      width: double.maxFinite,
-      child: Card(
-        elevation: 5,
-        color: Colors.white,
-        child: Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
-          // crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-              const SizedBox(height: 24,),
-             CustomText(text: 'Summary of successful transactions',
-             fontSize: 18,
-            color: Colors.grey[600],
-            weight: FontWeight.bold,),
-            const SizedBox(height: 24,),
-            Row(
+    var colorScheme = Theme.of(context).colorScheme;
+
+    return BlocBuilder<SummaryReportBloc, SummaryReportState>(
+      builder: (context, state) {
+        if (state is SummaryReportLoading) {
+          return PieChartShimmer();
+        } else if (state is SummaryReportError) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-               
-                 const SizedBox(width: 18,),
-                
-                
-                Expanded(
-                  child: AspectRatio(
-                    aspectRatio: 1.5,
-                    child: PieChart(
-                      PieChartData(
-                        pieTouchData: PieTouchData(
-                          touchCallback: (FlTouchEvent event,pieTouchResponse){
-                            setState(() {
-                              if(!event.isInterestedForInteractions|| pieTouchResponse==null||pieTouchResponse.touchedSection==null){
-                                touchedIndex=-1;
-                                return;
-                              }
-                              touchedIndex=pieTouchResponse.touchedSection!.touchedSectionIndex;
-                            });
-                          }
-                        ),
-                        borderData: FlBorderData(show: false),
-                        sectionsSpace: 2,
-                        centerSpaceRadius: 40,
-                        sections: _getPieChartSections(),
-                      )
-                      
-                    ),),
+                Icon(Icons.error_outline,
+                    color: Theme.of(context).colorScheme.error, size: 24),
+                SizedBox(height: 8),
+                CustomText(
+                  text: state.error,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontSize: 16,
+                  textAlign: TextAlign.center,
                 ),
-                 const SizedBox(width: 10,),
-                
-              
               ],
             ),
-             Padding(
-              padding: EdgeInsets.only(bottom: 18,right: 15),
-             child: Wrap(
-               spacing: 5,
-               runSpacing: 8,
-               direction: Axis.horizontal,
-               alignment: WrapAlignment.start,
-               children: [
-                  _buildIndicator(color: Colors.brown, text: 'Data Pack: 41.9%'),
-                  _buildIndicator(color: Colors.red, text: 'Electricity: 4%'),
-                  _buildIndicator(color: Colors.pink, text: 'Internet: 8%'),
-                  _buildIndicator(color: Colors.grey, text: 'TV: 0%'),
-                  _buildIndicator(color: Colors.blue, text: 'Water: 5%'),
-                  _buildIndicator(color: Colors.orange, text: 'Bank Transfer: 15%'),
-                                                   _buildIndicator(color: Colors.purple, text: 'QR: 35%'),
-               
-               ],
-             ))
-          ],
-          
-        ),
-      ),
-    ); 
+          );
+        } else if (state is SummaryReportLoaded) {
+          final data = state.summaryReportModel.data;
+
+          if (data == null || data.isEmpty) {
+            return const Center(child: Text('No data available'));
+          }
+
+          double totalSuccessAmount = data.fold(
+              0.0, (sum, item) => sum + (item.successAmount ?? 0).toDouble());
+
+          List<Color> chartColors = kMemberColorList;
+
+          List<PieChartSectionData> sections = [];
+          List<Widget> indicators = [];
+          double othersPercentage = 0.0;
+          List<_OthersEntry> othersEntries = [];
+
+          for (int i = 0; i < data.length; i++) {
+            double percentage = totalSuccessAmount > 0
+                ? ((data[i].successAmount ?? 0) / totalSuccessAmount) * 100
+                : 0;
+
+            if (percentage < 5.0) {
+              othersEntries.add(_OthersEntry(
+                label: data[i].services ?? 'Unknown',
+                percentage: percentage,
+              ));
+              othersPercentage += percentage;
+              continue;
+            }
+
+            // Normal section
+            sections.add(PieChartSectionData(
+              color: chartColors[i % chartColors.length],
+              value: percentage,
+              title: percentage.toStringAsFixed(1),
+              radius: touchedIndex == i ? 65.0 : 50.0,
+              titleStyle: TextStyle(
+                fontSize: touchedIndex == i ? 12.0 : 12.0,
+                fontWeight: FontWeight.w500,
+                color: Colors.white,
+              ),
+            ));
+
+            indicators.add(_buildIndicator(
+              color: chartColors[i % chartColors.length],
+              text: data[i].services ?? 'Unknown',
+              percentage: '${percentage.toStringAsFixed(1)}%',
+              context: context,
+            ));
+          }
+
+// ✅ Add "Others" once, after loop
+          if (othersEntries.isNotEmpty) {
+            sections.add(PieChartSectionData(
+              color: Colors.grey,
+              value: othersPercentage,
+              title: othersPercentage.toStringAsFixed(1),
+              radius: 50.0,
+              titleStyle: const TextStyle(
+                fontSize: 12.0,
+                fontWeight: FontWeight.w500,
+                color: Colors.white,
+              ),
+            ));
+
+            indicators.add(_buildIndicator(
+              color: Colors.grey,
+              text: 'Others',
+              percentage: '${othersPercentage.toStringAsFixed(1)}%',
+              context: context,
+            ));
+          }
+
+          return SizedBox(
+            width: double.maxFinite,
+            child: Card(
+              elevation: 4,
+              color: Theme.of(context).colorScheme.surfaceContainer,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: GestureDetector(
+                        onTap: () async {
+                          final range =
+                              await ThreeMonthRangePicker.show(context);
+                          if (range != null) {
+                            // Format the start and end dates to 'yyyy-MM-dd' format
+                            String startFormatted = DateFormat('yyyy-MM-dd')
+                                .format(range.startDate!);
+                            String endFormatted = DateFormat('yyyy-MM-dd')
+                                .format(range.endDate ?? range.startDate!);
+                            // ignore: use_build_context_synchronously
+                            context.read<SummaryReportBloc>().add(
+                                FetchSummaryReport(
+                                    dateFrom: startFormatted,
+                                    dateTo: endFormatted));
+                            setState(() {
+                              _showAllOthers = false;
+                            });
+                          }
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(right: 8),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: colorScheme.primary,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.calendar_month,
+                                size: 18,
+                                color: colorScheme.onPrimary,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    Row(
+                      children: [
+                        const SizedBox(width: 18),
+                        Expanded(
+                          child: AspectRatio(
+                            aspectRatio: 1.5,
+                            child: PieChart(PieChartData(
+                              borderData: FlBorderData(show: false),
+                              sectionsSpace: 0.8,
+                              centerSpaceRadius: 80,
+                              sections: sections,
+                            )),
+                          ),
+                        ),
+                        const SizedBox(width: 20),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 40,
+                        bottom: 8,
+                        right: 15,
+                        left: 15,
+                      ),
+                      child: LayoutBuilder(
+                        builder: (context, constraints) {
+                          return GridView.builder(
+                            shrinkWrap: true,
+                            physics:
+                                NeverScrollableScrollPhysics(), // Prevents scrolling inside GridView
+                            itemCount: indicators.length,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2, // Two columns
+                              childAspectRatio:
+                                  3.5, // Adjust to keep the layout balanced
+                              crossAxisSpacing: 24,
+                              mainAxisSpacing: 10,
+                            ),
+                            itemBuilder: (context, index) {
+                              return indicators[index];
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                    if (othersEntries.isNotEmpty) ...[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Divider(
+                            thickness: 1,
+                            color: Theme.of(context).dividerColor),
+                      ),
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(top: 12, left: 16, right: 16),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: CustomText(
+                            text: 'Others includes:',
+                            fontSize: 14,
+                            weight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: LayoutBuilder(
+                          builder: (context, constraints) {
+                            final displayedEntries = _showAllOthers
+                                ? othersEntries
+                                : othersEntries
+                                    .take(4)
+                                    .toList(); // limit to 4 if collapsed
+
+                            return Wrap(
+                              spacing: 24,
+                              runSpacing: 8,
+                              children: List.generate(
+                                (displayedEntries.length / 2).ceil(),
+                                (rowIndex) {
+                                  final first = displayedEntries[rowIndex * 2];
+                                  final second =
+                                      rowIndex * 2 + 1 < displayedEntries.length
+                                          ? displayedEntries[rowIndex * 2 + 1]
+                                          : null;
+
+                                  return Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Expanded(
+                                          child:
+                                              _buildOthersItem(context, first)),
+                                      if (second != null)
+                                        Expanded(
+                                            child: _buildOthersItem(
+                                                context, second))
+                                      else
+                                        const Spacer(),
+                                    ],
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      if (othersEntries.length > 4)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _showAllOthers = !_showAllOthers;
+                                });
+                              },
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    _showAllOthers ? 'Show less' : 'View all',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  Icon(
+                                    _showAllOthers
+                                        ? Icons.expand_less
+                                        : Icons.expand_more,
+                                    size: 16,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      const SizedBox(height: 16),
+                    ],
+
+                    // if (othersEntries.isNotEmpty) ...[
+                    //   const SizedBox(height: 12),
+                    //   Padding(
+                    //     padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    //     child: Align(
+                    //       alignment: Alignment.centerLeft,
+                    //       child: CustomText(
+                    //         text: 'Other includes:',
+                    //         fontSize: 14,
+                    //         weight: FontWeight.bold,
+                    //         color: Theme.of(context).colorScheme.onSurface,
+                    //       ),
+                    //     ),
+                    //   ),
+                    //   const SizedBox(height: 8),
+                    //   Padding(
+                    //     padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    //     child: Align(
+                    //       alignment: Alignment.centerLeft,
+                    //       child: Column(
+                    //         crossAxisAlignment: CrossAxisAlignment.start,
+                    //         children: othersEntries.map((entry) {
+                    //           return Padding(
+                    //             padding: const EdgeInsets.only(bottom: 8),
+                    //             child: CustomText(
+                    //               text:
+                    //                   '• ${entry.label} (${entry.percentage.toStringAsFixed(1)}%)',
+                    //               fontSize: 13,
+                    //               color: Theme.of(context)
+                    //                   .colorScheme
+                    //                   .onSurfaceVariant,
+                    //               textOverflow: TextOverflow.ellipsis,
+                    //               maxLine: 2,
+                    //             ),
+                    //           );
+                    //         }).toList(),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ],
+                    SizedBox(
+                      height: 20,
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
+        } else {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.error_outline,
+                    color: Theme.of(context).colorScheme.error, size: 24),
+                SizedBox(height: 8),
+                CustomText(
+                  text: 'Something went wrong',
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontSize: 16,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          );
+        }
+      },
+    );
   }
-  List<PieChartSectionData> _getPieChartSections(){
-  return [
-    PieChartSectionData(
-      color: Colors.brown,
-      value: 41.9,
-      title: '41.9',
-      radius: touchedIndex==0?60.0:50.0,
-      titleStyle: TextStyle(
-        fontSize: touchedIndex==0?20.0:16.0,
-        fontWeight: FontWeight.bold,
-        color: Colors.white,
-      )
-    ),
-     PieChartSectionData(
-      color: Colors.red,
-      value: 4,
-      title: '4',
-      radius: touchedIndex==1?60.0:50.0,
-      titleStyle: TextStyle(
-        fontSize: touchedIndex==1?20.0:16.0,
-        fontWeight: FontWeight.bold,
-        color: Colors.white,
-      )
-    ),
-     PieChartSectionData(
-      color: Colors.pink,
-      value: 8,
-      title: '8',
-      radius: touchedIndex==2?60.0:50.0,
-      titleStyle: TextStyle(
-        fontSize: touchedIndex==2?20.0:16.0,
-        fontWeight: FontWeight.bold,
-        color: Colors.white,
-      )
-    ),
-     PieChartSectionData(
-      color: Colors.cyan,
-      value: 0,
-      title: '0',
-      radius: touchedIndex==3?60.0:50.0,
-      titleStyle: TextStyle(
-        fontSize: touchedIndex==3?20.0:16.0,
-        fontWeight: FontWeight.bold,
-        color: Colors.white,
-      )
-    ),
-     PieChartSectionData(
-      color: Colors.grey,
-      value: 5,
-      title: '5',
-      radius: touchedIndex==4?60.0:50.0,
-      titleStyle: TextStyle(
-        fontSize: touchedIndex==4?20.0:16.0,
-        fontWeight: FontWeight.bold,
-        color: Colors.white,
-      )
-    ),
-     PieChartSectionData(
-      color: Colors.blue,
-      value: 15,
-      title: '15',
-      radius: touchedIndex==5?60.0:50.0,
-      titleStyle: TextStyle(
-        fontSize: touchedIndex==5?20.0:16.0,
-        fontWeight: FontWeight.bold,
-        color: Colors.white,
-      )
-    ),
-     PieChartSectionData(
-      color: Colors.orange,
-      value: 35,
-      title: '35',
-      radius: touchedIndex==5?60.0:50.0,
-      titleStyle: TextStyle(
-        fontSize: touchedIndex==5?20.0:16.0,
-        fontWeight: FontWeight.bold,
-        color: Colors.white,
-      )
-    ),
-    //  PieChartSectionData(
-    //   color: Colors.purple,
-    //   value: 35,
-    //   title: '35',
-    //   radius: touchedIndex==7?60.0:50.0,
-    //   titleStyle: TextStyle(
-    //     fontSize: touchedIndex==7?20.0:16.0,
-    //     fontWeight: FontWeight.bold,
-    //     color: Colors.white,
-    //   )
-    // )
-  ];
+
+  Widget _buildIndicator({
+    required Color color,
+    required String text,
+    required String percentage,
+    required BuildContext context,
+  }) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 16,
+          height: 16,
+          decoration: BoxDecoration(
+            color: color,
+            shape: BoxShape.circle, // Circular shape for consistency
+          ),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomText(
+                text: text.length > 15
+                    ? '${text.substring(0, 12)}...'
+                    : text, // Truncate if too long
+                fontSize: 14,
+                color: Theme.of(context).colorScheme.onSurface,
+                textOverflow: TextOverflow.ellipsis,
+                maxLine: 1,
+              ),
+              const SizedBox(height: 4),
+              CustomText(
+                text: percentage,
+                fontSize: 14,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 }
 
-Widget _buildIndicator({required Color color,required String text}){
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 20),
-    child: Row(
-      children: [
-        
-        Container(width: 16,height: 16,
-        color: color,),
-        const SizedBox(width: 8,),
-        CustomText(text: text,fontSize: 14,color: Colors.black87,)
-      ],
-    ),
+Widget _buildOthersItem(BuildContext context, _OthersEntry entry) {
+  return Row(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      CustomText(
+        text: '• ',
+        fontSize: 14,
+        weight: FontWeight.bold,
+        color: Theme.of(context).colorScheme.onSurfaceVariant,
+      ),
+      Expanded(
+        child: CustomText(
+          text: '${entry.label} (${entry.percentage.toStringAsFixed(1)}%)',
+          fontSize: 13,
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+          maxLine: 2,
+          textOverflow: TextOverflow.ellipsis,
+        ),
+      ),
+    ],
   );
 }
+
+class _OthersEntry {
+  final String label;
+  final double percentage;
+
+  _OthersEntry({required this.label, required this.percentage});
 }

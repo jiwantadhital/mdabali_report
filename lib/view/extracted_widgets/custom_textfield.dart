@@ -120,9 +120,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                       });
                     },
                     child: Image.asset(
-                      isHidden
-                          ? ImagesConstants.eyeClose
-                          : ImagesConstants.eye,
+                      isHidden ? ImagesConstants.eyeClose : ImagesConstants.eye,
                       color: theme.onSurfaceVariant,
                       scale: 2.5,
                     ),
@@ -158,11 +156,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
         ),
         border: OutlineInputBorder(),
         labelText: widget.isLabel ? widget.hintText : null,
-        contentPadding: widget.contentPadding == null
-            ? widget.suffixIconEnabled
+        contentPadding: widget.contentPadding ??
+            (widget.suffixIconEnabled
                 ? EdgeInsets.only(right: 0, left: 16)
-                : EdgeInsets.only(right: 15, left: 0)
-            : widget.contentPadding,
+                : EdgeInsets.only(right: 15, left: 0)),
       ),
     );
   }

@@ -4,59 +4,56 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mdabali_report/view/dash_board_page.dart';
 
-class OTPController extends GetxController{
-
-  var isCodeExpired= false.obs;
-  var otp =''.obs;
-  var remainingTime= 60.obs;
+class OTPController extends GetxController {
+  var isCodeExpired = false.obs;
+  var otp = ''.obs;
+  var remainingTime = 60.obs;
   Timer? timer;
   TextEditingController otpController = TextEditingController();
 
   @override
   void onInit() {
-  
     startTimer();
     super.onInit();
   }
 
-  void startTimer(){
-    timer =Timer.periodic(Duration(seconds: 1), (timer){
-      if(remainingTime>0){
+  void startTimer() {
+    timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (remainingTime > 0) {
         remainingTime.value--;
-      }
-      else{
-        isCodeExpired.value=true;
+      } else {
+        isCodeExpired.value = true;
         timer.cancel();
       }
     });
   }
-  void resendCode(){
-    remainingTime.value=60;
-    isCodeExpired.value=false;
-    otp.value='';
+
+  void resendCode() {
+    remainingTime.value = 60;
+    isCodeExpired.value = false;
+    otp.value = '';
     otpController.clear();
     startTimer();
-    Get.snackbar('Success','Sent OTP code');
+    Get.snackbar('Success', 'Sent OTP code');
     update();
   }
-  void verifyOtp(String enteredOtp){
-    var correctOtp= '1234';
-    if(isCodeExpired.value){
+
+  void verifyOtp(String enteredOtp) {
+    var correctOtp = '1234';
+    if (isCodeExpired.value) {
       Get.snackbar('Error', 'OTP has expired. Please resend OTP');
-    }
-    else if(correctOtp==enteredOtp){
+    } else if (correctOtp == enteredOtp) {
       Get.snackbar('Success', 'OTP verified successfully');
-      Get.off(()=>DashBoardPage());
-    }
-    else{
+      Get.off(() => DashBoardPage());
+    } else {
       Get.snackbar('Invalid', 'Inavild OTP code.Try again! ');
     }
-
   }
+
   @override
-  void onClose(){
+  void onClose() {
     timer?.cancel();
-    otpController.dispose();
+    //otpController.dispose();
     super.onClose();
   }
 }

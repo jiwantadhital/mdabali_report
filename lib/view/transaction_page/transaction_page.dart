@@ -1,261 +1,379 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:mdabali_report/bloc/summary_report_bloc/bloc/summary_report_bloc.dart';
+import 'package:mdabali_report/resources/colors.dart';
+import 'package:mdabali_report/view/extracted_widgets/date_range_picker_card.dart';
+import 'package:mdabali_report/view/transaction_page/shimmer_transaction_cards.dart';
 
 import '../extracted_widgets/custom_text.dart';
-import '../homepage/header_section.dart';
 
-class TransactionPage extends StatelessWidget {
+class TransactionPage extends StatefulWidget {
   const TransactionPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-   return SingleChildScrollView(
-    child: Padding(padding: EdgeInsets.all(16),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        //      HeaderSection(),
-        // const SizedBox(height: 24,),
-        //   CustomText(text: 'Transaction Summary',
-        // fontSize: 20,
-        // weight: FontWeight.w600,),
-        _buildTransactionList(),
-             
-        const SizedBox(height: 24,),
-       
-
-      
-        
-      ],
-    ),),
-  );
-  }
-  
-Widget _buildTransactionList(){
-  return Column(
-      children: [
-         _buildTransactionCard('Data Pack', 6, 809, 110, 24546, 0, 0),
-                _buildTransactionCard('Electricity', 96, 133986, 328, 72079, 1, 0),
-                _buildTransactionCard('Internet', 8, 13670, 417, 95786, 6, 40122),
-                _buildTransactionCard('TopUp', 1084, 117990, 425, 82956, 84, 6054),
-                _buildTransactionCard('TV', 1, 846, 444, 54886, 2, 0),
-                _buildTransactionCard('Water', 24, 16423, 112, 73677, 2, 3684),
-                _buildTransactionCard('Bank_Transfer', 114, 3851498, 420, 213600, 392, 9008839),
-                _buildTransactionCard('QR', 1095, 4036716, 477, 997777, 158, 1141924),
-                _buildTransactionCard('Wallet', 201, 1679092, 495, 508556, 481, 2197637),
-      ],
-  );
+  State<TransactionPage> createState() => _TransactionPageState();
 }
 
-Widget _buildTransactionCard(
-  String service,
-  int successCount,
-  int successAmount,
-  int pendingCount,
-  int pendingAmount,
-  int failCount,
-  int failAmount
-) {
-  return Container(
-    margin: EdgeInsets.symmetric(vertical: 12),
-    child: Card(
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Colors.white,
-              Color(0xFFF5F9FF),
-            ],
-          ),
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Color(0xFF4285F4).withOpacity(0.1),
-              offset: Offset(0, 4),
-              blurRadius: 12,
-              spreadRadius: 0,
-            ),
-          ],
-          border: Border.all(
-            color: Color(0xFF4285F4).withOpacity(0.15),
-            width: 1.5,
-          ),
-        ),
-        padding: EdgeInsets.all(20),
+class _TransactionPageState extends State<TransactionPage> {
+  @override
+  Widget build(BuildContext context) {
+    var colorScheme = Theme.of(context).colorScheme;
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Color(0xFF4285F4).withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Icon(
-                        _getServiceIcon(service),
-                        color: Color(0xFF4285F4),
-                        size: 22,
-                      ),
-                    ),
-                    SizedBox(width: 12),
-                    CustomText(text: service,
-                    fontSize: 18,
-                    weight: FontWeight.w700,
-                    color:  Color(0xFF2C3E50),
-                    letterSpacing: 0.3,
-                    ),
-                  ],
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            Align(
+              alignment: Alignment.centerRight,
+              child: GestureDetector(
+                onTap: () async {
+                  final range = await ThreeMonthRangePicker.show(context);
+                  if (range != null) {
+                    // Format the start and end dates to 'yyyy-MM-dd' format
+                    String startFormatted =
+                        DateFormat('yyyy-MM-dd').format(range.startDate!);
+                    String endFormatted = DateFormat('yyyy-MM-dd')
+                        .format(range.endDate ?? range.startDate!);
+                    // ignore: use_build_context_synchronously
+                    context.read<SummaryReportBloc>().add(FetchSummaryReport(
+                        dateFrom: startFormatted, dateTo: endFormatted));
+                  }
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                   decoration: BoxDecoration(
-                    color: Color(0xFF4285F4).withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(20),
+                    color: colorScheme.surface,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                        color: colorScheme.onSurfaceVariant, width: 1),
                   ),
                   child: Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(
-                        Icons.trending_up,
-                        color: Color(0xFF4285F4),
-                        size: 16,
+                        Icons.calendar_today,
+                        size: 14,
+                        color: colorScheme.primaryFixedDim,
                       ),
-                      SizedBox(width: 4),
-                      CustomText(
-                        text: '${_calculateSuccessRate(successCount, pendingCount, failCount)}',
-                        fontSize: 14,
-                        weight: FontWeight.w600,
-                        color: Color(0xFF4285F4),),
+                      SizedBox(width: 8),
+                      Text(
+                        "Select date Range",
+                        style: TextStyle(
+                            fontSize: 12, color: colorScheme.onSurfaceVariant),
+                      ),
                     ],
                   ),
                 ),
-              ],
+              ),
             ),
-            SizedBox(height: 20),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.03),
-                    blurRadius: 6,
-                    spreadRadius: 0,
-                  ),
-                ],
-              ),
-              padding: EdgeInsets.all(16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _buildStatColumn('Success', successCount, successAmount, Color(0xFF34C759), Icons.check_circle_outline),
-                  _buildVerticalDivider(),
-                  _buildStatColumn('Pending', pendingCount, pendingAmount, Color(0xFFFF9500), Icons.hourglass_empty),
-                  _buildVerticalDivider(),
-                  _buildStatColumn('Failed', failCount, failAmount, Color(0xFFFF3B30), Icons.error_outline),
-                ],
-              ),
+            _buildTransactionList(context = context),
+            const SizedBox(
+              height: 24,
             ),
           ],
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 
-Widget _buildVerticalDivider() {
-  return Container(
-    height: 50,
-    width: 1,
-    color: Colors.grey.withOpacity(0.2),
-  );
-}
-
-Widget _buildStatColumn(String label, int count, int amount, Color color, IconData icon) {
-  return Expanded(
-    child: Column(
-      children: [
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              color: color,
-              size: 16,
+  Widget _buildTransactionList(
+    BuildContext context,
+  ) {
+    return BlocBuilder<SummaryReportBloc, SummaryReportState>(
+      builder: (context, state) {
+        if (state is SummaryReportLoading) {
+          return ShimmerTransactionList();
+        } else if (state is SummaryReportLoaded) {
+          final summaryReportData = state.summaryReportModel.data;
+          int index = summaryReportData?.length ?? 0;
+          return Column(
+              children: List.generate(
+                  index,
+                  (index) => _buildTransactionCard(
+                      context,
+                      summaryReportData?[index].services ?? 'Not found',
+                      summaryReportData?[index].successCount ?? 0,
+                      summaryReportData?[index].successAmount ?? 0,
+                      summaryReportData?[index].pendingCount ?? 0,
+                      summaryReportData?[index].pendingAmount ?? 0,
+                      summaryReportData?[index].failedCount ?? 0,
+                      summaryReportData?[index].failedAmount ?? 0)));
+        } else if (state is SummaryReportError) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.error_outline,
+                    color: Theme.of(context).colorScheme.error, size: 24),
+                SizedBox(height: 8),
+                CustomText(
+                  text: state.error,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontSize: 16,
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
-            SizedBox(width: 4),
-            CustomText(
-              text: label,
-              fontSize: 12,
-              weight: FontWeight.w500,
-              color:Color(0xFF6C7A92) ,)
-          ],
+          );
+        } else {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.error_outline,
+                    color: Theme.of(context).colorScheme.error, size: 24),
+                SizedBox(height: 8),
+                CustomText(
+                  text: 'Failed to load Data',
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontSize: 16,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  Widget _buildTransactionCard(
+      BuildContext context,
+      String service,
+      int successCount,
+      double successAmount,
+      int pendingCount,
+      double pendingAmount,
+      int failCount,
+      double failAmount) {
+    var colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 12),
+      child: Card(
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
         ),
-        SizedBox(height: 8),
-        CustomText(text: count.toString(),
-        fontSize: 18,
-        weight: FontWeight.w800,
-        color: Color(0xFF2C3E50),),
-        SizedBox(height: 4),
-        CustomText(
-          text: 'Rs${_formatAmount(amount)}',
-          fontSize: 14,
-          weight: FontWeight.w600,
-          color: color,),
-      ],
-    ),
-  );
-}
+        child: Container(
+          decoration: BoxDecoration(
+            color: colorScheme.surfaceContainerLowest,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Color(0xFF4285F4).withOpacity(0.1),
+                offset: Offset(0, 4),
+                blurRadius: 12,
+                spreadRadius: 0,
+              ),
+            ],
+            border: Border.all(
+              color: colorScheme.primary.withOpacity(0.15),
+              width: 1.5,
+            ),
+          ),
+          padding: EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: colorScheme.primaryFixedDim.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Icon(
+                            _getServiceIcon(service),
+                            color: colorScheme.primary,
+                            //Color(0xFF4285F4),
+                            size: 22,
+                          ),
+                        ),
+                        SizedBox(width: 12),
+                        Expanded(
+                          child: CustomText(
+                            text: service,
+                            fontSize: 18,
+                            weight: FontWeight.w700,
+                            color: colorScheme.onSurface,
+                            letterSpacing: 0.3,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  //   Container(
+                  //     padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  //     decoration: BoxDecoration(
+                  //       color: colorScheme.primaryFixedDim.withOpacity(0.1),
+                  //       borderRadius: BorderRadius.circular(20),
+                  //     ),
+                  //     child: Row(
+                  //       children: [
+                  //         Icon(
+                  //           Icons.trending_up,
+                  //           color: colorScheme.primary,
+                  //           size: 16,
+                  //         ),
+                  //         SizedBox(width: 4),
+                  //         CustomText(
+                  //           text:
+                  //               '${_calculateSuccessRate(successCount, pendingCount, failCount)} %',
+                  //           fontSize: 14,
+                  //           weight: FontWeight.w600,
+                  //           color: colorScheme.primary,
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                ],
+              ),
+              SizedBox(height: 20),
+              Container(
+                decoration: BoxDecoration(
+                  color: colorScheme.surfaceContainer,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    kBoxShadow,
+                  ],
+                ),
+                padding: EdgeInsets.all(16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _buildStatColumn(
+                        'Success',
+                        successCount,
+                        successAmount,
+                        colorScheme.tertiary,
+                        Icons.check_circle_outline,
+                        context),
+                    _buildVerticalDivider(),
+                    _buildStatColumn(
+                        'Pending',
+                        pendingCount,
+                        pendingAmount,
+                        colorScheme.inverseSurface,
+                        Icons.hourglass_empty,
+                        context),
+                    _buildVerticalDivider(),
+                    _buildStatColumn('Failed', failCount, failAmount,
+                        colorScheme.error, Icons.error_outline, context),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildVerticalDivider() {
+    return Container(
+      height: 50,
+      width: 1,
+      color: Colors.grey.withOpacity(0.2),
+    );
+  }
+
+  Widget _buildStatColumn(
+    String label,
+    int count,
+    double amount,
+    Color color,
+    IconData icon,
+    BuildContext context,
+  ) {
+    var colorScheme = Theme.of(context).colorScheme;
+    return Expanded(
+      child: Column(
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                icon,
+                color: color,
+                size: 16,
+              ),
+              SizedBox(width: 4),
+              CustomText(
+                text: label,
+                fontSize: 12,
+                weight: FontWeight.w500,
+                color: colorScheme.onSurfaceVariant,
+              )
+            ],
+          ),
+          SizedBox(height: 10),
+          CustomText(
+            text: count.toString(),
+            fontSize: 18,
+            weight: FontWeight.w800,
+            color: colorScheme.onSurface,
+          ),
+          SizedBox(height: 10),
+          CustomText(
+            text: 'Rs ${_formatAmount(amount)}',
+            fontSize: 14,
+            weight: FontWeight.w600,
+            color: color,
+          ),
+        ],
+      ),
+    );
+  }
 
 // Helper functions
-IconData _getServiceIcon(String service) {
-  // Map service names to appropriate icons
-  switch (service) {
-    case 'Data Pack':
-      return Icons.money;
-    case 'Electricity':
-      return Icons.electrical_services;
-    case 'Internet':
-      return Icons.network_cell;
-    case 'Topup':
-      return Icons.arrow_upward;
-    case 'TV':
-    return  Icons.tv;
-    case 'Water':
-    return Icons.water;
-    case 'Bank_Transfer':
-    return Icons.balance_sharp;
-    case 'QR':
-    return Icons.qr_code;
-    case 'Wallet':
-    return Icons.wallet;
-    default:
-      return Icons.receipt_long;
+  IconData _getServiceIcon(String service) {
+    // Map service names to appropriate icons
+    switch (service) {
+      case 'Data Pack':
+        return Icons.money;
+      case 'Electricity':
+        return Icons.electrical_services;
+      case 'Internet':
+        return Icons.network_cell;
+      case 'Topup':
+        return Icons.arrow_upward;
+      case 'TV':
+        return Icons.tv;
+      case 'Water':
+        return Icons.water;
+      case 'BANK_TRANSFER':
+        return Icons.compare_arrows_rounded;
+      case 'QR':
+        return Icons.qr_code;
+      case 'WALLET':
+        return Icons.wallet;
+      default:
+        return Icons.receipt_long;
+    }
   }
-}
 
-String _formatAmount(int amount) {
-  if (amount >= 1000000) {
-    return '${(amount / 1000000).toStringAsFixed(1)}M';
-  } else if (amount >= 1000) {
-    return '${(amount / 1000).toStringAsFixed(1)}K';
-  } else {
-    return amount.toString();
+  String _formatAmount(double amount) {
+    if (amount >= 1000000) {
+      return '${(amount / 1000000).toStringAsFixed(1)}M';
+    } else if (amount >= 1000) {
+      return '${(amount / 1000).toStringAsFixed(1)}K';
+    } else {
+      return amount.toString();
+    }
   }
-}
 
-int _calculateSuccessRate(int successCount, int pendingCount, int failCount) {
-  int total = successCount + pendingCount + failCount;
-  if (total == 0) return 0;
-  return ((successCount / total) * 100).round();
-}
+//   int _calculateSuccessRate(int successCount, int pendingCount, int failCount) {
+//     int total = successCount + pendingCount + failCount;
+//     if (total == 0) return 0;
+//     return ((successCount / total) * 100).round();
+//   }
 }

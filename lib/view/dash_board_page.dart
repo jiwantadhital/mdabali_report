@@ -1,5 +1,11 @@
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:mdabali_report/bloc/five_month_data_bloc/bloc/five_month_data_bloc.dart';
+import 'package:mdabali_report/bloc/monthly_aggregate_bloc/bloc/monthly_aggregate_bloc.dart';
+import 'package:mdabali_report/bloc/summary_report_bloc/bloc/summary_report_bloc.dart';
+import 'package:mdabali_report/resources/colors.dart';
+import 'package:mdabali_report/view/extracted_widgets/custom_drawer.dart';
 import 'package:mdabali_report/view/extracted_widgets/custom_text.dart';
 import 'homepage/home_page.dart';
 import 'mdabali_page/mdabali_page.dart';
@@ -7,121 +13,112 @@ import 'sms_page/sms_page.dart';
 import 'transaction_page/transaction_page.dart';
 
 class DashBoardPage extends StatefulWidget {
-   DashBoardPage({super.key});
+  const DashBoardPage({super.key});
 
- 
   @override
   State<DashBoardPage> createState() => _DashBoardPageState();
 }
 
 class _DashBoardPageState extends State<DashBoardPage> {
-  int _selectedIndex=0;
+  int _selectedIndex = 0;
   late final List<Widget> _pages;
 
   @override
   void initState() {
-    _pages=[
-      HomePage(),
-      TransactionPage(),
-      SmsPage(),
-    MdabaliPage()];
+    _pages = [HomePage(), TransactionPage(), SmsPage(), MdabaliPage()];
+    // Get today's date
+    String todayDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    DateTime now = DateTime.now();
+    DateTime oneMonthAgo = DateTime(now.year, now.month - 1, now.day);
+    String dateFrom = DateFormat('yyyy-MM-dd').format(oneMonthAgo);
+    context.read<MonthlyAggregateBloc>().add(FetchMonthlyAggregate());
+    context
+        .read<SummaryReportBloc>()
+        .add(FetchSummaryReport(dateFrom: dateFrom, dateTo: todayDate));
+
+    //this is for line chart data
+    context
+        .read<FiveMonthDataBloc>()
+        .add(FetchFiveMonthData(toDate: todayDate));
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
-    List<String> appBar=[
+    List<String> appBar = [
       'mDabali Next Gen Report',
       'Transaction Summary',
-      'SMS Summary',
+      'SMS & TopUP Summary',
       'mDabali Summary'
     ];
+    var colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar:_selectedIndex==0?  AppBar(
-        surfaceTintColor: Colors.grey[100],
+      backgroundColor: colorScheme.surface,
+      drawer: CustomDrawer(),
+      appBar: AppBar(
+        surfaceTintColor: colorScheme.surfaceTint,
         elevation: 0,
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.grey[100],
-        title:CustomText(text: appBar[0],
-        fontSize: 18,
-        color: Colors.blue,
-        weight: FontWeight.bold,),
+        backgroundColor: colorScheme.surfaceDim,
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: Icon(Icons.menu, color: colorScheme.primary),
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            },
+          ),
+        ),
+        title: CustomText(
+          text: appBar[_selectedIndex],
+          fontSize: 18,
+          color: colorScheme.primary,
+          weight: FontWeight.bold,
+        ),
         centerTitle: true,
-      ):_selectedIndex==1?AppBar(
-        surfaceTintColor: Colors.grey[100],
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.grey[100],
-        title:CustomText(text: appBar[1],
-        fontSize: 18,
-        color: Colors.blue,
-        weight: FontWeight.bold,),
-        centerTitle: true,):_selectedIndex==2?AppBar(
-        surfaceTintColor: Colors.grey[100],
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.grey[100],
-        title:CustomText(text: appBar[2],
-        fontSize: 18,
-        color: Colors.blue,
-        weight: FontWeight.bold,),
-        centerTitle: true,):AppBar(
-        surfaceTintColor: Colors.grey[100],
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.grey[100],
-        title:CustomText(text: appBar[3],
-        fontSize: 18,
-        color: Colors.blue,
-        weight: FontWeight.bold,),
-        centerTitle: true,),
-      backgroundColor: Colors.grey[100],
+        // Actions for notification icon on the right
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: IconButton(
+              icon: Icon(Icons.notifications, color: colorScheme.primary),
+              onPressed: () {},
+            ),
+          ),
+        ],
+      ),
       body: AnimatedSwitcher(
         duration: const Duration(microseconds: 300),
-        transitionBuilder: (child, animation) =>
-         FadeTransition(opacity:animation,
-         child: child,),
-         child: _pages[_selectedIndex],
-         ),
-         bottomNavigationBar: _buildBottomNavBar(),
- 
-    );
-    }
-
-Widget _buildBottomNavBar(){
-  return Container(
-    decoration: BoxDecoration(
-      boxShadow: [
-      BoxShadow(
-        color: Colors.grey.withOpacity(0.1),
-        spreadRadius: 1,
-        blurRadius: 10
+        transitionBuilder: (child, animation) => FadeTransition(
+          opacity: animation,
+          child: child,
+        ),
+        child: _pages[_selectedIndex],
       ),
-      ],
-    ),
-    child: BottomNavigationBar(
-      currentIndex: _selectedIndex,
-      onTap: (index)=>setState(() {
-        _selectedIndex=index;
-      }),
-      selectedItemColor: Colors.blue[700],
-      unselectedItemColor: Colors.grey[600],
-      showSelectedLabels: true,
-      type: BottomNavigationBarType.fixed,
-      items:const [
-        BottomNavigationBarItem(icon: Icon(Icons.home),
-        label: 'HomePage'),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.swap_horiz),
-          label: 'Transaction'),
-          BottomNavigationBarItem(
-          icon: Icon(Icons.message),
-          label: 'SMS'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.people),
-            label: 'mDabbali')
-      ]),
-  );
-  }}
+      bottomNavigationBar: _buildBottomNavBar(),
+    );
+  }
 
-
-
+  Widget _buildBottomNavBar() {
+    return Container(
+      decoration: BoxDecoration(
+        boxShadow: [kBoxShadow],
+      ),
+      child: BottomNavigationBar(
+          currentIndex: _selectedIndex,
+          onTap: (index) => setState(() {
+                _selectedIndex = index;
+              }),
+          selectedItemColor: Theme.of(context).colorScheme.primaryFixedDim,
+          unselectedItemColor: Theme.of(context).colorScheme.onSurfaceVariant,
+          showSelectedLabels: true,
+          type: BottomNavigationBarType.fixed,
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'HomePage'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.swap_horiz), label: 'Transaction'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.message), label: 'SMS & TopUp'),
+            BottomNavigationBarItem(icon: Icon(Icons.people), label: 'mDabali')
+          ]),
+    );
+  }
+}

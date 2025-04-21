@@ -34,7 +34,7 @@ class HomePage extends StatelessWidget {
            textOverflow:TextOverflow.ellipsis,
            letterSpacing: 1,
            fontSize: 16,
-           weight: FontWeight.w600,),
+           weight: FontWeight.w600,), 
            const SizedBox(height: 24,),
          
                  

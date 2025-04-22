@@ -9,6 +9,7 @@ import 'package:mdabali_report/bloc/monthly_aggregate_bloc/bloc/monthly_aggregat
 import 'package:mdabali_report/bloc/sms_summary_bloc/bloc/sms_summary_bloc.dart';
 import 'package:mdabali_report/bloc/summary_report_bloc/bloc/summary_report_bloc.dart';
 import 'package:mdabali_report/bloc/topup_summary_bloc/bloc/topup_summary_bloc.dart';
+import 'package:mdabali_report/bloc/totp_bloc/bloc/t_otp_bloc.dart';
 import 'package:mdabali_report/data/repos/get_repo.dart';
 import 'package:mdabali_report/data/repos/repositories/five_month_data_repository.dart';
 import 'package:mdabali_report/data/repos/repositories/login_repository.dart';
@@ -17,6 +18,7 @@ import 'package:mdabali_report/data/repos/repositories/monthly_aggreagate_reposi
 import 'package:mdabali_report/data/repos/repositories/sms_summary_repository.dart';
 import 'package:mdabali_report/data/repos/repositories/summary_report_repository.dart';
 import 'package:mdabali_report/data/repos/repositories/topup_summary_repository.dart';
+import 'package:mdabali_report/data/repos/repositories/totp_repository.dart';
 import 'package:mdabali_report/data/shared_preferences/shared_preferences.dart';
 import 'package:mdabali_report/resources/colors.dart';
 import 'package:mdabali_report/view/password_login_page.dart';
@@ -40,6 +42,7 @@ class MyApp extends StatelessWidget {
             BlocProvider(
               create: (context) => LoginBloc(LoginRepository()),
             ),
+            BlocProvider(create: (context) => TOtpBloc(TotpRepository())),
             BlocProvider(
                 create: (context) => MonthlyAggregateBloc(
                     MonthlyAggregateRepository(getRepo: GetRepo()))),

@@ -64,7 +64,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
             Obx(
               () => PinCodeTextField(
                 appContext: context,
-                length: 4,
+                length:4,
                 controller: controller.otpController,
                 onCompleted: (value) {
                   controller.verifyOtp(value);

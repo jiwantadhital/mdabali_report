@@ -7,7 +7,7 @@ import 'package:mdabali_report/view/dash_board_page.dart';
 class OTPController extends GetxController {
   var isCodeExpired = false.obs;
   var otp = ''.obs;
-  var remainingTime = 60.obs;
+  var remainingTime = 30.obs;
   Timer? timer;
   TextEditingController otpController = TextEditingController();
 
@@ -27,9 +27,10 @@ class OTPController extends GetxController {
       }
     });
   }
+  
 
   void resendCode() {
-    remainingTime.value = 60;
+    remainingTime.value = 30;
     isCodeExpired.value = false;
     otp.value = '';
     otpController.clear();
@@ -39,14 +40,14 @@ class OTPController extends GetxController {
   }
 
   void verifyOtp(String enteredOtp) {
-    var correctOtp = '1234';
+    var correctOtp = '123456';
     if (isCodeExpired.value) {
       Get.snackbar('Error', 'OTP has expired. Please resend OTP');
     } else if (correctOtp == enteredOtp) {
       Get.snackbar('Success', 'OTP verified successfully');
       Get.off(() => DashBoardPage());
     } else {
-      Get.snackbar('Invalid', 'Inavild OTP code.Try again! ');
+      Get.snackbar('Invalid', 'Invalid OTP code.Try again! ');
     }
   }
 

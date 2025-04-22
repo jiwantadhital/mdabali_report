@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mdabali_report/controller/o_t_p_controller.dart';
+import 'package:mdabali_report/view/dash_board_page.dart';
 import 'package:mdabali_report/view/extracted_widgets/custom_text.dart';
 import 'package:mdabali_report/view/extracted_widgets/extracted_button.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -34,11 +35,11 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
             const SizedBox(
               height: 48,
             ),
-            CustomText(
-              text: 'New device detected!',
-              fontSize: 16,
-              color: colorScheme.inverseSurface,
-            ),
+            // CustomText(
+            //   text: 'New device detected!',
+            //   fontSize: 16,
+            //   color: colorScheme.inverseSurface,
+            // ),
             const SizedBox(
               height: 8,
             ),
@@ -54,7 +55,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
             ),
             CustomText(
               text:
-                  "We'll text you a code which lets us keep your account secure.",
+                  "Please enter the verification code from your authenticator app (such as Google Authenticator) to access the account",
               fontSize: 20,
               textAlign: TextAlign.start,
               color: colorScheme.onSurface,
@@ -65,11 +66,11 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
             Obx(
               () => PinCodeTextField(
                 appContext: context,
-                length:4,
+                length:6,
                 controller: controller.otpController,
-                onCompleted: (value) {
-                  controller.verifyOtp(value);
-                },
+                // onCompleted: (value) {
+                //   controller.verifyOtp(value);
+                // },
                 pinTheme: PinTheme(
                   shape: PinCodeFieldShape.box,
                   borderRadius: BorderRadius.circular(12),
@@ -99,7 +100,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
               child: Obx(() => CustomText(
                     text: controller.isCodeExpired.value
                         ? ' '
-                        : 'Resend code in ${controller.remainingTime.value}secs',
+                        : 'Your otp code expires in ${controller.remainingTime.value}secs',
                     fontSize: 16,
                     color: colorScheme.error,
                     textAlign: TextAlign.center,
@@ -108,6 +109,16 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
             ),
             const SizedBox(
               height: 72,
+            ),
+
+            LoginButton(
+                text: 'Verify OTP',
+                onPress:controller.otpController.text==controller.verifyOtp?Get.to(DashBoardPage()):null
+                // (){
+                //   if(controller.otpController.text== controller.verifyOtp){
+                //     Get.to(DashBoardPage())
+                //   }
+                // },
             ),
             Obx(() => LoginButton(
                   color: Colors.blue,

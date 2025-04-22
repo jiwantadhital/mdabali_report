@@ -49,10 +49,13 @@ class _PasswordLoginPageState extends State<PasswordLoginPage> {
               if (state is LoginSuccess) {
                 final loginData = state.loginModel;
                 loginData.isOTPRequired == true
-                    ? Get.off(() => OTPVerificationPage())
+                    ? Get.off(() => OTPVerificationPage(
+                          secret: loginData.data?.secret ?? '',
+                        ))
                     : Get.off(() => DashBoardPage());
-                final token = loginData.data?.accessToken ?? "";
-                await UserSimplePreferences.setToken(token);
+                // final token = loginData.data?.accessToken ?? "";
+                // await UserSimplePreferences.setToken(token);
+                print(loginData.data?.secret ?? 'jalfsdkn');
               }
               if (state is LoginFailure) {
                 CustomSnackbar(

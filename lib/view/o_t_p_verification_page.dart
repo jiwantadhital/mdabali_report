@@ -6,7 +6,8 @@ import 'package:mdabali_report/view/extracted_widgets/extracted_button.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class OTPVerificationPage extends StatefulWidget {
-  const OTPVerificationPage({super.key});
+  final String secret;
+  const OTPVerificationPage({super.key, required this.secret});
 
   @override
   State<OTPVerificationPage> createState() => _OTPVerificationPageState();

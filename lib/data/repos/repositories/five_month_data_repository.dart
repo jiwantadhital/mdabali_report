@@ -15,7 +15,7 @@ class FiveMonthDataRepository {
         "${ApiClass.pastFiveMonthUrl}?toDate=$toDate",
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200) {  
         final data = jsonDecode(response.body);
         return FiveMonthDataModel.fromJson(data);
       } else {

@@ -21,6 +21,7 @@ import 'package:mdabali_report/data/repos/repositories/topup_summary_repository.
 import 'package:mdabali_report/data/repos/repositories/totp_repository.dart';
 import 'package:mdabali_report/data/shared_preferences/shared_preferences.dart';
 import 'package:mdabali_report/resources/colors.dart';
+import 'package:mdabali_report/view/o_t_p_verification_page.dart';
 import 'package:mdabali_report/view/password_login_page.dart';
 
 void main() async {
@@ -74,7 +75,9 @@ class MyApp extends StatelessWidget {
                   backgroundColor: Color(0xFFFFFFFF),
                 ),
               ),
-              home: PasswordLoginPage()),
+              home:
+              // OTPVerificationPage())
+               PasswordLoginPage()),
         );
       },
     );

@@ -2,6 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mdabali_report/resources/images_constants.dart';
 import 'package:mdabali_report/view/extracted_widgets/custom_text.dart';
 import 'package:mdabali_report/view/extracted_widgets/logout_dialog.dart';
@@ -20,13 +21,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
   final String _userName = "Aakash Sah";
   final String _cooperativeName = "Aarjan saving and credit Cooperative";
   final String _userImagePath = ImagesConstants.mdabaliLogo;
-
+  final bool isDarkmode= true;
   // Handle theme change internally
   void _handleThemeChange(ThemeMode themeMode) {
     // You would typically use a theme provider or state management solution
     // For this example, we'll just print the theme change
     print('Changing theme to: $themeMode');
-
+    
     // Example implementation with a theme provider:
     // ThemeProvider.of(context).setThemeMode(themeMode);
 
@@ -141,7 +142,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
               contentPadding: EdgeInsets.only(left: 56, right: 16),
               leading: Icon(Icons.light_mode, color: colorScheme.primary),
               title: CustomText(text: "Light Theme"),
-              onTap: () => _handleThemeChange(ThemeMode.light),
+              onTap: (){
+                 Get.changeTheme(ThemeData.light());
+                 Navigator.pop(context);
+              }
+              // => _handleThemeChange(ThemeMode.light),
             ),
 
             // Dark theme option
@@ -149,7 +154,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
               contentPadding: EdgeInsets.only(left: 56, right: 16),
               leading: Icon(Icons.dark_mode, color: colorScheme.primary),
               title: CustomText(text: "Dark Theme"),
-              onTap: () => _handleThemeChange(ThemeMode.dark),
+              onTap: (){
+                Get.changeTheme(ThemeData.dark());
+                Navigator.pop(context);
+              }
             ),
 
             // System theme option

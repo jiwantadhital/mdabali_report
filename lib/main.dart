@@ -21,6 +21,7 @@ import 'package:mdabali_report/data/repos/repositories/topup_summary_repository.
 import 'package:mdabali_report/data/repos/repositories/totp_repository.dart';
 import 'package:mdabali_report/data/shared_preferences/shared_preferences.dart';
 import 'package:mdabali_report/resources/colors.dart';
+import 'package:mdabali_report/view/dash_board_page.dart';
 import 'package:mdabali_report/view/o_t_p_verification_page.dart';
 import 'package:mdabali_report/view/password_login_page.dart';
 
@@ -66,16 +67,19 @@ class MyApp extends StatelessWidget {
           child: GetMaterialApp(
               debugShowCheckedModeBanner: false,
               title: 'Flutter Demo',
-              darkTheme: darkColorScheme.copyWith(
-                bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-                    backgroundColor: Color(0xFF000000)),
-              ),
+              themeMode: ThemeMode.system,
+              darkTheme:ThemeData.dark(),
+              //  darkColorScheme.copyWith(
+              //   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+              //       backgroundColor: Color(0xFF000000)),
+              // ),
               theme: lightColorScheme.copyWith(
                 bottomNavigationBarTheme: const BottomNavigationBarThemeData(
                   backgroundColor: Color(0xFFFFFFFF),
                 ),
               ),
-              home:PasswordLoginPage()),
+              home:DashBoardPage()),
+              // PasswordLoginPage()),
         );
       },
     );

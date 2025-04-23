@@ -9,9 +9,17 @@ class LoginRepository {
       var uri = Uri.parse("${ApiClass.testUrl}/gateway/web-login");
 
       var request = http.MultipartRequest('POST', uri);
+
+      // Set fields
       request.fields['grant_type'] = 'password';
       request.fields['username'] = username;
       request.fields['password'] = password;
+
+      request.headers.addAll({
+        'Accept': 'application/json, text/plain, */*',
+        'Origin': 'http://pg.infodev.com.np',
+        'Referer': 'http://pg.infodev.com.np/',
+      });
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);

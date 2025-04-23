@@ -75,9 +75,7 @@ class MyApp extends StatelessWidget {
                   backgroundColor: Color(0xFFFFFFFF),
                 ),
               ),
-              home:
-              // OTPVerificationPage())
-               PasswordLoginPage()),
+              home:PasswordLoginPage()),
         );
       },
     );

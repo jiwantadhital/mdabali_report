@@ -1,0 +1,2 @@
+C:/Users/VINAY THAPA/mdabali_report/android/app/.cxx/Debug/293h1o69/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/Users/VINAY THAPA/mdabali_report/android/app/.cxx/Debug/293h1o69/arm64-v8a/CMakeFiles/rebuild_cache.dir

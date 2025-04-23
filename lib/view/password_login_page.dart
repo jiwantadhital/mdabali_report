@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:mdabali_report/bloc/login_bloc/bloc/login_bloc.dart';
-import 'package:mdabali_report/data/shared_preferences/shared_preferences.dart';
 import 'package:mdabali_report/view/dash_board_page.dart';
 import 'package:mdabali_report/view/extracted_widgets/custom_snackbar.dart';
 import 'package:mdabali_report/view/o_t_p_verification_page.dart';

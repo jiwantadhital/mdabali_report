@@ -66,7 +66,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
   @override
   void dispose() {
     _timer?.cancel();
-    _pinController.dispose();
+    //_pinController.dispose();
     _isButtonEnabled.dispose();
     _remainingTime.dispose();
     super.dispose();

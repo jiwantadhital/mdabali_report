@@ -57,6 +57,7 @@ dependencies:
   nepali_date_picker: ^6.0.1
   syncfusion_flutter_datepicker: ^29.1.35
   nepali_utils: ^3.0.8
+  http_mock_adapter: ^0.6.1
 
 dev_dependencies:
   flutter_test:

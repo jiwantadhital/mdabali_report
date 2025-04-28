@@ -27,7 +27,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
   final _pinController = TextEditingController();
   final _isButtonEnabled = ValueNotifier<bool>(false);
   final _remainingTime = ValueNotifier<int>(30);
-  final _formKey = GlobalKey<FormState>();
+  final _otpformKey = GlobalKey<FormState>();
   Timer? _timer;
   bool _isCodeExpired = false;
 
@@ -84,7 +84,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Form(
-          key: _formKey,
+          key: _otpformKey,
           child: BlocConsumer<TOtpBloc, TOtpState>(
             listener: (context, state) async {
               if (state is TOtpSuccess) {
@@ -217,7 +217,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                             ? null
                             : () {
                                 FocusScope.of(context).unfocus();
-                                if (_formKey.currentState!.validate()) {
+                                if (_otpformKey.currentState!.validate()) {
                                   context.read<TOtpBloc>().add(
                                         VerifyOtpEvent(
                                           secret: widget.secret,

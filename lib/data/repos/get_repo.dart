@@ -1,10 +1,14 @@
 import 'package:http/http.dart' as http;
 import 'package:mdabali_report/data/shared_preferences/shared_preferences.dart';
 import 'package:mdabali_report/resources/constants.dart';
+import 'package:mdabali_report/services/auth_service.dart';
 
 class GetRepo {
+ // final CustomHttpInterceptor client;
+  http.BaseClient client;
+  GetRepo(this.client);
   Future<http.Response> getRepository(api, {bool tokenrequired = true}) async {
-    var response = await http.get(
+    var response = await client.get(
       Uri.parse("${ApiClass.testUrl}$api"),
       headers: {
         "Authorization": tokenrequired == true

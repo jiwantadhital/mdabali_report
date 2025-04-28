@@ -3,8 +3,12 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:mdabali_report/data/shared_preferences/shared_preferences.dart';
 import 'package:mdabali_report/resources/constants.dart';
+import 'package:mdabali_report/services/auth_service.dart';
 
 class PostRepo {
+  http.BaseClient client;
+  // final CustomHttpInterceptor client;
+   PostRepo(this.client);
   Future<http.Response> postRepository(api,
       {Map<String, dynamic>? body, bool tokenrequired = true}) async {
     const Duration timeoutDuration = Duration(seconds: 60);
@@ -20,7 +24,7 @@ class PostRepo {
     try {
       final Uri uri = Uri.parse("${ApiClass.testUrl}$api");
 
-      final http.Response response = await http
+      final http.Response response = await client
           .post(
             uri,
             headers: headers,

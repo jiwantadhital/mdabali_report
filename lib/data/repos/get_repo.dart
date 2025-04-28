@@ -1,14 +1,18 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:mdabali_report/data/shared_preferences/shared_preferences.dart';
 import 'package:mdabali_report/resources/constants.dart';
-import 'package:mdabali_report/services/auth_service.dart';
+
+import '../../view/extracted_widgets/custom_text.dart';
 
 class GetRepo {
  // final CustomHttpInterceptor client;
-  http.BaseClient client;
-  GetRepo(this.client);
+  // http.BaseClient client;
+   bool isLogout = false;
+  GetRepo();
   Future<http.Response> getRepository(api, {bool tokenrequired = true}) async {
-    var response = await client.get(
+    var response = await http.get(
       Uri.parse("${ApiClass.testUrl}$api"),
       headers: {
         "Authorization": tokenrequired == true
@@ -31,9 +35,56 @@ class GetRepo {
       return response;
     }
     if (response.statusCode == 440) {
-      throw Exception(response.reasonPhrase);
+     isLogout = true;
+      if (isLogout == true) {
+        isLogout = false;
+        logout();
+        throw Exception(response.reasonPhrase);
+      } else {
+        throw Exception(response.reasonPhrase);
+      }
     } else {
       throw Exception(response.reasonPhrase);
     }
+  }
+}
+
+
+void logout() {
+  if (UserSimplePreferences.userLoggedIn() == true) { 
+        Get.dialog(
+            AlertDialog(
+              title: const Text('Session Expired'),
+              content: Text('Session Expired, Please Login again'),
+              actions: [
+                Center(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:Color.fromARGB(255, 9, 134, 255),
+                        foregroundColor: Colors.white,
+                        minimumSize: Size(100, 36),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      onPressed: () {
+                        // Perform logout action
+                        Get.back();
+                         Get.offAllNamed('/login');
+                      },
+                      child: CustomText(
+                        text: 'ok',
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            barrierDismissible:false,
+          );
+  } else {
+    print("ressetting");
+    // _resetInactivityTimer();
   }
 }

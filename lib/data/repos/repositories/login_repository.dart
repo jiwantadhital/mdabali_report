@@ -2,11 +2,11 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:mdabali_report/data/models/login_model.dart';
 import 'package:mdabali_report/resources/constants.dart';
-import 'package:mdabali_report/services/auth_service.dart';
+
 
 class LoginRepository {
-  final CustomHttpInterceptor client;
-  LoginRepository(this.client);
+  // final CustomHttpInterceptor client;
+  LoginRepository();
   Future<LoginModel> login(String username, String password) async {
     try {
       var uri = Uri.parse("${ApiClass.testUrl}/gateway/web-login");
@@ -24,7 +24,7 @@ class LoginRepository {
       //   'Referer': 'http://pg.infodev.com.np/',
       // });
 
-      var streamedResponse = await client.send(request);
+      var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
       print("Response Status Code: ${response.statusCode}");

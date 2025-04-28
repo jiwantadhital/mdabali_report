@@ -28,4 +28,12 @@ class UserSimplePreferences {
   static Future cleanToken() async {
     await _preferences?.remove(_token);
   }
+   static userLoggedIn() {
+    return _preferences?.containsKey(_token);
+  }
+  static Future userLoggedOut()async{
+    await _preferences?.remove(_token);
+
+    
+  }
 }

@@ -23,13 +23,9 @@ import 'package:mdabali_report/data/repos/repositories/topup_summary_repository.
 import 'package:mdabali_report/data/repos/repositories/totp_repository.dart';
 import 'package:mdabali_report/data/shared_preferences/shared_preferences.dart';
 import 'package:mdabali_report/resources/colors.dart';
-import 'package:mdabali_report/services/auth_service.dart';
-import 'package:mdabali_report/utils/navigator_observer.dart';
 import 'package:mdabali_report/view/dash_board_page.dart';
 import 'package:mdabali_report/view/o_t_p_verification_page.dart';
 import 'package:mdabali_report/view/password_login_page.dart';
-import 'package:http_mock_adapter/http_mock_adapter.dart';
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,71 +34,72 @@ void main() async {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   MyApp({super.key});
-  final ThemeController themeController = Get.find();
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
-  
-  
+  final ThemeController themeController = Get.find();
+
+
   @override
   Widget build(BuildContext context) {
-    final authBloc= AuthBloc();
-    print('Main: Created AuthBloc[${authBloc.id}]');
-  final customHttp= CustomHttpInterceptor(authBloc);
-  late final loginRepository = LoginRepository(customHttp);
-  final getrepo =GetRepo(customHttp);
     return FlutterSizer(
       builder: (context, orientation, deviceType) {
         return MultiBlocProvider(
           providers: [
             BlocProvider(
-              create: (context) => LoginBloc(loginRepository),
+              create: (context) => LoginBloc(LoginRepository()),
             ),
-            BlocProvider.value(value: authBloc),
             BlocProvider(create: (context) => TOtpBloc(TotpRepository())),
             BlocProvider(
                 create: (context) => MonthlyAggregateBloc(
-                    MonthlyAggregateRepository(getRepo: getrepo ))),
+                    MonthlyAggregateRepository(getRepo: GetRepo()))),
             BlocProvider(
                 create: (context) => SummaryReportBloc(
-                    SummaryReportRepository(getRepo: getrepo))),
+                    SummaryReportRepository(getRepo: GetRepo()))),
             BlocProvider(
                 create: (context) => FiveMonthDataBloc(
-                    FiveMonthDataRepository(getRepo: getrepo))),
-            BlocProvider(
-                create: (context) => TopupSummaryBloc(
-                    TopupSummaryRepository(getRepo: getrepo))),
+                    FiveMonthDataRepository(getRepo: GetRepo()))),
             BlocProvider(
                 create: (context) =>
-                    SmsSummaryBloc(SmsSummaryRepository(getRepo: getrepo))),
+                    TopupSummaryBloc(TopupSummaryRepository(getRepo: GetRepo()))),
             BlocProvider(
                 create: (context) =>
-                    MemberLimitBloc(MemberLimitRepository(getRepo: getrepo))),
+                    SmsSummaryBloc(SmsSummaryRepository(getRepo: GetRepo()))),
+            BlocProvider(
+                create: (context) =>
+                    MemberLimitBloc(MemberLimitRepository(getRepo: GetRepo()))),
           ],
           child: GetMaterialApp(
-             // navigatorObservers: [AuthNavigatorObserver()],
-              debugShowCheckedModeBanner: false,
-              title: 'Flutter Demo',
-              //themeMode: ThemeMode.system,
-              darkTheme:
-                  //    ThemeData.dark(),
-                  darkColorScheme.copyWith(
-                bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-                    backgroundColor: Color(0xFF000000)),
+            // navigatorObservers: [AuthNavigatorObserver()],
+            debugShowCheckedModeBanner: false,
+            title: 'Flutter Demo',
+            themeMode: themeController.themeMode.value,
+            darkTheme:
+                //    ThemeData.dark(),
+                darkColorScheme.copyWith(
+              bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+                  backgroundColor: Color(0xFF000000)),
+            ),
+            theme: lightColorScheme.copyWith(
+              bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+                backgroundColor: Color(0xFFFFFFFF),
               ),
-              theme: lightColorScheme.copyWith(
-                bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-                  backgroundColor: Color(0xFFFFFFFF),
-                ),
-              ),
-              initialRoute: '/login',
-              getPages: [
-                GetPage(name:'/login' , page: ()=> PasswordLoginPage()),
-                GetPage(name: '/dashboard', page: ()=>DashBoardPage()),
-                GetPage(name: '/otppage', page: ()=> OTPVerificationPage(secret: ''))
-              ],
-              // home: PasswordLoginPage()
-              ),
+            ),
+            initialRoute: '/login',
+            getPages: [
+              GetPage(name: '/login', page: () => PasswordLoginPage()),
+              GetPage(name: '/dashboard', page: () => DashBoardPage()),
+              GetPage(
+                  name: '/otppage', page: () => OTPVerificationPage(secret: ''))
+            ],
+            // home: PasswordLoginPage()
+          ),
         );
       },
     );

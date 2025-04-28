@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:mdabali_report/bloc/Auth/auth_bloc.dart';
-import 'package:mdabali_report/bloc/Auth/auth_event.dart';
-import 'package:mdabali_report/bloc/Auth/auth_state.dart';
 import 'package:mdabali_report/bloc/five_month_data_bloc/bloc/five_month_data_bloc.dart';
 import 'package:mdabali_report/bloc/monthly_aggregate_bloc/bloc/monthly_aggregate_bloc.dart';
 import 'package:mdabali_report/bloc/summary_report_bloc/bloc/summary_report_bloc.dart';
@@ -111,7 +108,6 @@ class _DashBoardPageState extends State<DashBoardPage> {
 
   @override
   Widget build(BuildContext context) {
-    print('DashBoardPage: Building widget with AuthBloc[${context.read<AuthBloc>().id}]');
     List<String> appBar = [
       'mDabali Next Gen Report',
       'Transaction Summary',
@@ -119,116 +115,50 @@ class _DashBoardPageState extends State<DashBoardPage> {
       'mDabali Summary'
     ];
     var colorScheme = Theme.of(context).colorScheme;
-    return BlocListener<AuthBloc, AuthState>(
-      listener: (context, state) {print('DashBoardPage: AuthBloc[${context.read<AuthBloc>().id}] state changed to $state');
-        if (state is AuthUnauthenticated && state.message != null && !_isDialogShowing) {
-          print('DashBoardPage: Showing session expired dialog');
-          _isDialogShowing = true;
-          if (!mounted) {
-            print('DashBoardPage: Widget not mounted, cannot show dialog');
-            _isDialogShowing = false;
-            return;
-          }
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => AlertDialog(
-                title: const Text('Session Expired'),
-                content: Text(state.message!),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      print('DashBoardPage: Dialog OK pressed, navigating to /login');
-                      _isDialogShowing = false;
-                      Navigator.of(context).pop();
-                      Get.offAllNamed('/login');
-                    },
-                    child: const Text('OK'),
-                  ),
-                ],
-              ),
-            ),
-          ).then((_) {
-            print('DashBoardPage: Dialog closed');
-            _isDialogShowing = false;
-          }).catchError((error) {
-            print('DashBoardPage: Dialog error: $error');
-            _isDialogShowing = false;
-          });
-          // print('DashBoardPage: Showing session expired dialog');
-          // _isDialogShowing = true;
-          // Get.dialog(
-          //   AlertDialog(
-          //     title: const Text('Session Expired'),
-          //     content: Text(state.message!),
-          //     actions: [
-          //       TextButton(
-          //         onPressed: () {
-          //           print('DashBoardPage: Dialog OK pressed, navigating to /login');
-          //           _isDialogShowing = false;
-          //           Get.back();
-          //           Get.offAllNamed('/login');
-          //         },
-          //         child: const Text('OK'),
-          //       ),
-          //     ],
-          //   ),
-          //   barrierDismissible: false,
-          // ).then((_) {
-          //   print('DashBoardPage: Dialog closed');
-          //   _isDialogShowing = false;
-          // }).catchError((error) {
-          //   print('DashBoardPage: Dialog error: $error');
-          //   _isDialogShowing = false;
-          // });
-       }
-      },
-      child: Scaffold(
-        backgroundColor: colorScheme.surface,
-        drawer: CustomDrawer(),
-        appBar: AppBar(
-          surfaceTintColor: colorScheme.surfaceTint,
-          elevation: 0,
-          backgroundColor: colorScheme.surfaceDim,
-          leading: Builder(
-            builder: (context) => IconButton(
-              icon: Icon(Icons.menu, color: colorScheme.primary),
+    return Scaffold(
+      backgroundColor: colorScheme.surface,
+      drawer: CustomDrawer(),
+      appBar: AppBar(
+        surfaceTintColor: colorScheme.surfaceTint,
+        elevation: 0,
+        backgroundColor: colorScheme.surfaceDim,
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: Icon(Icons.menu, color: colorScheme.primary),
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            },
+          ),
+        ),
+        title: CustomText(
+          text: appBar[_selectedIndex],
+          fontSize: 18,
+          color: colorScheme.primary,
+          weight: FontWeight.bold,
+        ),
+        centerTitle: true,
+        // Actions for notification icon on the right
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: IconButton(
+              icon: Icon(Icons.notifications, color: colorScheme.primary),
               onPressed: () {
-                Scaffold.of(context).openDrawer();
+                 
               },
             ),
           ),
-          title: CustomText(
-            text: appBar[_selectedIndex],
-            fontSize: 18,
-            color: colorScheme.primary,
-            weight: FontWeight.bold,
-          ),
-          centerTitle: true,
-          // Actions for notification icon on the right
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 8.0),
-              child: IconButton(
-                icon: Icon(Icons.notifications, color: colorScheme.primary),
-                onPressed: () {
-                    final authBloc = context.read<AuthBloc>();
-    print('DashBoardPage: Triggering manual LogoutEvent on AuthBloc[${authBloc.id}]');
-    authBloc.add(LogoutEvent());
-                },
-              ),
-            ),
-          ],
-        ),
-        body: AnimatedSwitcher(
-          duration: const Duration(microseconds: 300),
-          transitionBuilder: (child, animation) => FadeTransition(
-            opacity: animation,
-            child: child,
-          ),
-          child: _pages[_selectedIndex],
-        ),
-        bottomNavigationBar: _buildBottomNavBar(),
+        ],
       ),
+      body: AnimatedSwitcher(
+        duration: const Duration(microseconds: 300),
+        transitionBuilder: (child, animation) => FadeTransition(
+          opacity: animation,
+          child: child,
+        ),
+        child: _pages[_selectedIndex],
+      ),
+      bottomNavigationBar: _buildBottomNavBar(),
     );
   }
 

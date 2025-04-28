@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:mdabali_report/bloc/Auth/auth_bloc.dart';
+import 'package:mdabali_report/bloc/Auth/auth_event.dart';
+import 'package:mdabali_report/bloc/Auth/auth_state.dart';
 import 'package:mdabali_report/bloc/five_month_data_bloc/bloc/five_month_data_bloc.dart';
 import 'package:mdabali_report/bloc/monthly_aggregate_bloc/bloc/monthly_aggregate_bloc.dart';
 import 'package:mdabali_report/bloc/summary_report_bloc/bloc/summary_report_bloc.dart';
@@ -22,29 +26,92 @@ class DashBoardPage extends StatefulWidget {
 class _DashBoardPageState extends State<DashBoardPage> {
   int _selectedIndex = 0;
   late final List<Widget> _pages;
+  bool _isDialogShowing = false;
 
   @override
   void initState() {
-    _pages = [HomePage(), TransactionPage(), SmsPage(), MdabaliPage()];
+    // _pages = [HomePage(), TransactionPage(), SmsPage(), MdabaliPage()];
+    // // Get today's date
+    // String todayDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    // DateTime now = DateTime.now();
+    // DateTime oneMonthAgo = DateTime(now.year, now.month - 1, now.day);
+    // String dateFrom = DateFormat('yyyy-MM-dd').format(oneMonthAgo);
+    // context.read<MonthlyAggregateBloc>().add(FetchMonthlyAggregate());
+    // context
+    //     .read<SummaryReportBloc>()
+    //     .add(FetchSummaryReport(dateFrom: dateFrom, dateTo: todayDate));
+
+    // //this is for line chart data
+    // context
+    //     .read<FiveMonthDataBloc>()
+    //     .add(FetchFiveMonthData(toDate: todayDate));
+    // super.initState();
+  //   super.initState();
+  // _pages = [const HomePage(), const TransactionPage(), const SmsPage(), const MdabaliPage()];
+  // // Get today's date
+  // String todayDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+  // DateTime now = DateTime.now();
+  // DateTime oneMonthAgo = DateTime(now.year, now.month - 1, now.day);
+  // String dateFrom = DateFormat('yyyy-MM-dd').format(oneMonthAgo);
+  
+  // // Sequence BLoC requests to avoid parallel 440s
+  // WidgetsBinding.instance.addPostFrameCallback((_) async {
+  //   try {
+  //     context.read<MonthlyAggregateBloc>().add(FetchMonthlyAggregate());
+  //     await Future.delayed(Duration(milliseconds: 100)); // Wait for first request
+  //     context.read<SummaryReportBloc>().add(FetchSummaryReport(dateFrom: dateFrom, dateTo: todayDate));
+  //     await Future.delayed(Duration(milliseconds: 100)); // Wait for second request
+  //     context.read<FiveMonthDataBloc>().add(FetchFiveMonthData(toDate: todayDate));
+  //   } catch (e) {
+  //     print('DashBoardPage: initState error: $e');
+  //   }
+  // });super.initState();
+    print('DashBoardPage: initState called');
+    _pages = [const HomePage(), const TransactionPage(), const SmsPage(), const MdabaliPage()];
     // Get today's date
     String todayDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
     DateTime now = DateTime.now();
     DateTime oneMonthAgo = DateTime(now.year, now.month - 1, now.day);
     String dateFrom = DateFormat('yyyy-MM-dd').format(oneMonthAgo);
-    context.read<MonthlyAggregateBloc>().add(FetchMonthlyAggregate());
-    context
-        .read<SummaryReportBloc>()
-        .add(FetchSummaryReport(dateFrom: dateFrom, dateTo: todayDate));
 
-    //this is for line chart data
-    context
-        .read<FiveMonthDataBloc>()
-        .add(FetchFiveMonthData(toDate: todayDate));
-    super.initState();
+    // Delay BLoC requests to ensure widget is fully initialized
+    Future.microtask(() async {
+      print('DashBoardPage: Initializing BLoC requests');
+      try {
+        final monthlyAggregateBloc = context.read<MonthlyAggregateBloc>();
+        final summaryReportBloc = context.read<SummaryReportBloc>();
+        final fiveMonthDataBloc = context.read<FiveMonthDataBloc>();
+
+        // Check if widget is still mounted
+        if (!mounted) {
+          print('DashBoardPage: Widget not mounted, aborting BLoC requests');
+          return;
+        }
+
+        monthlyAggregateBloc.add(FetchMonthlyAggregate());
+        await monthlyAggregateBloc.stream.firstWhere(
+          (state) => state is MonthlyAggregateLoaded || state is MonthlyAggregateError,
+          orElse: () => MonthlyAggregateError('Timeout'),
+        );
+        if (!mounted) return;
+
+        summaryReportBloc.add(FetchSummaryReport(dateFrom: dateFrom, dateTo: todayDate));
+        await summaryReportBloc.stream.firstWhere(
+          (state) => state is SummaryReportLoaded || state is SummaryReportError,
+          orElse: () => SummaryReportError('Timeout'),
+        );
+        if (!mounted) return;
+
+        fiveMonthDataBloc.add(FetchFiveMonthData(toDate: todayDate));
+      } catch (e) {
+        print('DashBoardPage: initState error: $e');
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    print('DashBoardPage: Building widget with AuthBloc[${context.read<AuthBloc>().id}]');
     List<String> appBar = [
       'mDabali Next Gen Report',
       'Transaction Summary',
@@ -52,48 +119,116 @@ class _DashBoardPageState extends State<DashBoardPage> {
       'mDabali Summary'
     ];
     var colorScheme = Theme.of(context).colorScheme;
-    return Scaffold(
-      backgroundColor: colorScheme.surface,
-      drawer: CustomDrawer(),
-      appBar: AppBar(
-        surfaceTintColor: colorScheme.surfaceTint,
-        elevation: 0,
-        backgroundColor: colorScheme.surfaceDim,
-        leading: Builder(
-          builder: (context) => IconButton(
-            icon: Icon(Icons.menu, color: colorScheme.primary),
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
-          ),
-        ),
-        title: CustomText(
-          text: appBar[_selectedIndex],
-          fontSize: 18,
-          color: colorScheme.primary,
-          weight: FontWeight.bold,
-        ),
-        centerTitle: true,
-        // Actions for notification icon on the right
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: IconButton(
-              icon: Icon(Icons.notifications, color: colorScheme.primary),
-              onPressed: () {},
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {print('DashBoardPage: AuthBloc[${context.read<AuthBloc>().id}] state changed to $state');
+        if (state is AuthUnauthenticated && state.message != null && !_isDialogShowing) {
+          print('DashBoardPage: Showing session expired dialog');
+          _isDialogShowing = true;
+          if (!mounted) {
+            print('DashBoardPage: Widget not mounted, cannot show dialog');
+            _isDialogShowing = false;
+            return;
+          }
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => AlertDialog(
+                title: const Text('Session Expired'),
+                content: Text(state.message!),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      print('DashBoardPage: Dialog OK pressed, navigating to /login');
+                      _isDialogShowing = false;
+                      Navigator.of(context).pop();
+                      Get.offAllNamed('/login');
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              ),
+            ),
+          ).then((_) {
+            print('DashBoardPage: Dialog closed');
+            _isDialogShowing = false;
+          }).catchError((error) {
+            print('DashBoardPage: Dialog error: $error');
+            _isDialogShowing = false;
+          });
+          // print('DashBoardPage: Showing session expired dialog');
+          // _isDialogShowing = true;
+          // Get.dialog(
+          //   AlertDialog(
+          //     title: const Text('Session Expired'),
+          //     content: Text(state.message!),
+          //     actions: [
+          //       TextButton(
+          //         onPressed: () {
+          //           print('DashBoardPage: Dialog OK pressed, navigating to /login');
+          //           _isDialogShowing = false;
+          //           Get.back();
+          //           Get.offAllNamed('/login');
+          //         },
+          //         child: const Text('OK'),
+          //       ),
+          //     ],
+          //   ),
+          //   barrierDismissible: false,
+          // ).then((_) {
+          //   print('DashBoardPage: Dialog closed');
+          //   _isDialogShowing = false;
+          // }).catchError((error) {
+          //   print('DashBoardPage: Dialog error: $error');
+          //   _isDialogShowing = false;
+          // });
+       }
+      },
+      child: Scaffold(
+        backgroundColor: colorScheme.surface,
+        drawer: CustomDrawer(),
+        appBar: AppBar(
+          surfaceTintColor: colorScheme.surfaceTint,
+          elevation: 0,
+          backgroundColor: colorScheme.surfaceDim,
+          leading: Builder(
+            builder: (context) => IconButton(
+              icon: Icon(Icons.menu, color: colorScheme.primary),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
             ),
           ),
-        ],
-      ),
-      body: AnimatedSwitcher(
-        duration: const Duration(microseconds: 300),
-        transitionBuilder: (child, animation) => FadeTransition(
-          opacity: animation,
-          child: child,
+          title: CustomText(
+            text: appBar[_selectedIndex],
+            fontSize: 18,
+            color: colorScheme.primary,
+            weight: FontWeight.bold,
+          ),
+          centerTitle: true,
+          // Actions for notification icon on the right
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: IconButton(
+                icon: Icon(Icons.notifications, color: colorScheme.primary),
+                onPressed: () {
+                    final authBloc = context.read<AuthBloc>();
+    print('DashBoardPage: Triggering manual LogoutEvent on AuthBloc[${authBloc.id}]');
+    authBloc.add(LogoutEvent());
+                },
+              ),
+            ),
+          ],
         ),
-        child: _pages[_selectedIndex],
+        body: AnimatedSwitcher(
+          duration: const Duration(microseconds: 300),
+          transitionBuilder: (child, animation) => FadeTransition(
+            opacity: animation,
+            child: child,
+          ),
+          child: _pages[_selectedIndex],
+        ),
+        bottomNavigationBar: _buildBottomNavBar(),
       ),
-      bottomNavigationBar: _buildBottomNavBar(),
     );
   }
 

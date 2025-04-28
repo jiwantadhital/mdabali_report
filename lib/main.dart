@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:mdabali_report/bloc/Auth/auth_bloc.dart';
 import 'package:mdabali_report/bloc/five_month_data_bloc/bloc/five_month_data_bloc.dart';
 import 'package:mdabali_report/bloc/login_bloc/bloc/login_bloc.dart';
 import 'package:mdabali_report/bloc/member_limit_bloc/bloc/member_limit_bloc.dart';
@@ -24,7 +23,13 @@ import 'package:mdabali_report/data/repos/repositories/topup_summary_repository.
 import 'package:mdabali_report/data/repos/repositories/totp_repository.dart';
 import 'package:mdabali_report/data/shared_preferences/shared_preferences.dart';
 import 'package:mdabali_report/resources/colors.dart';
+import 'package:mdabali_report/services/auth_service.dart';
+import 'package:mdabali_report/utils/navigator_observer.dart';
+import 'package:mdabali_report/view/dash_board_page.dart';
+import 'package:mdabali_report/view/o_t_p_verification_page.dart';
 import 'package:mdabali_report/view/password_login_page.dart';
+import 'package:http_mock_adapter/http_mock_adapter.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,36 +42,45 @@ class MyApp extends StatelessWidget {
   MyApp({super.key});
   final ThemeController themeController = Get.find();
   // This widget is the root of your application.
+  
+  
   @override
   Widget build(BuildContext context) {
+    final authBloc= AuthBloc();
+    print('Main: Created AuthBloc[${authBloc.id}]');
+  final customHttp= CustomHttpInterceptor(authBloc);
+  late final loginRepository = LoginRepository(customHttp);
+  final getrepo =GetRepo(customHttp);
     return FlutterSizer(
       builder: (context, orientation, deviceType) {
         return MultiBlocProvider(
           providers: [
             BlocProvider(
-              create: (context) => LoginBloc(LoginRepository()),
+              create: (context) => LoginBloc(loginRepository),
             ),
+            BlocProvider.value(value: authBloc),
             BlocProvider(create: (context) => TOtpBloc(TotpRepository())),
             BlocProvider(
                 create: (context) => MonthlyAggregateBloc(
-                    MonthlyAggregateRepository(getRepo: GetRepo()))),
+                    MonthlyAggregateRepository(getRepo: getrepo ))),
             BlocProvider(
                 create: (context) => SummaryReportBloc(
-                    SummaryReportRepository(getRepo: GetRepo()))),
+                    SummaryReportRepository(getRepo: getrepo))),
             BlocProvider(
                 create: (context) => FiveMonthDataBloc(
-                    FiveMonthDataRepository(getRepo: GetRepo()))),
+                    FiveMonthDataRepository(getRepo: getrepo))),
             BlocProvider(
                 create: (context) => TopupSummaryBloc(
-                    TopupSummaryRepository(getRepo: GetRepo()))),
+                    TopupSummaryRepository(getRepo: getrepo))),
             BlocProvider(
                 create: (context) =>
-                    SmsSummaryBloc(SmsSummaryRepository(getRepo: GetRepo()))),
+                    SmsSummaryBloc(SmsSummaryRepository(getRepo: getrepo))),
             BlocProvider(
                 create: (context) =>
-                    MemberLimitBloc(MemberLimitRepository(getRepo: GetRepo()))),
+                    MemberLimitBloc(MemberLimitRepository(getRepo: getrepo))),
           ],
           child: GetMaterialApp(
+             // navigatorObservers: [AuthNavigatorObserver()],
               debugShowCheckedModeBanner: false,
               title: 'Flutter Demo',
               //themeMode: ThemeMode.system,
@@ -81,7 +95,14 @@ class MyApp extends StatelessWidget {
                   backgroundColor: Color(0xFFFFFFFF),
                 ),
               ),
-              home: PasswordLoginPage()),
+              initialRoute: '/login',
+              getPages: [
+                GetPage(name:'/login' , page: ()=> PasswordLoginPage()),
+                GetPage(name: '/dashboard', page: ()=>DashBoardPage()),
+                GetPage(name: '/otppage', page: ()=> OTPVerificationPage(secret: ''))
+              ],
+              // home: PasswordLoginPage()
+              ),
         );
       },
     );

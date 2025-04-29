@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:mdabali_report/bloc/five_month_data_bloc/bloc/five_month_data_bloc.dart';
+import 'package:mdabali_report/bloc/init_bloc/bloc/init_bloc.dart';
 import 'package:mdabali_report/bloc/monthly_aggregate_bloc/bloc/monthly_aggregate_bloc.dart';
 import 'package:mdabali_report/bloc/summary_report_bloc/bloc/summary_report_bloc.dart';
 import 'package:mdabali_report/resources/colors.dart';
@@ -23,7 +23,6 @@ class DashBoardPage extends StatefulWidget {
 class _DashBoardPageState extends State<DashBoardPage> {
   int _selectedIndex = 0;
   late final List<Widget> _pages;
-  bool _isDialogShowing = false;
 
   @override
   void initState() {
@@ -43,28 +42,32 @@ class _DashBoardPageState extends State<DashBoardPage> {
     //     .read<FiveMonthDataBloc>()
     //     .add(FetchFiveMonthData(toDate: todayDate));
     // super.initState();
-  //   super.initState();
-  // _pages = [const HomePage(), const TransactionPage(), const SmsPage(), const MdabaliPage()];
-  // // Get today's date
-  // String todayDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
-  // DateTime now = DateTime.now();
-  // DateTime oneMonthAgo = DateTime(now.year, now.month - 1, now.day);
-  // String dateFrom = DateFormat('yyyy-MM-dd').format(oneMonthAgo);
-  
-  // // Sequence BLoC requests to avoid parallel 440s
-  // WidgetsBinding.instance.addPostFrameCallback((_) async {
-  //   try {
-  //     context.read<MonthlyAggregateBloc>().add(FetchMonthlyAggregate());
-  //     await Future.delayed(Duration(milliseconds: 100)); // Wait for first request
-  //     context.read<SummaryReportBloc>().add(FetchSummaryReport(dateFrom: dateFrom, dateTo: todayDate));
-  //     await Future.delayed(Duration(milliseconds: 100)); // Wait for second request
-  //     context.read<FiveMonthDataBloc>().add(FetchFiveMonthData(toDate: todayDate));
-  //   } catch (e) {
-  //     print('DashBoardPage: initState error: $e');
-  //   }
-  // });super.initState();
-    print('DashBoardPage: initState called');
-    _pages = [const HomePage(), const TransactionPage(), const SmsPage(), const MdabaliPage()];
+    //   super.initState();
+    // _pages = [const HomePage(), const TransactionPage(), const SmsPage(), const MdabaliPage()];
+    // // Get today's date
+    // String todayDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    // DateTime now = DateTime.now();
+    // DateTime oneMonthAgo = DateTime(now.year, now.month - 1, now.day);
+    // String dateFrom = DateFormat('yyyy-MM-dd').format(oneMonthAgo);
+
+    // // Sequence BLoC requests to avoid parallel 440s
+    // WidgetsBinding.instance.addPostFrameCallback((_) async {
+    //   try {
+    //     context.read<MonthlyAggregateBloc>().add(FetchMonthlyAggregate());
+    //     await Future.delayed(Duration(milliseconds: 100)); // Wait for first request
+    //     context.read<SummaryReportBloc>().add(FetchSummaryReport(dateFrom: dateFrom, dateTo: todayDate));
+    //     await Future.delayed(Duration(milliseconds: 100)); // Wait for second request
+    //     context.read<FiveMonthDataBloc>().add(FetchFiveMonthData(toDate: todayDate));
+    //   } catch (e) {
+    //     print('DashBoardPage: initState error: $e');
+    //   }
+    // });super.initState();
+    _pages = [
+      const HomePage(),
+      const TransactionPage(),
+      const SmsPage(),
+      const MdabaliPage()
+    ];
     // Get today's date
     String todayDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
     DateTime now = DateTime.now();
@@ -84,17 +87,20 @@ class _DashBoardPageState extends State<DashBoardPage> {
           print('DashBoardPage: Widget not mounted, aborting BLoC requests');
           return;
         }
-
+        context.read<InitBloc>().add(FetchInitData());
         monthlyAggregateBloc.add(FetchMonthlyAggregate());
         await monthlyAggregateBloc.stream.firstWhere(
-          (state) => state is MonthlyAggregateLoaded || state is MonthlyAggregateError,
+          (state) =>
+              state is MonthlyAggregateLoaded || state is MonthlyAggregateError,
           orElse: () => MonthlyAggregateError('Timeout'),
         );
         if (!mounted) return;
 
-        summaryReportBloc.add(FetchSummaryReport(dateFrom: dateFrom, dateTo: todayDate));
+        summaryReportBloc
+            .add(FetchSummaryReport(dateFrom: dateFrom, dateTo: todayDate));
         await summaryReportBloc.stream.firstWhere(
-          (state) => state is SummaryReportLoaded || state is SummaryReportError,
+          (state) =>
+              state is SummaryReportLoaded || state is SummaryReportError,
           orElse: () => SummaryReportError('Timeout'),
         );
         if (!mounted) return;
@@ -143,9 +149,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
             padding: const EdgeInsets.only(right: 8.0),
             child: IconButton(
               icon: Icon(Icons.notifications, color: colorScheme.primary),
-              onPressed: () {
-                 
-              },
+              onPressed: () {},
             ),
           ),
         ],

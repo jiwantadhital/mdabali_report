@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:get/get.dart';
 import 'package:mdabali_report/bloc/five_month_data_bloc/bloc/five_month_data_bloc.dart';
+import 'package:mdabali_report/bloc/init_bloc/bloc/init_bloc.dart';
 import 'package:mdabali_report/bloc/login_bloc/bloc/login_bloc.dart';
 import 'package:mdabali_report/bloc/member_limit_bloc/bloc/member_limit_bloc.dart';
 import 'package:mdabali_report/bloc/monthly_aggregate_bloc/bloc/monthly_aggregate_bloc.dart';
@@ -13,6 +14,7 @@ import 'package:mdabali_report/bloc/totp_bloc/bloc/t_otp_bloc.dart';
 import 'package:mdabali_report/controller/theme_controller.dart';
 import 'package:mdabali_report/data/repos/get_repo.dart';
 import 'package:mdabali_report/data/repos/repositories/five_month_data_repository.dart';
+import 'package:mdabali_report/data/repos/repositories/init_repository.dart';
 import 'package:mdabali_report/data/repos/repositories/login_repository.dart';
 import 'package:mdabali_report/data/repos/repositories/member_limit_repository.dart';
 import 'package:mdabali_report/data/repos/repositories/monthly_aggreagate_repository.dart';
@@ -44,7 +46,6 @@ class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   final ThemeController themeController = Get.find();
 
-
   @override
   Widget build(BuildContext context) {
     return FlutterSizer(
@@ -56,6 +57,9 @@ class _MyAppState extends State<MyApp> {
             ),
             BlocProvider(create: (context) => TOtpBloc(TotpRepository())),
             BlocProvider(
+                create: (context) =>
+                    InitBloc(InitRepository(getRepo: GetRepo()))),
+            BlocProvider(
                 create: (context) => MonthlyAggregateBloc(
                     MonthlyAggregateRepository(getRepo: GetRepo()))),
             BlocProvider(
@@ -65,8 +69,8 @@ class _MyAppState extends State<MyApp> {
                 create: (context) => FiveMonthDataBloc(
                     FiveMonthDataRepository(getRepo: GetRepo()))),
             BlocProvider(
-                create: (context) =>
-                    TopupSummaryBloc(TopupSummaryRepository(getRepo: GetRepo()))),
+                create: (context) => TopupSummaryBloc(
+                    TopupSummaryRepository(getRepo: GetRepo()))),
             BlocProvider(
                 create: (context) =>
                     SmsSummaryBloc(SmsSummaryRepository(getRepo: GetRepo()))),

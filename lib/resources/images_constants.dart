@@ -4,4 +4,5 @@ class ImagesConstants {
   static const String eyeClose = 'assets/images/eye_close.png';
   static const String arjnaLogo = 'assets/images/arjan_logo.png';
   static const String mdabaliLogo = 'assets/images/mdabali.png';
+  static const String noInternet='assets/images/no_internet.png';
 }

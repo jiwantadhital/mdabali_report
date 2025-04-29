@@ -1,9 +1,13 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mdabali_report/bloc/five_month_data_bloc/bloc/five_month_data_bloc.dart';
+import 'package:mdabali_report/bloc/init_bloc/bloc/init_bloc.dart';
 import 'package:mdabali_report/bloc/monthly_aggregate_bloc/bloc/monthly_aggregate_bloc.dart';
 import 'package:mdabali_report/resources/images_constants.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../extracted_widgets/custom_text.dart';
 import 'charts/line_chart_card.dart';
@@ -77,6 +81,7 @@ class _HomePageState extends State<HomePage> {
     return RefreshIndicator(
       onRefresh: () {
         context.read<MonthlyAggregateBloc>().add(FetchMonthlyAggregate());
+        context.read<InitBloc>().add(FetchInitData());
         return Future.delayed(const Duration(milliseconds: 1200));
       },
       child: SingleChildScrollView(
@@ -85,29 +90,110 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Center(
-                      child: Image.asset(
-                    ImagesConstants.arjnaLogo,
-                    height: 30,
-                    width: 30,
-                  )),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  CustomText(
-                    text: 'Arjan saving and credit cooperative',
-                    textOverflow: TextOverflow.ellipsis,
-                    letterSpacing: 1,
-                    fontSize: 16,
-                    weight: FontWeight.w600,
-                  ),
-                  const SizedBox(
-                    height: 24,
-                  ),
-                ],
+              BlocBuilder<InitBloc, InitState>(
+                builder: (context, state) {
+                  if (state is InitLoading) {
+                    // Get colors from theme
+                    var colorScheme = Theme.of(context).colorScheme;
+                    var brightness = Theme.of(context).brightness;
+                    Color baseColor = brightness == Brightness.light
+                        ? colorScheme.surfaceContainerHighest.withOpacity(0.5)
+                        : colorScheme.surfaceContainerHighest.withOpacity(0.3);
+                    Color highlightColor = brightness == Brightness.light
+                        ? colorScheme.onSurface
+                        : colorScheme.onSurface.withOpacity(0.6);
+
+                    return SizedBox(
+                      height: 40, // Fixed height to match your content
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // Logo shimmer
+                          Shimmer.fromColors(
+                            baseColor: baseColor,
+                            highlightColor: highlightColor,
+                            child: Container(
+                              height: 30,
+                              width: 30,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          // Text shimmer
+                          Expanded(
+                            child: Shimmer.fromColors(
+                              baseColor: baseColor,
+                              highlightColor: highlightColor,
+                              child: Container(
+                                height: 20,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  } else if (state is InitLoaded) {
+                    final initData = state.initModel.data;
+                    return Expanded(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Center(
+                              child: Image.asset(
+                            ImagesConstants.arjnaLogo,
+                            height: 30,
+                            width: 30,
+                          )),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Expanded(
+                            child: CustomText(
+                              text: initData?.clientName ??
+                                  'Client name not found',
+                              maxLine: 2,
+                              textOverflow: TextOverflow.ellipsis,
+                              letterSpacing: 1,
+                              fontSize: 16,
+                              weight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 24,
+                          ),
+                        ],
+                      ),
+                    );
+                  } else if (state is InitFailure) {
+                    return Center(
+                      child: CustomText(
+                        text: state.error,
+                        maxLine: 2,
+                        textOverflow: TextOverflow.ellipsis,
+                        letterSpacing: 1,
+                        fontSize: 14,
+                        weight: FontWeight.w600,
+                      ),
+                    );
+                  } else {
+                    return Center(
+                      child: CustomText(
+                        text: "Something went wrong!",
+                        textOverflow: TextOverflow.ellipsis,
+                        letterSpacing: 1,
+                        fontSize: 14,
+                        weight: FontWeight.w600,
+                      ),
+                    );
+                  }
+                },
               ),
               const SizedBox(
                 height: 24,

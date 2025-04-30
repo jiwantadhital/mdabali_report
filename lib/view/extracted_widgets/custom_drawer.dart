@@ -1,7 +1,10 @@
 // ignore_for_file: deprecated_member_use
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:mdabali_report/bloc/init_bloc/bloc/init_bloc.dart';
 import 'package:mdabali_report/controller/theme_controller.dart';
+import 'package:mdabali_report/data/shared_preferences/shared_preferences.dart';
 import 'package:mdabali_report/resources/images_constants.dart';
 import 'package:mdabali_report/view/extracted_widgets/custom_text.dart';
 import 'package:mdabali_report/view/extracted_widgets/logout_dialog.dart';
@@ -18,7 +21,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
   // Static values for user information
   final String _userName = "Aakash Sah";
-  final String _cooperativeName = "Aarjan saving and credit Cooperative";
   final String _userImagePath = ImagesConstants.mdabaliLogo;
   final bool isDarkmode = true;
   // Handle theme change internally
@@ -30,7 +32,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
   // Handle logout internally
   void _handleLogout() {
-    print('Logging out...');
     Navigator.pop(context);
     showLogoutDialog(context);
   }
@@ -68,16 +69,41 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   ),
                   SizedBox(height: 12),
                   CustomText(
-                    text: _userName,
+                    text: UserSimplePreferences.getUsername().toString(),
                     fontSize: 18,
                     weight: FontWeight.w500,
                     color: colorScheme.onSecondary,
                   ),
                   SizedBox(height: 8),
-                  CustomText(
-                    text: _cooperativeName,
-                    fontSize: 14,
-                    color: colorScheme.onSecondary,
+                  BlocBuilder<InitBloc, InitState>(
+                    builder: (context, state) {
+                      if (state is InitLoading) {
+                        return Center(
+                          child: CustomText(
+                            text: 'Loading...',
+                            fontSize: 14,
+                            color: colorScheme.onSecondary,
+                          ),
+                        );
+                      } else if (state is InitLoaded) {
+                        final initData = state.initModel.data;
+                        return Center(
+                          child: CustomText(
+                            text: initData?.clientName ?? 'Not found',
+                            fontSize: 14,
+                            textAlign: TextAlign.center,
+                            color: colorScheme.onSecondary,
+                          ),
+                        );
+                      } else {
+                        return CustomText(
+                          text: 'Something went wrong!',
+                          fontSize: 14,
+                          color: colorScheme.onSecondary,
+                          textAlign: TextAlign.center,
+                        );
+                      }
+                    },
                   ),
                   SizedBox(height: 16),
                 ],

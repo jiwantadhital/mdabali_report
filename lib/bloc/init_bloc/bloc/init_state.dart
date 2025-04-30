@@ -13,8 +13,9 @@ class InitLoading extends InitState {}
 
 class InitLoaded extends InitState {
   final InitModel initModel;
+  final Uint8List? imageBytes;
 
-  const InitLoaded({required this.initModel});
+  const InitLoaded({required this.initModel, required this.imageBytes});
 }
 
 class InitFailure extends InitState {

@@ -8,4 +8,5 @@ class ApiClass {
   static const String smsUrl = '/gateway/mdabaliApi/sms/aggregate-report';
   static const String memberLimitUrl = '/gateway/mdabaliApi/customer/limit';
   
+  static const String initUrl = '/gateway/mobileApi/user/init/reporting';
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -193,7 +195,7 @@ const kMemberColorList = [
   Color(0xff029DFF),
   Color(0xff2BBF7D),
   Color(0xffF6A400),
-  Color(0xffE00000),
+  Color.fromARGB(255, 145, 120, 130),
   Color(0xff926BFA),
   Color(0xffD946EF),
   Color(0xffF58300),

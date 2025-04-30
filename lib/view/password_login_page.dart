@@ -65,6 +65,8 @@ class _PasswordLoginPageState extends State<PasswordLoginPage> {
                     await UserSimplePreferences.setToken(
                         loginData.data!.accessToken ?? '');
                   }
+                  await UserSimplePreferences.setUsername(
+                      usernameController.text.toString().trim());
                   //   final token = loginData.data?.accessToken ?? "";
 
                   print(loginData.data?.secret ?? 'jalfsdkn');

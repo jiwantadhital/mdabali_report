@@ -10,6 +10,7 @@ sealed class SummaryReportEvent extends Equatable {
 class FetchSummaryReport extends SummaryReportEvent {
   final String dateFrom;
   final String dateTo;
+  final String clientId;
 
-  const FetchSummaryReport({required this.dateFrom, required this.dateTo});
+  const FetchSummaryReport({required this.dateFrom, required this.dateTo,required this.clientId});
 }

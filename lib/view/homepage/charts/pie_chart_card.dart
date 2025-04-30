@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:mdabali_report/bloc/summary_report_bloc/bloc/summary_report_bloc.dart';
+import 'package:mdabali_report/data/shared_preferences/shared_preferences.dart';
 import 'package:mdabali_report/resources/colors.dart';
 import 'package:mdabali_report/view/extracted_widgets/custom_text.dart';
 import 'package:mdabali_report/view/extracted_widgets/date_range_picker_card.dart';
@@ -144,7 +145,8 @@ class _PieChartCardState extends State<PieChartCard> {
                             context.read<SummaryReportBloc>().add(
                                 FetchSummaryReport(
                                     dateFrom: startFormatted,
-                                    dateTo: endFormatted));
+                                    dateTo: endFormatted,
+                                    clientId: UserSimplePreferences.getClientId().toString()));
                             setState(() {
                               _showAllOthers = false;
                             });

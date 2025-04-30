@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:mdabali_report/bloc/summary_report_bloc/bloc/summary_report_bloc.dart';
+import 'package:mdabali_report/data/shared_preferences/shared_preferences.dart';
 import 'package:mdabali_report/resources/colors.dart';
 import 'package:mdabali_report/view/extracted_widgets/date_range_picker_card.dart';
 import 'package:mdabali_report/view/transaction_page/shimmer_transaction_cards.dart';
@@ -40,7 +41,7 @@ class _TransactionPageState extends State<TransactionPage> {
                         .format(range.endDate ?? range.startDate!);
                     // ignore: use_build_context_synchronously
                     context.read<SummaryReportBloc>().add(FetchSummaryReport(
-                        dateFrom: startFormatted, dateTo: endFormatted));
+                        dateFrom: startFormatted, dateTo: endFormatted,clientId: UserSimplePreferences.getClientId().toString()));
                   }
                 },
                 child: Container(

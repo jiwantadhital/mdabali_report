@@ -8,10 +8,10 @@ class SummaryReportRepository {
   SummaryReportRepository({required this.getRepo});
 
   Future<SummaryReportModel> fetchSummaryReport(
-      {required String dateFrom, required String dateTo}) async {
+      {required String dateFrom, required String dateTo,required String clientId}) async {
     try {
       final response = await getRepo.getRepository(
-        "/gateway/reportingApi/summary-report?fromDate=$dateFrom&toDate=$dateTo&clientId=535",
+        "/gateway/reportingApi/summary-report?fromDate=$dateFrom&toDate=$dateTo&clientId=$clientId",
       );
 
       if (response.statusCode == 200) {

@@ -6,6 +6,7 @@ class UserSimplePreferences {
   static const _languageNepali = 'LANGUAGE';
   static const _token = 'TOKEN';
   static const _username = 'USERNAME';
+  static const _clientId ='CLIENTID';
 
   static Future init() async =>
       _preferences = await SharedPreferences.getInstance();
@@ -22,6 +23,9 @@ class UserSimplePreferences {
   static Future setUsername(String username) async {
     await _preferences?.setString(_username, username);
   }
+  static Future setClientId(String clientId)async{
+    await _preferences?.setString(_clientId, clientId);
+  }
 
 //get saved data
   static bool? getLanguage() => _preferences?.getBool(_languageNepali);
@@ -30,6 +34,7 @@ class UserSimplePreferences {
   static Future cleanL() async {
     await _preferences?.remove(_languageNepali);
   }
+  static String? getClientId()=> _preferences?.getString(_clientId);
 
   static Future cleanToken() async {
     await _preferences?.remove(_token);

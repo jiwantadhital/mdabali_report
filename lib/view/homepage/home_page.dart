@@ -4,9 +4,12 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:mdabali_report/bloc/five_month_data_bloc/bloc/five_month_data_bloc.dart';
 import 'package:mdabali_report/bloc/init_bloc/bloc/init_bloc.dart';
 import 'package:mdabali_report/bloc/monthly_aggregate_bloc/bloc/monthly_aggregate_bloc.dart';
+import 'package:mdabali_report/bloc/summary_report_bloc/bloc/summary_report_bloc.dart';
+import 'package:mdabali_report/data/shared_preferences/shared_preferences.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -142,6 +145,15 @@ class _HomePageState extends State<HomePage> {
                     );
                   } else if (state is InitLoaded) {
                     final initData = state.initModel.data;
+                    final clientId=initData!.clientId;
+                     String todayDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+                       DateTime now = DateTime.now();
+    DateTime oneMonthAgo = DateTime(now.year, now.month - 1, now.day);
+                       String dateFrom = DateFormat('yyyy-MM-dd').format(oneMonthAgo);
+                    UserSimplePreferences.setClientId(clientId.toString());
+                    context.read<SummaryReportBloc>().add(FetchSummaryReport(
+                      dateFrom: dateFrom, dateTo: todayDate, clientId: UserSimplePreferences.getClientId().toString()));
+                    print('Client Id; ${UserSimplePreferences.getClientId()}');
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,

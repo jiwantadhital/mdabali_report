@@ -35,9 +35,9 @@ class _DashBoardPageState extends State<DashBoardPage> {
 
     context.read<InitBloc>().add(FetchInitData());
     context.read<MonthlyAggregateBloc>().add(FetchMonthlyAggregate());
-    context
-        .read<SummaryReportBloc>()
-        .add(FetchSummaryReport(dateFrom: dateFrom, dateTo: todayDate));
+    // context
+    //     .read<SummaryReportBloc>()
+    //     .add(FetchSummaryReport(dateFrom: dateFrom, dateTo: todayDate));
 
     //this is for line chart data
     context

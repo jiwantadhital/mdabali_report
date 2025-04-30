@@ -20,7 +20,7 @@ class SummaryReportBloc extends Bloc<SummaryReportEvent, SummaryReportState> {
     emit(SummaryReportLoading());
     try {
       final data = await summaryReportRepository.fetchSummaryReport(
-          dateFrom: event.dateFrom, dateTo: event.dateTo);
+          dateFrom: event.dateFrom, dateTo: event.dateTo,clientId: event.clientId);
       data.status == true
           ? emit(SummaryReportLoaded(data))
           : emit(SummaryReportError(data.message.toString()));

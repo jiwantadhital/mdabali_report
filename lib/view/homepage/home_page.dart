@@ -93,7 +93,7 @@ class _HomePageState extends State<HomePage> {
               BlocBuilder<InitBloc, InitState>(
                 builder: (context, state) {
                   if (state is InitLoading) {
-                    // Get colors from theme
+                    //Get colors from theme
                     var colorScheme = Theme.of(context).colorScheme;
                     var brightness = Theme.of(context).brightness;
                     Color baseColor = brightness == Brightness.light
@@ -128,7 +128,7 @@ class _HomePageState extends State<HomePage> {
                               baseColor: baseColor,
                               highlightColor: highlightColor,
                               child: Container(
-                                height: 20,
+                                height: 30,
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(4),
@@ -141,35 +141,35 @@ class _HomePageState extends State<HomePage> {
                     );
                   } else if (state is InitLoaded) {
                     final initData = state.initModel.data;
-                    return Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Center(
-                              child: Image.asset(
-                            ImagesConstants.arjnaLogo,
-                            height: 30,
-                            width: 30,
-                          )),
-                          const SizedBox(
-                            width: 5,
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(
+                            child: Image.asset(
+                          ImagesConstants.arjnaLogo,
+                          height: 40,
+                          width: 40,
+                        )),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Expanded(
+                          child: CustomText(
+                            text:
+                                initData?.clientName ?? 'Client name not found',
+                            maxLine: 2,
+                            textAlign: TextAlign.start,
+                            textOverflow: TextOverflow.ellipsis,
+                            letterSpacing: 1,
+                            fontSize: 16,
+                            weight: FontWeight.w600,
                           ),
-                          Expanded(
-                            child: CustomText(
-                              text: initData?.clientName ??
-                                  'Client name not found',
-                              maxLine: 2,
-                              textOverflow: TextOverflow.ellipsis,
-                              letterSpacing: 1,
-                              fontSize: 16,
-                              weight: FontWeight.w600,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 24,
-                          ),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(
+                          height: 24,
+                        ),
+                      ],
                     );
                   } else if (state is InitFailure) {
                     return Center(

@@ -339,11 +339,11 @@ class _TransactionPageState extends State<TransactionPage> {
     // Map service names to appropriate icons
     switch (service) {
       case 'Data Pack':
-        return Icons.money;
+        return Icons.network_cell;
       case 'Electricity':
         return Icons.electrical_services;
       case 'Internet':
-        return Icons.network_cell;
+        return Icons.network_wifi_sharp;
       case 'Topup':
         return Icons.arrow_upward;
       case 'TV':
@@ -356,6 +356,10 @@ class _TransactionPageState extends State<TransactionPage> {
         return Icons.qr_code;
       case 'WALLET':
         return Icons.wallet;
+      case 'Landline':
+        return Icons.phone;
+      case 'Bus Ticket':
+        return Icons.directions_bus;
       default:
         return Icons.receipt_long;
     }

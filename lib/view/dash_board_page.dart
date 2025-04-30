@@ -26,90 +26,25 @@ class _DashBoardPageState extends State<DashBoardPage> {
 
   @override
   void initState() {
-    // _pages = [HomePage(), TransactionPage(), SmsPage(), MdabaliPage()];
-    // // Get today's date
-    // String todayDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    // DateTime now = DateTime.now();
-    // DateTime oneMonthAgo = DateTime(now.year, now.month - 1, now.day);
-    // String dateFrom = DateFormat('yyyy-MM-dd').format(oneMonthAgo);
-    // context.read<MonthlyAggregateBloc>().add(FetchMonthlyAggregate());
-    // context
-    //     .read<SummaryReportBloc>()
-    //     .add(FetchSummaryReport(dateFrom: dateFrom, dateTo: todayDate));
-
-    // //this is for line chart data
-    // context
-    //     .read<FiveMonthDataBloc>()
-    //     .add(FetchFiveMonthData(toDate: todayDate));
-    // super.initState();
-    //   super.initState();
-    // _pages = [const HomePage(), const TransactionPage(), const SmsPage(), const MdabaliPage()];
-    // // Get today's date
-    // String todayDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    // DateTime now = DateTime.now();
-    // DateTime oneMonthAgo = DateTime(now.year, now.month - 1, now.day);
-    // String dateFrom = DateFormat('yyyy-MM-dd').format(oneMonthAgo);
-
-    // // Sequence BLoC requests to avoid parallel 440s
-    // WidgetsBinding.instance.addPostFrameCallback((_) async {
-    //   try {
-    //     context.read<MonthlyAggregateBloc>().add(FetchMonthlyAggregate());
-    //     await Future.delayed(Duration(milliseconds: 100)); // Wait for first request
-    //     context.read<SummaryReportBloc>().add(FetchSummaryReport(dateFrom: dateFrom, dateTo: todayDate));
-    //     await Future.delayed(Duration(milliseconds: 100)); // Wait for second request
-    //     context.read<FiveMonthDataBloc>().add(FetchFiveMonthData(toDate: todayDate));
-    //   } catch (e) {
-    //     print('DashBoardPage: initState error: $e');
-    //   }
-    // });super.initState();
-    _pages = [
-      const HomePage(),
-      const TransactionPage(),
-      const SmsPage(),
-      const MdabaliPage()
-    ];
+    _pages = [HomePage(), TransactionPage(), SmsPage(), MdabaliPage()];
     // Get today's date
     String todayDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
     DateTime now = DateTime.now();
     DateTime oneMonthAgo = DateTime(now.year, now.month - 1, now.day);
     String dateFrom = DateFormat('yyyy-MM-dd').format(oneMonthAgo);
 
-    // Delay BLoC requests to ensure widget is fully initialized
-    Future.microtask(() async {
-      print('DashBoardPage: Initializing BLoC requests');
-      try {
-        final monthlyAggregateBloc = context.read<MonthlyAggregateBloc>();
-        final summaryReportBloc = context.read<SummaryReportBloc>();
-        final fiveMonthDataBloc = context.read<FiveMonthDataBloc>();
+    context.read<InitBloc>().add(FetchInitData());
+    context.read<MonthlyAggregateBloc>().add(FetchMonthlyAggregate());
+    context
+        .read<SummaryReportBloc>()
+        .add(FetchSummaryReport(dateFrom: dateFrom, dateTo: todayDate));
 
-        // Check if widget is still mounted
-        if (!mounted) {
-          print('DashBoardPage: Widget not mounted, aborting BLoC requests');
-          return;
-        }
-        context.read<InitBloc>().add(FetchInitData());
-        monthlyAggregateBloc.add(FetchMonthlyAggregate());
-        await monthlyAggregateBloc.stream.firstWhere(
-          (state) =>
-              state is MonthlyAggregateLoaded || state is MonthlyAggregateError,
-          orElse: () => MonthlyAggregateError('Timeout'),
-        );
-        if (!mounted) return;
+    //this is for line chart data
+    context
+        .read<FiveMonthDataBloc>()
+        .add(FetchFiveMonthData(toDate: todayDate));
 
-        summaryReportBloc
-            .add(FetchSummaryReport(dateFrom: dateFrom, dateTo: todayDate));
-        await summaryReportBloc.stream.firstWhere(
-          (state) =>
-              state is SummaryReportLoaded || state is SummaryReportError,
-          orElse: () => SummaryReportError('Timeout'),
-        );
-        if (!mounted) return;
-
-        fiveMonthDataBloc.add(FetchFiveMonthData(toDate: todayDate));
-      } catch (e) {
-        print('DashBoardPage: initState error: $e');
-      }
-    });
+    super.initState();
   }
 
   @override

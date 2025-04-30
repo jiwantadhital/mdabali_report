@@ -1,11 +1,12 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mdabali_report/bloc/five_month_data_bloc/bloc/five_month_data_bloc.dart';
 import 'package:mdabali_report/bloc/init_bloc/bloc/init_bloc.dart';
 import 'package:mdabali_report/bloc/monthly_aggregate_bloc/bloc/monthly_aggregate_bloc.dart';
-import 'package:mdabali_report/resources/images_constants.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -146,8 +147,8 @@ class _HomePageState extends State<HomePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Center(
-                            child: Image.asset(
-                          ImagesConstants.arjnaLogo,
+                            child: Image.memory(
+                          Uint8List.fromList(state.imageBytes!),
                           height: 40,
                           width: 40,
                         )),

@@ -5,6 +5,7 @@ class UserSimplePreferences {
 
   static const _languageNepali = 'LANGUAGE';
   static const _token = 'TOKEN';
+  static const _username = 'USERNAME';
 
   static Future init() async =>
       _preferences = await SharedPreferences.getInstance();
@@ -18,9 +19,14 @@ class UserSimplePreferences {
     await _preferences?.setString(_token, token);
   }
 
+  static Future setUsername(String username) async {
+    await _preferences?.setString(_username, username);
+  }
+
 //get saved data
   static bool? getLanguage() => _preferences?.getBool(_languageNepali);
   static String? getToken() => _preferences?.getString(_token);
+  static String? getUsername() => _preferences?.getString(_username);
   static Future cleanL() async {
     await _preferences?.remove(_languageNepali);
   }
@@ -28,12 +34,13 @@ class UserSimplePreferences {
   static Future cleanToken() async {
     await _preferences?.remove(_token);
   }
-   static userLoggedIn() {
+
+  static userLoggedIn() {
     return _preferences?.containsKey(_token);
   }
-  static Future userLoggedOut()async{
-    await _preferences?.remove(_token);
 
-    
+  static Future userLoggedOut() async {
+    await _preferences?.remove(_token);
+    await _preferences?.remove(_username);
   }
 }

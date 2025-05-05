@@ -6,7 +6,6 @@ import 'package:mdabali_report/bloc/summary_report_bloc/bloc/summary_report_bloc
 import 'package:mdabali_report/data/shared_preferences/shared_preferences.dart';
 import 'package:mdabali_report/resources/colors.dart';
 import 'package:mdabali_report/view/extracted_widgets/custom_text.dart';
-import 'package:mdabali_report/view/extracted_widgets/date_range_picker_card.dart';
 import 'package:mdabali_report/view/extracted_widgets/nepali_date_range_picker_card.dart';
 import 'package:mdabali_report/view/homepage/charts/pie_chart_shimmer.dart';
 
@@ -57,7 +56,19 @@ class _PieChartCardState extends State<PieChartCard> {
           double totalSuccessAmount = data.fold(
               0.0, (sum, item) => sum + (item.successAmount ?? 0).toDouble());
 
-          List<Color> chartColors = kMemberColorList;
+          // List<Color> chartColors = kMemberColorList;
+          List<Color> generateDistinctColors(int count) {
+            return List<Color>.generate(count, (index) {
+              final hue = (360.0 / count) * index;
+              return HSLColor.fromAHSL(1.0, hue, 0.6, 0.6).toColor();
+            });
+          }
+
+          List<Color> chartColors = List<Color>.from(kMemberColorList);
+          if (data.length > chartColors.length) {
+            chartColors.addAll(
+                generateDistinctColors(data.length - chartColors.length));
+          }
 
           List<PieChartSectionData> sections = [];
           List<Widget> indicators = [];
@@ -102,7 +113,7 @@ class _PieChartCardState extends State<PieChartCard> {
 // ✅ Add "Others" once, after loop
           if (othersEntries.isNotEmpty) {
             sections.add(PieChartSectionData(
-              color: Colors.grey,
+              color: Colors.grey[400],
               value: othersPercentage,
               title: othersPercentage.toStringAsFixed(1),
               radius: 50.0,
@@ -138,8 +149,8 @@ class _PieChartCardState extends State<PieChartCard> {
                               await NepaliDateRangePicker.show(context);
                           if (range != null) {
                             // Format the start and end dates to 'yyyy-MM-dd' format
-                            String startFormatted = DateFormat('yyyy-MM-dd')
-                                .format(range.start);
+                            String startFormatted =
+                                DateFormat('yyyy-MM-dd').format(range.start);
                             String endFormatted = DateFormat('yyyy-MM-dd')
                                 .format(range.end ?? range.start);
                             // ignore: use_build_context_synchronously
@@ -147,7 +158,9 @@ class _PieChartCardState extends State<PieChartCard> {
                                 FetchSummaryReport(
                                     dateFrom: startFormatted,
                                     dateTo: endFormatted,
-                                    clientId: UserSimplePreferences.getClientId().toString()));
+                                    clientId:
+                                        UserSimplePreferences.getClientId()
+                                            .toString()));
                             setState(() {
                               _showAllOthers = false;
                             });

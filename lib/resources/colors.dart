@@ -195,13 +195,15 @@ const kMemberColorList = [
   Color(0xff029DFF),
   Color(0xff2BBF7D),
   Color(0xffF6A400),
-  Color.fromARGB(255, 145, 120, 130),
+  Color(0xff936276),
   Color(0xff926BFA),
   Color(0xffD946EF),
   Color(0xffF58300),
   Color(0xff1F6DFF),
   Color(0xff059669),
   Color(0xffEC4899),
+  Color(0xff1e81b0),
+  Color(0xff52c4a2)
 ];
 
 Color getRandomColor(int index) {

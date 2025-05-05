@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -43,7 +44,10 @@ class _TransactionPageState extends State<TransactionPage> {
                         print(endFormatted);
                     // ignore: use_build_context_synchronously
                     context.read<SummaryReportBloc>().add(FetchSummaryReport(
-                        dateFrom: startFormatted, dateTo: endFormatted,clientId: UserSimplePreferences.getClientId().toString()));
+                        dateFrom: startFormatted,
+                        dateTo: endFormatted,
+                        clientId:
+                            UserSimplePreferences.getClientId().toString()));
                   }
                 },
                 child: Container(
@@ -363,6 +367,12 @@ class _TransactionPageState extends State<TransactionPage> {
         return Icons.phone;
       case 'Bus Ticket':
         return Icons.directions_bus;
+      case 'Flight':
+        return Icons.flight_takeoff;
+      case 'Government Payment':
+        return Icons.account_balance;
+      case 'Insurance':
+        return Icons.security_rounded;
       default:
         return Icons.receipt_long;
     }

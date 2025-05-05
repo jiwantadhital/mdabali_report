@@ -1,4 +1,6 @@
 // ignore_for_file: deprecated_member_use
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -8,6 +10,7 @@ import 'package:mdabali_report/data/shared_preferences/shared_preferences.dart';
 import 'package:mdabali_report/resources/images_constants.dart';
 import 'package:mdabali_report/view/extracted_widgets/custom_text.dart';
 import 'package:mdabali_report/view/extracted_widgets/logout_dialog.dart';
+import 'package:shimmer/shimmer.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({super.key});
@@ -19,9 +22,6 @@ class CustomDrawer extends StatefulWidget {
 class _CustomDrawerState extends State<CustomDrawer> {
   bool _isSettingsExpanded = false;
 
-  // Static values for user information
-  final String _userName = "Aakash Sah";
-  final String _userImagePath = ImagesConstants.mdabaliLogo;
   final bool isDarkmode = true;
   // Handle theme change internally
   void _handleThemeChange(ThemeMode mode) {
@@ -62,10 +62,47 @@ class _CustomDrawerState extends State<CustomDrawer> {
               child: Column(
                 children: [
                   SizedBox(height: 40), // For safe area
-                  CircleAvatar(
-                    radius: 40,
-                    backgroundColor: colorScheme.onSecondary,
-                    backgroundImage: AssetImage(_userImagePath),
+                  BlocBuilder<InitBloc, InitState>(
+                    builder: (context, state) {
+                      if (state is InitLoading) {
+                        var colorScheme = Theme.of(context).colorScheme;
+                        var brightness = Theme.of(context).brightness;
+                        Color baseColor = brightness == Brightness.light
+                            ? colorScheme.surfaceContainerHighest
+                                .withOpacity(0.5)
+                            : colorScheme.surfaceContainerHighest
+                                .withOpacity(0.3);
+                        Color highlightColor = brightness == Brightness.light
+                            ? colorScheme.onSurface
+                            : colorScheme.onSurface.withOpacity(0.6);
+                        return Shimmer.fromColors(
+                          baseColor: baseColor,
+                          highlightColor: highlightColor,
+                          child: Container(
+                            height: 80,
+                            width: 80,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                            ),
+                          ),
+                        );
+                      } else if (state is InitLoaded) {
+                        return CircleAvatar(
+                            radius: 50,
+                            backgroundColor: colorScheme.onSecondary,
+                            backgroundImage: MemoryImage(
+                              Uint8List.fromList(state.imageBytes!),
+                            ));
+                      } else {
+                        return CircleAvatar(
+                          radius: 40,
+                          backgroundColor: colorScheme.onSecondary,
+                          backgroundImage:
+                              AssetImage(ImagesConstants.mdabaliLogo),
+                        );
+                      }
+                    },
                   ),
                   SizedBox(height: 12),
                   CustomText(

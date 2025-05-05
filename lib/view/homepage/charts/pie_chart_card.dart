@@ -7,6 +7,7 @@ import 'package:mdabali_report/data/shared_preferences/shared_preferences.dart';
 import 'package:mdabali_report/resources/colors.dart';
 import 'package:mdabali_report/view/extracted_widgets/custom_text.dart';
 import 'package:mdabali_report/view/extracted_widgets/date_range_picker_card.dart';
+import 'package:mdabali_report/view/extracted_widgets/nepali_date_range_picker_card.dart';
 import 'package:mdabali_report/view/homepage/charts/pie_chart_shimmer.dart';
 
 class PieChartCard extends StatefulWidget {
@@ -134,13 +135,13 @@ class _PieChartCardState extends State<PieChartCard> {
                       child: GestureDetector(
                         onTap: () async {
                           final range =
-                              await ThreeMonthRangePicker.show(context);
+                              await NepaliDateRangePicker.show(context);
                           if (range != null) {
                             // Format the start and end dates to 'yyyy-MM-dd' format
                             String startFormatted = DateFormat('yyyy-MM-dd')
-                                .format(range.startDate!);
+                                .format(range.start);
                             String endFormatted = DateFormat('yyyy-MM-dd')
-                                .format(range.endDate ?? range.startDate!);
+                                .format(range.end ?? range.start);
                             // ignore: use_build_context_synchronously
                             context.read<SummaryReportBloc>().add(
                                 FetchSummaryReport(

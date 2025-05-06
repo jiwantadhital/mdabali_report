@@ -215,10 +215,11 @@ class _NepaliCalendar extends StatelessWidget {
     final difference = nextMonth.difference(month);
     return difference.inDays;
   }
+
   bool isSameDay(nepali.NepaliDateTime? a, nepali.NepaliDateTime? b) {
-  if (a == null || b == null) return false;
-  return a.year == b.year && a.month == b.month && a.day == b.day;
-}
+    if (a == null || b == null) return false;
+    return a.year == b.year && a.month == b.month && a.day == b.day;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -259,10 +260,11 @@ class _NepaliCalendar extends StatelessWidget {
       final isInRange = range != null &&
           date.isAfter(range!.start) &&
           date.isBefore(range!.end);
-    //   final isStartOrEnd =(tempStart != null && tempStart == date) ||
-    // (range != null && (range!.start == date || range!.end == date));
-    final isStartOrEnd = isSameDay(tempStart, date) ||
-    (range != null && (isSameDay(range!.start, date) || isSameDay(range!.end, date)));
+      //   final isStartOrEnd =(tempStart != null && tempStart == date) ||
+      // (range != null && (range!.start == date || range!.end == date));
+      final isStartOrEnd = isSameDay(tempStart, date) ||
+          (range != null &&
+              (isSameDay(range!.start, date) || isSameDay(range!.end, date)));
 
       dayWidgets.add(
         GestureDetector(
@@ -271,7 +273,7 @@ class _NepaliCalendar extends StatelessWidget {
             margin: const EdgeInsets.all(2),
             decoration: BoxDecoration(
               color: isStartOrEnd
-                  ?colorScheme.primary
+                  ? colorScheme.primary
                   : isInRange
                       ? colorScheme.primary.withValues(alpha: 0.2)
                       : null,
@@ -282,7 +284,7 @@ class _NepaliCalendar extends StatelessWidget {
                 '$day',
                 style: TextStyle(
                   color: isStartOrEnd
-                      ? Colors.black
+                      ? Colors.white
                       : isDisabled
                           ? colorScheme.onSurface.withValues(alpha: 0.4)
                           : colorScheme.onSurface,

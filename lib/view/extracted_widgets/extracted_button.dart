@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables, deprecated_member_use
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -8,7 +10,7 @@ class LoginButton extends StatelessWidget {
   final onPress, text, color, textcolor, isFull, isLoading, isNewButton, icon;
   final double? padBot;
   const LoginButton(
-      {Key? key,
+      {super.key,
       this.onPress,
       this.text,
       this.color,
@@ -17,8 +19,7 @@ class LoginButton extends StatelessWidget {
       this.isFull = true,
       this.isLoading = false,
       this.isNewButton = false,
-      this.padBot})
-      : super(key: key);
+      this.padBot});
 
   @override
   Widget build(BuildContext context) {
@@ -94,4 +95,3 @@ class LoginButton extends StatelessWidget {
     );
   }
 }
- 

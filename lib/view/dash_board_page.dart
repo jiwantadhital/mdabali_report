@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:mdabali_report/bloc/five_month_data_bloc/bloc/five_month_data_bloc.dart';
 import 'package:mdabali_report/bloc/init_bloc/bloc/init_bloc.dart';
 import 'package:mdabali_report/bloc/monthly_aggregate_bloc/bloc/monthly_aggregate_bloc.dart';
-import 'package:mdabali_report/bloc/summary_report_bloc/bloc/summary_report_bloc.dart';
 import 'package:mdabali_report/resources/colors.dart';
 import 'package:mdabali_report/view/extracted_widgets/custom_drawer.dart';
 import 'package:mdabali_report/view/extracted_widgets/custom_text.dart';
@@ -31,7 +30,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
     String todayDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
     DateTime now = DateTime.now();
     DateTime oneMonthAgo = DateTime(now.year, now.month - 1, now.day);
-    String dateFrom = DateFormat('yyyy-MM-dd').format(oneMonthAgo);
+    DateFormat('yyyy-MM-dd').format(oneMonthAgo);
 
     context.read<InitBloc>().add(FetchInitData());
     context.read<MonthlyAggregateBloc>().add(FetchMonthlyAggregate());

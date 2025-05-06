@@ -151,8 +151,8 @@ class _PieChartCardState extends State<PieChartCard> {
                             // Format the start and end dates to 'yyyy-MM-dd' format
                             String startFormatted =
                                 DateFormat('yyyy-MM-dd').format(range.start);
-                            String endFormatted = DateFormat('yyyy-MM-dd')
-                                .format(range.end ?? range.start);
+                            String endFormatted =
+                                DateFormat('yyyy-MM-dd').format(range.end);
                             // ignore: use_build_context_synchronously
                             context.read<SummaryReportBloc>().add(
                                 FetchSummaryReport(

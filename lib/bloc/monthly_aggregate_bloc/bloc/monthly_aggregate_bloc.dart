@@ -27,7 +27,7 @@ class MonthlyAggregateBloc
       //       : emit(MonthlyAggregateError(data.message ?? 'Something went wrong'));
     } catch (e) {
       emit(MonthlyAggregateError(e.toString()));
-      print('error : ${e}');
+      print('error : $e');
     }
   }
 }

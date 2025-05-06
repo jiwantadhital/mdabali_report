@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
@@ -5,7 +7,8 @@ import 'package:mdabali_report/view/extracted_widgets/custom_text.dart';
 import 'package:pinput/pinput.dart';
 
 class CustomPinput extends StatefulWidget {
-  CustomPinput({
+  const CustomPinput({
+    super.key,
     required this.pinController,
     this.isShow = false,
     this.isForgot = false,
@@ -69,7 +72,7 @@ class _CustomPinputState extends State<CustomPinput> {
             textStyle: TextStyle(fontSize: 18.dp, color: theme.onSurface),
             decoration: BoxDecoration(
               color: theme.surface,
-            //  boxShadow: [kBoxShadow],
+              //  boxShadow: [kBoxShadow],
               borderRadius: BorderRadius.circular(4),
               border: Border.all(
                 color: widget.color ?? theme.outlineVariant,
@@ -118,9 +121,7 @@ class _CustomPinputState extends State<CustomPinput> {
                                 });
                               },
                               child: CustomText(
-                                text: isVisible
-                                    ? ''
-                                    : '',
+                                text: isVisible ? '' : '',
                                 color: Theme.of(context).primaryColor,
                                 fontSize: 13.dp,
                                 weight: FontWeight.w500,
@@ -149,9 +150,7 @@ class _CustomPinputState extends State<CustomPinput> {
                               });
                             },
                             child: CustomText(
-                              text: isVisible
-                                  ? ''
-                                  : '',
+                              text: isVisible ? '' : '',
                               color: Theme.of(context).primaryColor,
                               fontSize: 13.dp,
                               weight: FontWeight.w500,

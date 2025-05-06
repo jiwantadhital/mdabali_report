@@ -21,10 +21,10 @@ class MonthlyAggregateBloc
     try {
       final data = await repository.fetchMonthlyAggregate();
       print('data: $data');
-      emit(MonthlyAggregateLoaded(data));
-      //   data.status == true
-      //       ? emit(MonthlyAggregateLoaded(data))
-      //       : emit(MonthlyAggregateError(data.message ?? 'Something went wrong'));
+      //   emit(MonthlyAggregateLoaded(data));
+      data.status == true
+          ? emit(MonthlyAggregateLoaded(data))
+          : emit(MonthlyAggregateError(data.message ?? 'Something went wrong'));
     } catch (e) {
       emit(MonthlyAggregateError(e.toString()));
       print('error : $e');

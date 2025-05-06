@@ -144,16 +144,16 @@ class _NepaliDatePickerState extends State<NepaliDatePicker> {
               onDaySelected: _onDaySelected,
             ),
             const SizedBox(height: 8),
-            if (_range != null)
-              CustomText(
-                  text:
-                      'Selected Date: ${_range!.start.format('yyyy-MM-dd')} to ${_range!.end.format('yyyy-MM-dd')}',
-                  color: Theme.of(context).colorScheme.primary)
-            else if (_tempStart != null)
-              CustomText(
-                text:
-                    'Selected Date: ${_tempStart!.format('yyyy-MM-dd')} (Select end date)',
-              ),
+            // if (_range != null)
+            //   CustomText(
+            //       text:
+            //           'Selected Date: ${_range!.start.format('yyyy-MM-dd')} to ${_range!.end.format('yyyy-MM-dd')}',
+            //       color: Theme.of(context).colorScheme.primary)
+            // else if (_tempStart != null)
+            //   CustomText(
+            //     text:
+            //         'Selected Date: ${_tempStart!.format('yyyy-MM-dd')} (Select end date)',
+            //   ),
             if (_error != null)
               Padding(
                 padding: const EdgeInsets.only(top: 8),
@@ -215,6 +215,10 @@ class _NepaliCalendar extends StatelessWidget {
     final difference = nextMonth.difference(month);
     return difference.inDays;
   }
+  bool isSameDay(nepali.NepaliDateTime? a, nepali.NepaliDateTime? b) {
+  if (a == null || b == null) return false;
+  return a.year == b.year && a.month == b.month && a.day == b.day;
+}
 
   @override
   Widget build(BuildContext context) {
@@ -251,9 +255,10 @@ class _NepaliCalendar extends StatelessWidget {
       final isInRange = range != null &&
           date.isAfter(range!.start) &&
           date.isBefore(range!.end);
-      final isStartOrEnd =
-          (range != null && (range!.start == date || range!.end == date)) ||
-              (tempStart != null && tempStart == date);
+    //   final isStartOrEnd =(tempStart != null && tempStart == date) ||
+    // (range != null && (range!.start == date || range!.end == date));
+    final isStartOrEnd = isSameDay(tempStart, date) ||
+    (range != null && (isSameDay(range!.start, date) || isSameDay(range!.end, date)));
 
       dayWidgets.add(
         GestureDetector(
@@ -262,9 +267,8 @@ class _NepaliCalendar extends StatelessWidget {
             margin: const EdgeInsets.all(2),
             decoration: BoxDecoration(
               color: isStartOrEnd
-                  ? colorScheme.primary
+                  ?colorScheme.primary
                   : isInRange
-                      // ignore: deprecated_member_use
                       ? colorScheme.primary.withOpacity(0.2)
                       : null,
               shape: BoxShape.circle,
@@ -274,9 +278,8 @@ class _NepaliCalendar extends StatelessWidget {
                 '$day',
                 style: TextStyle(
                   color: isStartOrEnd
-                      ? colorScheme.onPrimary
+                      ? Colors.black
                       : isDisabled
-                          // ignore: deprecated_member_use
                           ? colorScheme.onSurface.withOpacity(0.4)
                           : colorScheme.onSurface,
                 ),

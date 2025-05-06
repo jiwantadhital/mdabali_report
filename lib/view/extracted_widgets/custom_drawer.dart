@@ -39,7 +39,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
   Widget build(BuildContext context) {
     // Get colorScheme from the current theme
     final colorScheme = Theme.of(context).colorScheme;
-
+    final controller = Get.find<ThemeController>();
     return Drawer(
       backgroundColor: colorScheme.surface,
       child: ListView(
@@ -192,34 +192,39 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
           // Expandable theme settings
           if (_isSettingsExpanded) ...[
-            // Light theme option
             ListTile(
-                contentPadding: EdgeInsets.only(left: 56, right: 16),
-                leading: Icon(Icons.light_mode, color: colorScheme.primary),
-                title: CustomText(text: "Light Theme"),
-                onTap: () {
-                  _handleThemeChange(ThemeMode.light);
-                }),
-
-            // Dark theme option
+              contentPadding: EdgeInsets.only(left: 56, right: 16),
+              leading: Icon(Icons.light_mode, color: colorScheme.primary),
+              title: CustomText(text: "Light Theme"),
+              trailing: controller.themeMode.value == ThemeMode.light
+                  ? Icon(Icons.check, color: colorScheme.primary)
+                  : null,
+              onTap: () {
+                _handleThemeChange(ThemeMode.light);
+              },
+            ),
             ListTile(
-                contentPadding: EdgeInsets.only(left: 56, right: 16),
-                leading: Icon(Icons.dark_mode, color: colorScheme.primary),
-                title: CustomText(text: "Dark Theme"),
-                onTap: () {
-                  _handleThemeChange(ThemeMode.dark);
-                }),
-
-            // System theme option
+              contentPadding: EdgeInsets.only(left: 56, right: 16),
+              leading: Icon(Icons.dark_mode, color: colorScheme.primary),
+              title: CustomText(text: "Dark Theme"),
+              trailing: controller.themeMode.value == ThemeMode.dark
+                  ? Icon(Icons.check, color: colorScheme.primary)
+                  : null,
+              onTap: () {
+                _handleThemeChange(ThemeMode.dark);
+              },
+            ),
             ListTile(
               contentPadding: EdgeInsets.only(left: 56, right: 16),
               leading: Icon(Icons.settings_system_daydream_rounded,
                   color: colorScheme.primary),
               title: CustomText(text: "System Theme"),
+              trailing: controller.themeMode.value == ThemeMode.system
+                  ? Icon(Icons.check, color: colorScheme.primary)
+                  : null,
               onTap: () => _handleThemeChange(ThemeMode.system),
             ),
           ],
-
           Padding(
             padding: EdgeInsets.symmetric(vertical: 0),
             child: Container(

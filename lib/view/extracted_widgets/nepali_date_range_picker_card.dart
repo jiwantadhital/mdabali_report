@@ -215,13 +215,7 @@ class _NepaliCalendar extends StatelessWidget {
     for (var day in weekdays) {
       dayWidgets.add(
         Center(
-          child: Text(
-            day,
-            style: TextStyle(
-              color: colorScheme.onSurface,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          child:CustomText(text: day,weight: FontWeight.w500,)
         ),
       );
     }
@@ -234,7 +228,7 @@ class _NepaliCalendar extends StatelessWidget {
     // Days of the month
     for (var day = 1; day <= daysInMonth; day++) {
       final date = nepali.NepaliDateTime(currentMonth.year, currentMonth.month, day);
-      final isDisabled = date.isBefore(today.subtract(const Duration(days: 365 * 5))) ||
+      final isDisabled = date.isBefore(today.subtract(const Duration(days: 365))) ||
           date.isAfter(today);
       final isInRange = range != null &&
           date.isAfter(range!.start) &&
@@ -251,6 +245,7 @@ class _NepaliCalendar extends StatelessWidget {
               color: isStartOrEnd
                   ? colorScheme.primary
                   : isInRange
+                      // ignore: deprecated_member_use
                       ? colorScheme.primary.withOpacity(0.2)
                       : null,
               shape: BoxShape.circle,
@@ -262,6 +257,7 @@ class _NepaliCalendar extends StatelessWidget {
                   color: isStartOrEnd
                       ? colorScheme.onPrimary
                       : isDisabled
+                          // ignore: deprecated_member_use
                           ? colorScheme.onSurface.withOpacity(0.4)
                           : colorScheme.onSurface,
                 ),

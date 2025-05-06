@@ -11,11 +11,11 @@ class ShimmerTransactionCard extends StatelessWidget {
     var colorScheme = Theme.of(context).colorScheme;
     var brightness = Theme.of(context).brightness;
     Color baseColor = brightness == Brightness.light
-        ? colorScheme.surfaceContainerHighest.withOpacity(0.5)
-        : colorScheme.surfaceContainerHighest.withOpacity(0.3);
+        ? colorScheme.surfaceContainerHighest.withValues(alpha: 0.5)
+        : colorScheme.surfaceContainerHighest.withValues(alpha: 0.3);
     Color highlightColor = brightness == Brightness.light
         ? colorScheme.onSurface
-        : colorScheme.onSurface.withOpacity(0.6);
+        : colorScheme.onSurface.withValues(alpha: 0.6);
 
     return Container(
       margin: EdgeInsets.symmetric(vertical: 12),
@@ -30,14 +30,14 @@ class ShimmerTransactionCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: Color(0xFF4285F4).withOpacity(0.1),
+                color: Color(0xFF4285F4).withValues(alpha: 0.1),
                 offset: Offset(0, 4),
                 blurRadius: 12,
                 spreadRadius: 0,
               ),
             ],
             border: Border.all(
-              color: colorScheme.primary.withOpacity(0.15),
+              color: colorScheme.primary.withValues(alpha: 0.15),
               width: 1.5,
             ),
           ),
@@ -112,7 +112,7 @@ class ShimmerTransactionCard extends StatelessWidget {
     return Container(
       height: 50,
       width: 1,
-      color: Colors.grey.withOpacity(0.2),
+      color: Colors.grey.withValues(alpha: 0.2),
     );
   }
 

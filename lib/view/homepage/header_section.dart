@@ -130,7 +130,7 @@ class _HeaderSectionState extends State<HeaderSection> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Color(0xFF4285F4).withOpacity(0.1),
+            color: Color(0xFF4285F4).withValues(alpha: 0.1),
             offset: Offset(0, 4),
             blurRadius: 12,
             spreadRadius: 0,
@@ -195,7 +195,7 @@ class _HeaderSectionState extends State<HeaderSection> {
                             decoration: BoxDecoration(
                               color: isPositive
                                   ? colorScheme.tertiaryFixedDim
-                                  : colorScheme.error.withOpacity(0.1),
+                                  : colorScheme.error.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Row(
@@ -232,7 +232,7 @@ class _HeaderSectionState extends State<HeaderSection> {
                             decoration: BoxDecoration(
                               color: isPositive
                                   ? colorScheme.tertiaryFixedDim
-                                  : colorScheme.error.withOpacity(0.1),
+                                  : colorScheme.error.withValues(alpha: 0.1),
                               shape: BoxShape.circle,
                             ),
                             child: Icon(
@@ -264,12 +264,12 @@ class _HeaderSectionState extends State<HeaderSection> {
 
     // Determine shimmer colors based on theme brightness
     Color baseColor = brightness == Brightness.light
-        ? colorScheme.surfaceContainerHighest.withOpacity(0.5)
-        : colorScheme.surfaceContainerHighest.withOpacity(0.3);
+        ? colorScheme.surfaceContainerHighest.withValues(alpha: 0.5)
+        : colorScheme.surfaceContainerHighest.withValues(alpha: 0.3);
 
     Color highlightColor = brightness == Brightness.light
         ? colorScheme.onSurface
-        : colorScheme.onSurface.withOpacity(0.6);
+        : colorScheme.onSurface.withValues(alpha: 0.6);
 
     return Container(
       margin: EdgeInsets.symmetric(vertical: 12),
@@ -278,7 +278,7 @@ class _HeaderSectionState extends State<HeaderSection> {
         boxShadow: [
           BoxShadow(
             color: Color(0xFF4285F4)
-                .withOpacity(brightness == Brightness.light ? 0.1 : 0.2),
+                .withValues(alpha: brightness == Brightness.light ? 0.1 : 0.2),
             offset: Offset(0, 4),
             blurRadius: 12,
             spreadRadius: 0,

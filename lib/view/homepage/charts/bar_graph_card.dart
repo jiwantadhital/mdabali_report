@@ -83,7 +83,8 @@ class _BarGraphCardState extends State<BarGraphCard> {
                             FetchSummaryReport(
                                 dateFrom: startFormatted,
                                 dateTo: endFormatted,
-                                clientId: UserSimplePreferences.getClientId().toString()));
+                                clientId: UserSimplePreferences.getClientId()
+                                    .toString()));
                       }
                     },
                     child: Container(
@@ -241,11 +242,11 @@ class ShimmerBarCard extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final brightness = Theme.of(context).brightness;
     final Color baseColor = brightness == Brightness.light
-        ? colorScheme.surfaceContainerHighest.withOpacity(0.5)
-        : colorScheme.surfaceContainerHighest.withOpacity(0.3);
+        ? colorScheme.surfaceContainerHighest.withValues(alpha: 0.5)
+        : colorScheme.surfaceContainerHighest.withValues(alpha: 0.3);
     final Color highlightColor = brightness == Brightness.light
         ? colorScheme.onSurface
-        : colorScheme.onSurface.withOpacity(0.6);
+        : colorScheme.onSurface.withValues(alpha: 0.6);
 
     return Shimmer.fromColors(
       baseColor: baseColor,
@@ -256,7 +257,7 @@ class ShimmerBarCard extends StatelessWidget {
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 5,
               offset: const Offset(0, 2),
             )

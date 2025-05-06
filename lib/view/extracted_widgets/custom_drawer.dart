@@ -50,7 +50,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
           Card(
             margin: EdgeInsets.all(0),
             elevation: 0,
-            color: colorScheme.secondary.withOpacity(0.9),
+            color: colorScheme.secondary.withValues(alpha: 0.9),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(16),
@@ -69,12 +69,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         var brightness = Theme.of(context).brightness;
                         Color baseColor = brightness == Brightness.light
                             ? colorScheme.surfaceContainerHighest
-                                .withOpacity(0.5)
+                                .withValues(alpha: 0.5)
                             : colorScheme.surfaceContainerHighest
-                                .withOpacity(0.3);
+                                .withValues(alpha: 0.3);
                         Color highlightColor = brightness == Brightness.light
                             ? colorScheme.onSurface
-                            : colorScheme.onSurface.withOpacity(0.6);
+                            : colorScheme.onSurface.withValues(alpha: 0.6);
                         return Shimmer.fromColors(
                           baseColor: baseColor,
                           highlightColor: highlightColor,
@@ -156,9 +156,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    Colors.blue.withOpacity(0),
-                    Colors.blue.withOpacity(0.5),
-                    Colors.blue.withOpacity(0),
+                    Colors.blue.withValues(alpha: 0),
+                    Colors.blue.withValues(alpha: 0.5),
+                    Colors.blue.withValues(alpha: 0),
                   ],
                   stops: [0.0, 0.5, 1.0],
                   begin: Alignment.centerLeft,
@@ -228,9 +228,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    Colors.blue.withOpacity(0),
-                    Colors.blue.withOpacity(0.5),
-                    Colors.blue.withOpacity(0),
+                    Colors.blue.withValues(alpha: 0),
+                    Colors.blue.withValues(alpha: 0.5),
+                    Colors.blue.withValues(alpha: 0),
                   ],
                   stops: [0.0, 0.5, 1.0],
                   begin: Alignment.centerLeft,

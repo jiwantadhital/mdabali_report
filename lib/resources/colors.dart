@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use, constant_identifier_names, non_constant_identifier_names
+// ignore_for_file:  constant_identifier_names, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -50,7 +50,7 @@ var lightColorScheme = ThemeData(
     outlineVariant: Color(0xFFDBE1E5),
 //success
     tertiary: Color(0xFF34C759),
-    tertiaryFixedDim: Color(0xFF34C759).withOpacity(0.1),
+    tertiaryFixedDim: Color(0xFF34C759).withValues(alpha: 0.1),
 //on_success
     onTertiary: Color(0xFFFFFFFF),
 //success_container
@@ -107,7 +107,7 @@ var darkColorScheme = ThemeData(
     outlineVariant: Color(0xFF3D3D3D),
 //success
     tertiary: Color(0xFF34C759),
-    tertiaryFixedDim: Color(0xFF34C759).withOpacity(0.1),
+    tertiaryFixedDim: Color(0xFF34C759).withValues(alpha: 0.1),
 //on_success
     onTertiary: Color(0xFFFFFFFF),
 //success_container
@@ -180,13 +180,13 @@ final formatter = NumberFormat('#,##,##0.00'); // to add commas between numbers
 const kAppbarColor = Color.fromRGBO(240, 242, 246, 1);
 
 var kBoxShadow = BoxShadow(
-    color: kShadow.withOpacity(.04),
+    color: kShadow.withValues(alpha: .04),
     offset: Offset(1, 1),
     spreadRadius: 1,
     blurRadius: 2);
 
 var kSheetShadow = BoxShadow(
-    color: kShadow.withOpacity(0.1),
+    color: kShadow.withValues(alpha: 0.1),
     offset: Offset(2, 0),
     spreadRadius: 6,
     blurRadius: 4);

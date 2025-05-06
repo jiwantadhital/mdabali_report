@@ -170,14 +170,14 @@ class _TransactionPageState extends State<TransactionPage> {
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: Color(0xFF4285F4).withOpacity(0.1),
+                color: Color(0xFF4285F4).withValues(alpha: 0.1),
                 offset: Offset(0, 4),
                 blurRadius: 12,
                 spreadRadius: 0,
               ),
             ],
             border: Border.all(
-              color: colorScheme.primary.withOpacity(0.15),
+              color: colorScheme.primary.withValues(alpha: 0.15),
               width: 1.5,
             ),
           ),
@@ -194,7 +194,8 @@ class _TransactionPageState extends State<TransactionPage> {
                         Container(
                           padding: EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: colorScheme.primaryFixedDim.withOpacity(0.1),
+                            color: colorScheme.primaryFixedDim
+                                .withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Icon(
@@ -220,7 +221,7 @@ class _TransactionPageState extends State<TransactionPage> {
                   //   Container(
                   //     padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   //     decoration: BoxDecoration(
-                  //       color: colorScheme.primaryFixedDim.withOpacity(0.1),
+                  //       color: colorScheme.primaryFixedDim.withValues(alpha:0.1),
                   //       borderRadius: BorderRadius.circular(20),
                   //     ),
                   //     child: Row(
@@ -288,7 +289,7 @@ class _TransactionPageState extends State<TransactionPage> {
     return Container(
       height: 50,
       width: 1,
-      color: Colors.grey.withOpacity(0.2),
+      color: Colors.grey.withValues(alpha: 0.2),
     );
   }
 

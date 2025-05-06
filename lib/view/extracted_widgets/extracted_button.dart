@@ -36,7 +36,7 @@ class LoginButton extends StatelessWidget {
           onPressed: isLoading ? null : onPress,
           style: ElevatedButton.styleFrom(
             disabledBackgroundColor: isLoading
-                ? Theme.of(context).primaryColor.withOpacity(0.4)
+                ? Theme.of(context).primaryColor.withValues(alpha: 0.4)
                 : Theme.of(context).disabledColor,
             elevation: 0,
             backgroundColor: color ?? Theme.of(context).primaryColor,

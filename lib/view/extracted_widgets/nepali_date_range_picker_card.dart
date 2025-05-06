@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:flutter/material.dart';
 import 'package:mdabali_report/view/extracted_widgets/custom_text.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart' as nepali;

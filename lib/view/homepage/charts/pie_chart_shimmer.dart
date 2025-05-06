@@ -12,12 +12,12 @@ class PieChartShimmer extends StatelessWidget {
     var brightness = Theme.of(context).brightness;
 
     Color baseColor = brightness == Brightness.light
-        ? colorScheme.surfaceContainerHighest.withOpacity(0.5)
-        : colorScheme.surfaceContainerHighest.withOpacity(0.3);
+        ? colorScheme.surfaceContainerHighest.withValues(alpha: 0.5)
+        : colorScheme.surfaceContainerHighest.withValues(alpha: 0.3);
 
     Color highlightColor = brightness == Brightness.light
         ? colorScheme.onSurface
-        : colorScheme.onSurface.withOpacity(0.6);
+        : colorScheme.onSurface.withValues(alpha: 0.6);
 
     return Card(
       elevation: 4,

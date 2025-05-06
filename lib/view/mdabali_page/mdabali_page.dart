@@ -109,7 +109,8 @@ class _MdabaliPageState extends State<MdabaliPage> {
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             decoration: BoxDecoration(
               border: Border.all(
-                  color: colorScheme.primary.withOpacity(0.3), width: 1.5),
+                  color: colorScheme.primary.withValues(alpha: 0.3),
+                  width: 1.5),
               borderRadius: BorderRadius.circular(24),
             ),
             child: ClipRRect(
@@ -125,7 +126,7 @@ class _MdabaliPageState extends State<MdabaliPage> {
                           membersLimit,
                           Icons.card_membership,
                           colorScheme.onSurface,
-                          iconBgColor: Colors.red.withOpacity(0.5),
+                          iconBgColor: Colors.red.withValues(alpha: 0.5),
                         ),
                         buildDivider(),
                         buildMetricRow(
@@ -133,7 +134,8 @@ class _MdabaliPageState extends State<MdabaliPage> {
                           verifiedUser,
                           Icons.verified_user_rounded,
                           colorScheme.onSurface,
-                          iconBgColor: Colors.greenAccent.withOpacity(0.5),
+                          iconBgColor:
+                              Colors.greenAccent.withValues(alpha: 0.5),
                         ),
                         buildDivider(),
                         buildMetricRow(
@@ -141,7 +143,8 @@ class _MdabaliPageState extends State<MdabaliPage> {
                           closedUser,
                           Icons.person_off_rounded,
                           colorScheme.onSurface,
-                          iconBgColor: Colors.deepOrangeAccent.withOpacity(0.5),
+                          iconBgColor:
+                              Colors.deepOrangeAccent.withValues(alpha: 0.5),
                         ),
                         buildDivider(),
                         buildMetricRow(
@@ -149,7 +152,8 @@ class _MdabaliPageState extends State<MdabaliPage> {
                           totalUser,
                           Icons.people_rounded,
                           colorScheme.onSurface,
-                          iconBgColor: Colors.amberAccent.withOpacity(0.5),
+                          iconBgColor:
+                              Colors.amberAccent.withValues(alpha: 0.5),
                           isLast: true,
                         ),
                         buildDivider(),
@@ -158,7 +162,7 @@ class _MdabaliPageState extends State<MdabaliPage> {
                           remainingLimit,
                           Icons.linear_scale_outlined,
                           colorScheme.onSurface,
-                          iconBgColor: Colors.cyan.withOpacity(0.5),
+                          iconBgColor: Colors.cyan.withValues(alpha: 0.5),
                           isLast: true,
                         ),
                       ],
@@ -178,7 +182,7 @@ class _MdabaliPageState extends State<MdabaliPage> {
               height: 100,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.blue.withOpacity(0.1),
+                color: Colors.blue.withValues(alpha: 0.1),
               ),
             ),
           ),
@@ -190,7 +194,7 @@ class _MdabaliPageState extends State<MdabaliPage> {
               height: 80,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.blue.withOpacity(0.1),
+                color: Colors.blue.withValues(alpha: 0.1),
               ),
             ),
           ),
@@ -220,11 +224,11 @@ class _MdabaliPageState extends State<MdabaliPage> {
                 Container(
                   padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: iconBgColor ?? Colors.white.withOpacity(0.2),
+                    color: iconBgColor ?? Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha: 0.1),
                         offset: Offset(0, 2),
                         blurRadius: 6,
                       ),
@@ -243,7 +247,7 @@ class _MdabaliPageState extends State<MdabaliPage> {
                     text: label,
                     fontSize: 15,
                     weight: FontWeight.w500,
-                    color: color.withOpacity(0.9),
+                    color: color.withValues(alpha: 0.9),
                   ),
                 )
               ],
@@ -253,10 +257,10 @@ class _MdabaliPageState extends State<MdabaliPage> {
           Container(
               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.1),
+                color: Colors.white.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: Colors.blue.withOpacity(0.1),
+                  color: Colors.blue.withValues(alpha: 0.1),
                   width: 1,
                 ),
               ),
@@ -280,9 +284,9 @@ class _MdabaliPageState extends State<MdabaliPage> {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Colors.blue.withOpacity(0),
-              Colors.blue.withOpacity(0.5),
-              Colors.blue.withOpacity(0),
+              Colors.blue.withValues(alpha: 0),
+              Colors.blue.withValues(alpha: 0.5),
+              Colors.blue.withValues(alpha: 0),
             ],
             stops: [0.0, 0.5, 1.0],
             begin: Alignment.centerLeft,

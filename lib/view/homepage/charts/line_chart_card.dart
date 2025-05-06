@@ -84,7 +84,8 @@ class LineChartCard extends StatelessWidget {
                           horizontalInterval: interval,
                           getDrawingHorizontalLine: (value) {
                             return FlLine(
-                              color: colorScheme.onSurface.withOpacity(0.3),
+                              color:
+                                  colorScheme.onSurface.withValues(alpha: 0.3),
                               strokeWidth: 1,
                             );
                           }),
@@ -171,12 +172,12 @@ class ShimmerLineChartCard extends StatelessWidget {
 
     // Shimmer colors based on theme brightness
     Color baseColor = brightness == Brightness.light
-        ? colorScheme.surfaceContainerHighest.withOpacity(0.5)
-        : colorScheme.surfaceContainerHighest.withOpacity(0.3);
+        ? colorScheme.surfaceContainerHighest.withValues(alpha: 0.5)
+        : colorScheme.surfaceContainerHighest.withValues(alpha: 0.3);
 
     Color highlightColor = brightness == Brightness.light
         ? colorScheme.onSurface
-        : colorScheme.onSurface.withOpacity(0.6);
+        : colorScheme.onSurface.withValues(alpha: 0.6);
 
     return Card(
       elevation: 4,

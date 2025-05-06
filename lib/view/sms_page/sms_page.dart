@@ -188,7 +188,8 @@ class _SmsPageState extends State<SmsPage> {
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             decoration: BoxDecoration(
               border: Border.all(
-                  color: colorScheme.primary.withOpacity(0.3), width: 1.5),
+                  color: colorScheme.primary.withValues(alpha: 0.3),
+                  width: 1.5),
               borderRadius: BorderRadius.circular(24),
             ),
             child: ClipRRect(
@@ -200,7 +201,7 @@ class _SmsPageState extends State<SmsPage> {
                     color: colorScheme.surfaceContainerHigh,
                     borderRadius: BorderRadius.circular(24),
                     border: Border.all(
-                      color: Colors.blue.withOpacity(0.1),
+                      color: Colors.blue.withValues(alpha: 0.1),
                       width: 1.5,
                     ),
                   ),
@@ -211,7 +212,8 @@ class _SmsPageState extends State<SmsPage> {
                         smsCount.toString(),
                         Icons.sms_outlined,
                         colorScheme.onSurface,
-                        iconBgColor: colorScheme.onSurface.withOpacity(0.15),
+                        iconBgColor:
+                            colorScheme.onSurface.withValues(alpha: 0.15),
                       ),
                       buildDivider(),
                       buildMetricRow(
@@ -219,7 +221,7 @@ class _SmsPageState extends State<SmsPage> {
                         'Rs $rate',
                         Icons.attach_money_outlined,
                         colorScheme.onSurface,
-                        iconBgColor: Colors.greenAccent.withOpacity(0.25),
+                        iconBgColor: Colors.greenAccent.withValues(alpha: 0.25),
                       ),
                       buildDivider(),
                       buildMetricRow(
@@ -227,7 +229,7 @@ class _SmsPageState extends State<SmsPage> {
                         NumberFormatter.formatAmount(totalAmount),
                         Icons.money,
                         colorScheme.onSurface,
-                        iconBgColor: Colors.redAccent.withOpacity(0.5),
+                        iconBgColor: Colors.redAccent.withValues(alpha: 0.5),
                       ),
                       buildDivider(),
                       buildMetricRow(
@@ -235,7 +237,7 @@ class _SmsPageState extends State<SmsPage> {
                         NumberFormatter.formatAmount(availableBalance),
                         Icons.balance,
                         colorScheme.onSurface,
-                        iconBgColor: Colors.amberAccent.withOpacity(0.5),
+                        iconBgColor: Colors.amberAccent.withValues(alpha: 0.5),
                         isLast: true,
                       ),
                     ],
@@ -254,7 +256,7 @@ class _SmsPageState extends State<SmsPage> {
               height: 100,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.blue.withOpacity(0.1),
+                color: Colors.blue.withValues(alpha: 0.1),
               ),
             ),
           ),
@@ -266,7 +268,7 @@ class _SmsPageState extends State<SmsPage> {
               height: 80,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.blue.withOpacity(0.1),
+                color: Colors.blue.withValues(alpha: 0.1),
               ),
             ),
           ),
@@ -293,7 +295,8 @@ class _SmsPageState extends State<SmsPage> {
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             decoration: BoxDecoration(
               border: Border.all(
-                  color: colorScheme.primary.withOpacity(0.3), width: 1.5),
+                  color: colorScheme.primary.withValues(alpha: 0.3),
+                  width: 1.5),
               borderRadius: BorderRadius.circular(20),
             ),
             child: ClipRRect(
@@ -309,7 +312,7 @@ class _SmsPageState extends State<SmsPage> {
                           transactionCount.toString(),
                           Icons.format_list_numbered_rtl_outlined,
                           colorScheme.onSurface,
-                          iconBgColor: Colors.redAccent.withOpacity(0.5),
+                          iconBgColor: Colors.redAccent.withValues(alpha: 0.5),
                         ),
                         buildDivider(),
                         buildMetricRow(
@@ -317,7 +320,8 @@ class _SmsPageState extends State<SmsPage> {
                           NumberFormatter.formatAmount(transactionAmount),
                           CupertinoIcons.creditcard,
                           colorScheme.onSurface,
-                          iconBgColor: colorScheme.onSurface.withOpacity(0.15),
+                          iconBgColor:
+                              colorScheme.onSurface.withValues(alpha: 0.15),
                         ),
                         buildDivider(),
                         buildMetricRow(
@@ -325,7 +329,8 @@ class _SmsPageState extends State<SmsPage> {
                           NumberFormatter.formatAmount(remainingBalance),
                           Icons.balance,
                           colorScheme.onSurface,
-                          iconBgColor: Colors.greenAccent.withOpacity(0.25),
+                          iconBgColor:
+                              Colors.greenAccent.withValues(alpha: 0.25),
                         ),
                       ],
                     ),
@@ -344,7 +349,7 @@ class _SmsPageState extends State<SmsPage> {
               height: 100,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.blue.withOpacity(0.1),
+                color: Colors.blue.withValues(alpha: 0.1),
               ),
             ),
           ),
@@ -356,7 +361,7 @@ class _SmsPageState extends State<SmsPage> {
               height: 80,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.blue.withOpacity(0.1),
+                color: Colors.blue.withValues(alpha: 0.1),
               ),
             ),
           ),
@@ -386,11 +391,11 @@ class _SmsPageState extends State<SmsPage> {
                 Container(
                   padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: iconBgColor ?? Colors.white.withOpacity(0.2),
+                    color: iconBgColor ?? Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha: 0.1),
                         offset: Offset(0, 2),
                         blurRadius: 6,
                       ),
@@ -409,7 +414,7 @@ class _SmsPageState extends State<SmsPage> {
                     text: label,
                     fontSize: 15,
                     weight: FontWeight.w500,
-                    color: color.withOpacity(0.9),
+                    color: color.withValues(alpha: 0.9),
                   ),
                 )
               ],
@@ -419,10 +424,10 @@ class _SmsPageState extends State<SmsPage> {
           Container(
               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.1),
+                color: Colors.white.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: Colors.blue.withOpacity(0.1),
+                  color: Colors.blue.withValues(alpha: 0.1),
                   width: 1,
                 ),
               ),
@@ -446,9 +451,9 @@ class _SmsPageState extends State<SmsPage> {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Colors.blue.withOpacity(0),
-              Colors.blue.withOpacity(0.5),
-              Colors.blue.withOpacity(0),
+              Colors.blue.withValues(alpha: 0),
+              Colors.blue.withValues(alpha: 0.5),
+              Colors.blue.withValues(alpha: 0),
             ],
             stops: [0.0, 0.5, 1.0],
             begin: Alignment.centerLeft,
@@ -471,12 +476,12 @@ class ShimmerTopupCard extends StatelessWidget {
     var brightness = Theme.of(context).brightness;
 
     Color baseColor = brightness == Brightness.light
-        ? colorScheme.surfaceContainerHighest.withOpacity(0.5)
-        : colorScheme.surfaceContainerHighest.withOpacity(0.3);
+        ? colorScheme.surfaceContainerHighest.withValues(alpha: 0.5)
+        : colorScheme.surfaceContainerHighest.withValues(alpha: 0.3);
 
     Color highlightColor = brightness == Brightness.light
         ? colorScheme.onSurface
-        : colorScheme.onSurface.withOpacity(0.6);
+        : colorScheme.onSurface.withValues(alpha: 0.6);
 
     return Shimmer.fromColors(
       baseColor: baseColor,

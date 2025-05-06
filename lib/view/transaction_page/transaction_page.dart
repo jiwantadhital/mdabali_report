@@ -1,6 +1,5 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -38,10 +37,10 @@ class _TransactionPageState extends State<TransactionPage> {
                     // Format the start and end dates to 'yyyy-MM-dd' format
                     String startFormatted =
                         DateFormat('yyyy-MM-dd').format(range.start);
-                        print(startFormatted);
-                    String endFormatted = DateFormat('yyyy-MM-dd')
-                        .format(range.end ?? range.start);
-                        print(endFormatted);
+                    print(startFormatted);
+                    String endFormatted =
+                        DateFormat('yyyy-MM-dd').format(range.end);
+                    print(endFormatted);
                     // ignore: use_build_context_synchronously
                     context.read<SummaryReportBloc>().add(FetchSummaryReport(
                         dateFrom: startFormatted,

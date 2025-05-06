@@ -145,14 +145,20 @@ class _HomePageState extends State<HomePage> {
                     );
                   } else if (state is InitLoaded) {
                     final initData = state.initModel.data;
-                    final clientId=initData!.clientId;
-                     String todayDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
-                       DateTime now = DateTime.now();
-    DateTime oneMonthAgo = DateTime(now.year, now.month - 1, now.day);
-                       String dateFrom = DateFormat('yyyy-MM-dd').format(oneMonthAgo);
+                    final clientId = initData!.clientId;
+                    String todayDate =
+                        DateFormat('yyyy-MM-dd').format(DateTime.now());
+                    DateTime now = DateTime.now();
+                    DateTime oneMonthAgo =
+                        DateTime(now.year, now.month - 1, now.day);
+                    String dateFrom =
+                        DateFormat('yyyy-MM-dd').format(oneMonthAgo);
                     UserSimplePreferences.setClientId(clientId.toString());
                     context.read<SummaryReportBloc>().add(FetchSummaryReport(
-                      dateFrom: dateFrom, dateTo: todayDate, clientId: UserSimplePreferences.getClientId().toString()));
+                        dateFrom: dateFrom,
+                        dateTo: todayDate,
+                        clientId:
+                            UserSimplePreferences.getClientId().toString()));
                     print('Client Id; ${UserSimplePreferences.getClientId()}');
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -170,7 +176,7 @@ class _HomePageState extends State<HomePage> {
                         Expanded(
                           child: CustomText(
                             text:
-                                initData?.clientName ?? 'Client name not found',
+                                initData.clientName ?? 'Client name not found',
                             maxLine: 2,
                             textAlign: TextAlign.start,
                             textOverflow: TextOverflow.ellipsis,

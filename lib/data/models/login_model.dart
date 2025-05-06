@@ -18,7 +18,7 @@ class LoginModel {
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
-    data['isOTPRequired'] = this.isOTPRequired;
+    data['isOTPRequired'] = isOTPRequired;
     data['message'] = message;
     data['status'] = status;
     return data;

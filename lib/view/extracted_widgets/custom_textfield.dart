@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables, annotate_overrides, overridden_fields
+
 import 'package:flutter/material.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:mdabali_report/resources/images_constants.dart';
@@ -33,10 +35,12 @@ class CustomTextField extends StatefulWidget {
       contentPadding,
       onFocusChange;
 
+  // ignore: use_key_in_widget_constructors
   const CustomTextField(
       {this.autoFocus = false,
       this.key,
       this.showCount = false,
+      // ignore: avoid_init_to_null
       this.onSubmit = null,
       this.onPress,
       this.maxLines = 1,
@@ -57,6 +61,7 @@ class CustomTextField extends StatefulWidget {
       this.onchange,
       this.focusedColor,
       this.textInputAction = TextInputAction.next,
+      // ignore: avoid_init_to_null
       this.prefixIcon = null,
       this.isFloating = false,
       this.textCap = TextCapitalization.none,

@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:mdabali_report/view/extracted_widgets/custom_text.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart' as nepali;
@@ -14,7 +16,7 @@ class NepaliDateRangePicker {
       ),
       builder: (context) => const NepaliDatePicker(),
     );
-    
+
     if (nepaliRange != null) {
       // Convert Nepali dates to Gregorian
       final startGregorian = nepaliRange.start.toDateTime();
@@ -24,6 +26,7 @@ class NepaliDateRangePicker {
     return null;
   }
 }
+
 class NepaliDatePicker extends StatefulWidget {
   const NepaliDatePicker({super.key});
 
@@ -57,13 +60,16 @@ class _NepaliDatePickerState extends State<NepaliDatePicker> {
         final start = _tempStart!;
         final limits = _getLimits(start);
 
-        if (selectedDate.isBefore(limits['min']!) || selectedDate.isAfter(limits['max']!)) {
+        if (selectedDate.isBefore(limits['min']!) ||
+            selectedDate.isAfter(limits['max']!)) {
           _error = 'Select within ±3 months of start date';
         } else {
           if (selectedDate.isBefore(start)) {
-            _range = nepali.NepaliDateTimeRange(start: selectedDate, end: start);
+            _range =
+                nepali.NepaliDateTimeRange(start: selectedDate, end: start);
           } else {
-            _range = nepali.NepaliDateTimeRange(start: start, end: selectedDate);
+            _range =
+                nepali.NepaliDateTimeRange(start: start, end: selectedDate);
           }
           _tempStart = null;
           _error = null;
@@ -71,22 +77,25 @@ class _NepaliDatePickerState extends State<NepaliDatePicker> {
       }
     });
   }
+
   void _changeMonth(int delta) {
     setState(() {
-     final totalMonths= (_currentMonth.year*12)+ _currentMonth.month -1 +delta;
-     final newYear= totalMonths~/12;
-     final newMonth= (totalMonths%12)+1;
+      final totalMonths =
+          (_currentMonth.year * 12) + _currentMonth.month - 1 + delta;
+      final newYear = totalMonths ~/ 12;
+      final newMonth = (totalMonths % 12) + 1;
 
-     final newDate= nepali.NepaliDateTime(newYear,newMonth,1);
-     if(newDate.isAfter(_today.subtract(const Duration(days: 365*5)))&& newDate.isBefore(_today.add(const Duration(days: 12)))){
-      _currentMonth=newDate;
-     }
+      final newDate = nepali.NepaliDateTime(newYear, newMonth, 1);
+      if (newDate.isAfter(_today.subtract(const Duration(days: 365 * 5))) &&
+          newDate.isBefore(_today.add(const Duration(days: 12)))) {
+        _currentMonth = newDate;
+      }
     });
-    
   }
+
   @override
   Widget build(BuildContext context) {
-  final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = Theme.of(context).colorScheme;
     return Theme(
       data: Theme.of(context).copyWith(
         colorScheme: ColorScheme.dark(
@@ -113,9 +122,15 @@ class _NepaliDatePickerState extends State<NepaliDatePicker> {
                   onPressed: () => _changeMonth(-1),
                   icon: const Icon(Icons.chevron_left),
                 ),
-                CustomText(text: '${_currentMonth.format('MMMM yyyy')} ',fontSize: 20,weight: FontWeight.bold,),
+                CustomText(
+                  text: '${_currentMonth.format('MMMM yyyy')} ',
+                  fontSize: 20,
+                  weight: FontWeight.bold,
+                ),
                 IconButton(
-                  onPressed: _currentMonth.isBefore(_today) ? () => _changeMonth(1) : null,
+                  onPressed: _currentMonth.isBefore(_today)
+                      ? () => _changeMonth(1)
+                      : null,
                   icon: const Icon(Icons.chevron_right),
                 ),
               ],
@@ -131,13 +146,13 @@ class _NepaliDatePickerState extends State<NepaliDatePicker> {
             const SizedBox(height: 8),
             if (_range != null)
               CustomText(
-                text:
-                    'Selected Date: ${_range!.start.format('yyyy-MM-dd')} to ${_range!.end.format('yyyy-MM-dd')}',
-                    color: Theme.of(context).colorScheme.primary
-              )
+                  text:
+                      'Selected Date: ${_range!.start.format('yyyy-MM-dd')} to ${_range!.end.format('yyyy-MM-dd')}',
+                  color: Theme.of(context).colorScheme.primary)
             else if (_tempStart != null)
               CustomText(
-                text: 'Selected Date: ${_tempStart!.format('yyyy-MM-dd')} (Select end date)',
+                text:
+                    'Selected Date: ${_tempStart!.format('yyyy-MM-dd')} (Select end date)',
               ),
             if (_error != null)
               Padding(
@@ -151,17 +166,20 @@ class _NepaliDatePickerState extends State<NepaliDatePicker> {
             Padding(
               padding: const EdgeInsets.only(right: 16),
               child: Row(
-                
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
                     onPressed: () => Navigator.pop(context),
-                    child:  CustomText(text: 'Cancel',color: Colors.red),
+                    child: CustomText(text: 'Cancel', color: Colors.red),
                   ),
                   const SizedBox(width: 8),
-                  TextButton(onPressed: _range != null && _error == null
-                        ? () => Navigator.of(context).pop(_range)
-                        : null , child: CustomText(text: 'Submit',color:Theme.of(context).colorScheme.primary)),
+                  TextButton(
+                      onPressed: _range != null && _error == null
+                          ? () => Navigator.of(context).pop(_range)
+                          : null,
+                      child: CustomText(
+                          text: 'Submit',
+                          color: Theme.of(context).colorScheme.primary)),
                 ],
               ),
             ),
@@ -171,7 +189,6 @@ class _NepaliDatePickerState extends State<NepaliDatePicker> {
     );
   }
 }
-
 
 class _NepaliCalendar extends StatelessWidget {
   final nepali.NepaliDateTime currentMonth;
@@ -204,7 +221,8 @@ class _NepaliCalendar extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     // Calculate days in the month
-    final firstDayOfMonth = nepali.NepaliDateTime(currentMonth.year, currentMonth.month, 1);
+    final firstDayOfMonth =
+        nepali.NepaliDateTime(currentMonth.year, currentMonth.month, 1);
     final daysInMonth = _getDaysInMonth(firstDayOfMonth); // Use helper function
     final firstWeekday = firstDayOfMonth.weekday % 7; // Adjust for Sunday start
 
@@ -233,8 +251,9 @@ class _NepaliCalendar extends StatelessWidget {
       final isInRange = range != null &&
           date.isAfter(range!.start) &&
           date.isBefore(range!.end);
-      final isStartOrEnd = (range != null && (range!.start == date || range!.end == date)) ||
-          (tempStart != null && tempStart == date);
+      final isStartOrEnd =
+          (range != null && (range!.start == date || range!.end == date)) ||
+              (tempStart != null && tempStart == date);
 
       dayWidgets.add(
         GestureDetector(

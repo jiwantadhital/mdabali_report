@@ -39,7 +39,7 @@ void main() async {
 }
 
 class MyApp extends StatefulWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -98,13 +98,16 @@ class _MyAppState extends State<MyApp> {
                   backgroundColor: Color(0xFFFFFFFF),
                 ),
               ),
-             initialRoute: '/login',
+              initialRoute: '/login',
               getPages: [
                 GetPage(name: '/login', page: () => PasswordLoginPage()),
                 GetPage(name: '/dashboard', page: () => DashBoardPage()),
                 GetPage(
-                    name: '/otppage', page: () => OTPVerificationPage(secret: '')),
-                    GetPage(name: '/NoInternetPage', page: () => const NoInternetPage()),
+                    name: '/otppage',
+                    page: () => OTPVerificationPage(secret: '')),
+                GetPage(
+                    name: '/NoInternetPage',
+                    page: () => const NoInternetPage()),
               ],
               //  home:PasswordLoginPage()
             ),

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mdabali_report/resources/images_constants.dart';
@@ -19,42 +21,57 @@ class NoInternetPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset(ImagesConstants.noInternet,height: 200,
-              width: 200,),
-              const SizedBox(height: 24,),
-              CustomText(text: 'NO INTERNET CONNECTION',
-              fontSize: 24,
-              weight: FontWeight.bold,
-              color: Theme.of(context).colorScheme.primary,
+              Image.asset(
+                ImagesConstants.noInternet,
+                height: 200,
+                width: 200,
               ),
-              const SizedBox(height: 16,),
-              CustomText(text: 'Please check your internet connection',
-              fontSize: 16,
-              weight: FontWeight.w400,
-              color: Theme.of(context).colorScheme.primary,
+              const SizedBox(
+                height: 24,
               ),
-              const SizedBox(height: 24,),
+              CustomText(
+                text: 'NO INTERNET CONNECTION',
+                fontSize: 24,
+                weight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              CustomText(
+                text: 'Please check your internet connection',
+                fontSize: 16,
+                weight: FontWeight.w400,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              const SizedBox(
+                height: 24,
+              ),
               Padding(
                 padding: const EdgeInsets.all(24.0),
-                child: LoginButton(text: 'Refresh',
-                color: Theme.of(context).colorScheme.primary,
-                onPress: ()async{
-                  final isConnected= await ConnectivityService.isConnected();
-                  print('Refresh button: isConnected = $isConnected');
-                  if(isConnected){
-                             Get.back();
-                  }
-                  else{
-                    CustomSnackbar(title: 'NO Internet Connection',
-                     message: 'Still No Internet',
-                    snackPosition: SnackPosition.TOP,
-                     backgroundColor: Theme.of(context).colorScheme.surface,
-                      textColor: Theme.of(context).colorScheme.onSurfaceVariant).show();
-                  }
-                },
+                child: LoginButton(
+                  text: 'Refresh',
+                  color: Theme.of(context).colorScheme.primary,
+                  onPress: () async {
+                    final isConnected = await ConnectivityService.isConnected();
+                    print('Refresh button: isConnected = $isConnected');
+                    if (isConnected) {
+                      Get.back();
+                    } else {
+                      CustomSnackbar(
+                              title: 'NO Internet Connection',
+                              message: 'Still No Internet',
+                              snackPosition: SnackPosition.TOP,
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.surface,
+                              textColor: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant)
+                          .show();
+                    }
+                  },
                 ),
               )
-        
             ],
           ),
         ),

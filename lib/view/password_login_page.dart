@@ -130,9 +130,9 @@ class _PasswordLoginPageState extends State<PasswordLoginPage> {
                         //   ),
                         const SizedBox(height: 40),
                         CustomText(
-                          text: 'Login or register',
+                          text: 'Login',
                           fontSize: 20,
-                          weight: FontWeight.w400,
+                          weight: FontWeight.w500,
                         ),
                         const SizedBox(height: 20),
                         CustomTextField(

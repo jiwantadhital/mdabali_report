@@ -58,6 +58,10 @@ dependencies:
   syncfusion_flutter_datepicker: ^29.1.35
   nepali_utils: ^3.0.8
   http_mock_adapter: ^0.6.1
+  device_info_plus: ^11.4.0
+  package_info_plus: ^8.3.0
+  geolocator: ^14.0.0
+  permission_handler: ^12.0.0+1
 
 dev_dependencies:
   flutter_test:

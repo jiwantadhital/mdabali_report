@@ -78,6 +78,14 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        leading: IconButton(
+            onPressed: () {
+              Get.back();
+            },
+            icon: Icon(
+              Icons.arrow_back_ios,
+              size: 20,
+            )),
       ),
       resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -132,7 +140,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                     height: 8,
                   ),
                   CustomText(
-                    text: 'OTP Verification',
+                    text: 'TOTP Verification',
                     fontSize: 24,
                     weight: FontWeight.bold,
                     family: 'SFPro',
@@ -183,22 +191,22 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                     height: 24,
                   ),
 
-                  ValueListenableBuilder<int>(
-                    valueListenable: _remainingTime,
-                    builder: (context, time, _) {
-                      return CustomText(
-                        text: _isCodeExpired
-                            ? 'Code expired. Requesting a new one.'
-                            : 'Your code expires in $time seconds',
-                        fontSize: 16,
-                        color: _isCodeExpired
-                            ? colorScheme.primary
-                            : colorScheme.onSurfaceVariant,
-                        textAlign: TextAlign.center,
-                        weight: FontWeight.w500,
-                      );
-                    },
-                  ),
+                  //   ValueListenableBuilder<int>(
+                  //     valueListenable: _remainingTime,
+                  //     builder: (context, time, _) {
+                  //       return CustomText(
+                  //         text: _isCodeExpired
+                  //             ? 'Code expired. Requesting a new one.'
+                  //             : 'Your code expires in $time seconds',
+                  //         fontSize: 16,
+                  //         color: _isCodeExpired
+                  //             ? colorScheme.primary
+                  //             : colorScheme.onSurfaceVariant,
+                  //         textAlign: TextAlign.center,
+                  //         weight: FontWeight.w500,
+                  //       );
+                  //     },
+                  //   ),
                   const SizedBox(
                     height: 72,
                   ),

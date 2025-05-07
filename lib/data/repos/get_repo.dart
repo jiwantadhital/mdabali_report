@@ -35,9 +35,9 @@ class GetRepo {
       return response;
     }
     if (response.statusCode == 440) {
-     isLogout = true;
-      if (isLogout == true) {
-        isLogout = false;
+    //  isLogout = true;
+      if (!isLogout) {
+        isLogout = true;
         logout();
         throw Exception(response.reasonPhrase);
       } else {
@@ -52,34 +52,39 @@ class GetRepo {
 
 void logout() {
   if (UserSimplePreferences.userLoggedIn() == true) { 
+    UserSimplePreferences.cleanToken();
+    Get.offAll(()=> Container(color: Colors.white,),
+    transition: Transition.noTransition);
         Get.dialog(
-            AlertDialog(
-              title: const Text('Session Expired'),
-              content: Text('Session Expired, Please Login again'),
-              actions: [
-                Center(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:Color.fromARGB(255, 9, 134, 255),
-                        foregroundColor: Colors.white,
-                        minimumSize: Size(100, 36),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+            // ignore: deprecated_member_use
+            WillPopScope(
+              onWillPop: ()async => false,
+              child: AlertDialog(
+                title: const Text('Session Expired'),
+                content: Text('Session Expired, Please Login again'),
+                actions: [
+                  Center(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:Color.fromARGB(255, 9, 134, 255),
+                          foregroundColor: Colors.white,
+                          minimumSize: Size(100, 36),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        onPressed: () {
+                           Get.offAllNamed('/login');
+                        },
+                        child: CustomText(
+                          text: 'ok',
+                          color: Colors.white,
+                          fontSize: 16,
                         ),
                       ),
-                      onPressed: () {
-                        // Perform logout action
-                        Get.back();
-                         Get.offAllNamed('/login');
-                      },
-                      child: CustomText(
-                        text: 'ok',
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
                     ),
-                  ),
-              ],
+                ],
+              ),
             ),
             barrierDismissible:false,
           );

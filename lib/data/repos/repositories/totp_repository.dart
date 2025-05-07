@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:mdabali_report/data/models/totp_model.dart';
 import 'package:mdabali_report/resources/constants.dart';
-import 'package:mdabali_report/utils/get_device_detail.dart';
+import 'package:mdabali_report/services/device_info_service.dart';
 
 class TotpRepository {
   Future<TOtpModel> verifyOtp(String secret, String otp) async {
@@ -14,7 +14,7 @@ class TotpRepository {
       request.fields['secret'] = secret;
       request.fields['otp'] = otp;
       request.fields['menu_type'] = menuType;
-      final deviceDetail = await getDeviceDetails();
+      final deviceDetail = await DeviceInfoService.getDeviceDetails();
       request.fields['deviceDetail'] = jsonEncode(deviceDetail);
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);

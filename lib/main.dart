@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
@@ -28,6 +29,7 @@ import 'package:mdabali_report/resources/colors.dart';
 import 'package:mdabali_report/view/dash_board_page.dart';
 import 'package:mdabali_report/view/o_t_p_verification_page.dart';
 import 'package:mdabali_report/view/password_login_page.dart';
+import 'package:mdabali_report/view/splash_screen.dart';
 
 import 'view/no_internet_page.dart';
 
@@ -98,8 +100,9 @@ class _MyAppState extends State<MyApp> {
                   backgroundColor: Color(0xFFFFFFFF),
                 ),
               ),
-              initialRoute: '/login',
+              initialRoute: '/splash',
               getPages: [
+                GetPage(name: '/splash', page: ()=> SplashScreen()),
                 GetPage(name: '/login', page: () => PasswordLoginPage()),
                 GetPage(name: '/dashboard', page: () => DashBoardPage()),
                 GetPage(

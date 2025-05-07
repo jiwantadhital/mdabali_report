@@ -167,17 +167,23 @@ class _NepaliDatePickerState extends State<NepaliDatePicker> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(Colors.red)
+                    ),
                     onPressed: () => Navigator.pop(context),
-                    child: CustomText(text: 'Cancel', color: Colors.red),
+                    child: CustomText(text: 'Cancel', color: Colors.white,)
                   ),
                   const SizedBox(width: 8),
                   TextButton(
+                    style: ButtonStyle(
+                                            backgroundColor: WidgetStatePropertyAll(colorScheme.primary)
+                    ),
                       onPressed: _range != null && _error == null
                           ? () => Navigator.of(context).pop(_range)
                           : null,
                       child: CustomText(
                           text: 'Submit',
-                          color: Theme.of(context).colorScheme.primary)),
+                          color: Colors.white),)
                 ],
               ),
             ),

@@ -194,52 +194,42 @@ class _SmsPageState extends State<SmsPage> {
               borderRadius: BorderRadius.circular(24),
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: colorScheme.surfaceContainerHigh,
-                    borderRadius: BorderRadius.circular(24),
-                    border: Border.all(
-                      color: Colors.blue.withValues(alpha: 0.1),
-                      width: 1.5,
+                child: Column(
+                  children: [
+                    buildMetricRow(
+                      'Sms Count',
+                      smsCount.toString(),
+                      Icons.sms_outlined,
+                      colorScheme.onSurface,
+                      iconBgColor:
+                          colorScheme.onSurface.withValues(alpha: 0.15),
                     ),
-                  ),
-                  child: Column(
-                    children: [
-                      buildMetricRow(
-                        'Sms Count',
-                        smsCount.toString(),
-                        Icons.sms_outlined,
-                        colorScheme.onSurface,
-                        iconBgColor:
-                            colorScheme.onSurface.withValues(alpha: 0.15),
-                      ),
-                      buildDivider(),
-                      buildMetricRow(
-                        'SMS Rate',
-                        'Rs $rate',
-                        Icons.attach_money_outlined,
-                        colorScheme.onSurface,
-                        iconBgColor: Colors.greenAccent.withValues(alpha: 0.25),
-                      ),
-                      buildDivider(),
-                      buildMetricRow(
-                        'Total Cost',
-                        NumberFormatter.formatAmount(totalAmount),
-                        Icons.money,
-                        colorScheme.onSurface,
-                        iconBgColor: Colors.redAccent.withValues(alpha: 0.5),
-                      ),
-                      buildDivider(),
-                      buildMetricRow(
-                        'Available Count',
-                        NumberFormatter.formatAmount(availableBalance),
-                        Icons.balance,
-                        colorScheme.onSurface,
-                        iconBgColor: Colors.amberAccent.withValues(alpha: 0.5),
-                        isLast: true,
-                      ),
-                    ],
-                  ),
+                    buildDivider(),
+                    buildMetricRow(
+                      'SMS Rate',
+                      'Rs $rate',
+                      Icons.attach_money_outlined,
+                      colorScheme.onSurface,
+                      iconBgColor: Colors.greenAccent.withValues(alpha: 0.25),
+                    ),
+                    buildDivider(),
+                    buildMetricRow(
+                      'Total Cost',
+                      NumberFormatter.formatAmount(totalAmount),
+                      Icons.money,
+                      colorScheme.onSurface,
+                      iconBgColor: Colors.redAccent.withValues(alpha: 0.5),
+                    ),
+                    buildDivider(),
+                    buildMetricRow(
+                      'Available Count',
+                      NumberFormatter.formatAmount(availableBalance),
+                      Icons.balance,
+                      colorScheme.onSurface,
+                      iconBgColor: Colors.amberAccent.withValues(alpha: 0.5),
+                      isLast: true,
+                    ),
+                  ],
                 ),
               ),
             ),

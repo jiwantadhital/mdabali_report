@@ -30,7 +30,7 @@ class InitRepository {
 
   Future<Uint8List> fetchImageUrl(String clientId) async {
     final imageUrl =
-        Uri.parse('${ApiClass.testUrl}/gateway/webApi/client/image/$clientId');
+        Uri.parse('${ApiClass.testUrl}/webApi/client/image/$clientId');
     final response = await http.get(imageUrl);
     if (response.statusCode != 200) {
       throw Exception("Failed to fetch image");

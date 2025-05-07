@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:mdabali_report/data/models/summary_report_model.dart';
 import 'package:mdabali_report/data/repos/get_repo.dart';
+import 'package:mdabali_report/resources/constants.dart';
 
 class SummaryReportRepository {
   final GetRepo getRepo;
@@ -8,10 +9,12 @@ class SummaryReportRepository {
   SummaryReportRepository({required this.getRepo});
 
   Future<SummaryReportModel> fetchSummaryReport(
-      {required String dateFrom, required String dateTo,required String clientId}) async {
+      {required String dateFrom,
+      required String dateTo,
+      required String clientId}) async {
     try {
       final response = await getRepo.getRepository(
-        "/gateway/reportingApi/summary-report?fromDate=$dateFrom&toDate=$dateTo&clientId=$clientId",
+        "${ApiClass.summaryReportUrl}fromDate=$dateFrom&toDate=$dateTo&clientId=$clientId",
       );
 
       if (response.statusCode == 200) {

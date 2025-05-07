@@ -57,7 +57,7 @@ class _PasswordLoginPageState extends State<PasswordLoginPage> {
                 if (state is LoginSuccess) {
                   final loginData = state.loginModel;
                   loginData.isOTPRequired == true
-                      ? Get.off(() => OTPVerificationPage(
+                      ? Get.to(() => OTPVerificationPage(
                             secret: loginData.data?.secret ?? '',
                           ))
                       : Get.off(() => DashBoardPage());
@@ -68,7 +68,10 @@ class _PasswordLoginPageState extends State<PasswordLoginPage> {
                   await UserSimplePreferences.setUsername(
                       usernameController.text.toString().trim());
                   //   final token = loginData.data?.accessToken ?? "";
-
+                  setState(() {
+                    _isEditable =
+                        loginData.isOTPRequired == true ? false : true;
+                  });
                   print(loginData.data?.secret ?? 'jalfsdkn');
                 }
                 if (state is LoginFailure) {

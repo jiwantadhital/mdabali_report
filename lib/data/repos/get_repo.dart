@@ -53,12 +53,9 @@ class GetRepo {
 void logout() {
   if (UserSimplePreferences.userLoggedIn() == true) { 
     UserSimplePreferences.cleanToken();
-    Get.offAll(()=> Container(color: Colors.white,),
-    transition: Transition.noTransition);
         Get.dialog(
-            // ignore: deprecated_member_use
-            WillPopScope(
-              onWillPop: ()async => false,
+            PopScope(
+            canPop:  false,
               child: AlertDialog(
                 title: const Text('Session Expired'),
                 content: Text('Session Expired, Please Login again'),

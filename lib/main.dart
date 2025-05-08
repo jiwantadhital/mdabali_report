@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
@@ -36,8 +35,10 @@ import 'view/no_internet_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await UserSimplePreferences.init(); // Ensure SharedPreferences is initialized
-  Get.put(ThemeController());
+  await UserSimplePreferences.init();
+  final themeController = ThemeController();
+  await themeController.loadThemeMode();
+  Get.put(themeController);
   runApp(MyApp());
 }
 
@@ -85,7 +86,8 @@ class _MyAppState extends State<MyApp> {
                     MemberLimitBloc(MemberLimitRepository(getRepo: GetRepo()))),
           ],
           child: ConnectivityListener(
-            child: GetMaterialApp(
+              child: Obx(
+            () => GetMaterialApp(
               // navigatorObservers: [AuthNavigatorObserver()],
               debugShowCheckedModeBanner: false,
               title: 'Flutter Demo',
@@ -116,7 +118,7 @@ class _MyAppState extends State<MyApp> {
               ],
               //  home:PasswordLoginPage()
             ),
-          ),
+          )),
         );
       },
     );

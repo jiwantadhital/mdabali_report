@@ -7,9 +7,9 @@ import 'package:mdabali_report/resources/constants.dart';
 import '../../view/extracted_widgets/custom_text.dart';
 
 class GetRepo {
- // final CustomHttpInterceptor client;
+  // final CustomHttpInterceptor client;
   // http.BaseClient client;
-   bool isLogout = false;
+  bool isLogout = false;
   GetRepo();
   Future<http.Response> getRepository(api, {bool tokenrequired = true}) async {
     var response = await http.get(
@@ -34,8 +34,8 @@ class GetRepo {
     if (response.statusCode == 200) {
       return response;
     }
-    if (response.statusCode == 440) {
-    //  isLogout = true;
+    if (response.statusCode == 440 || response.statusCode == 401) {
+      //  isLogout = true;
       if (!isLogout) {
         isLogout = true;
         logout();
@@ -49,42 +49,41 @@ class GetRepo {
   }
 }
 
-
 void logout() {
-  if (UserSimplePreferences.userLoggedIn() == true) { 
+  if (UserSimplePreferences.userLoggedIn() == true) {
     UserSimplePreferences.cleanToken();
-        Get.dialog(
-            PopScope(
-            canPop:  false,
-              child: AlertDialog(
-                title: const Text('Session Expired'),
-                content: Text('Session Expired, Please Login again'),
-                actions: [
-                  Center(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:Color.fromARGB(255, 9, 134, 255),
-                          foregroundColor: Colors.white,
-                          minimumSize: Size(100, 36),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        onPressed: () {
-                           Get.offAllNamed('/login');
-                        },
-                        child: CustomText(
-                          text: 'ok',
-                          color: Colors.white,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                ],
+    Get.dialog(
+      PopScope(
+        canPop: false,
+        child: AlertDialog(
+          title: const Text('Session Expired'),
+          content: Text('Session Expired, Please Login again'),
+          actions: [
+            Center(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color.fromARGB(255, 9, 134, 255),
+                  foregroundColor: Colors.white,
+                  minimumSize: Size(100, 36),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                onPressed: () {
+                  Get.offAllNamed('/login');
+                },
+                child: CustomText(
+                  text: 'ok',
+                  color: Colors.white,
+                  fontSize: 16,
+                ),
               ),
             ),
-            barrierDismissible:false,
-          );
+          ],
+        ),
+      ),
+      barrierDismissible: false,
+    );
   } else {
     print("ressetting");
     // _resetInactivityTimer();

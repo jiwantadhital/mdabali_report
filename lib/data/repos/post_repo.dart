@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:mdabali_report/data/shared_preferences/shared_preferences.dart';
 import 'package:mdabali_report/resources/constants.dart';
+import 'package:mdabali_report/services/http_error_handler.dart';
 
 
 class PostRepo {
@@ -37,7 +38,12 @@ class PostRepo {
           );
       if (response.statusCode == 200) {
         return response;
-      } else {
+      }
+      if(response.statusCode==503){
+       HttpErrorHandler.handleErrorResponse(response.statusCode);
+       return response;
+      }
+       else {
         throw Exception(response.reasonPhrase);
       }
     } catch (e) {

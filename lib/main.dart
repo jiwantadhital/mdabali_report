@@ -29,6 +29,7 @@ import 'package:mdabali_report/resources/colors.dart';
 import 'package:mdabali_report/view/dash_board_page.dart';
 import 'package:mdabali_report/view/o_t_p_verification_page.dart';
 import 'package:mdabali_report/view/password_login_page.dart';
+import 'package:mdabali_report/view/service_unavailable_page.dart';
 import 'package:mdabali_report/view/splash_screen.dart';
 
 import 'view/no_internet_page.dart';
@@ -100,8 +101,9 @@ class _MyAppState extends State<MyApp> {
                   backgroundColor: Color(0xFFFFFFFF),
                 ),
               ),
-              initialRoute: '/splash',
+              initialRoute: '/login',
               getPages: [
+                GetPage(name: '/service_error', page: ()=> ServiceUnavailablePage()),
                 GetPage(name: '/splash', page: ()=> SplashScreen()),
                 GetPage(name: '/login', page: () => PasswordLoginPage()),
                 GetPage(name: '/dashboard', page: () => DashBoardPage()),

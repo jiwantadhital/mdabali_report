@@ -41,3 +41,4 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/android/app/.cxx/Debug/293h1o69/armeabi-v7a/configure_fingerprint.binandroid/app/.cxx/Debug/293h1o69/armeabi-v7a/configure_fingerprint.bin

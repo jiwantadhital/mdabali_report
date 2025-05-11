@@ -6,6 +6,7 @@ import 'package:mdabali_report/data/shared_preferences/shared_preferences.dart';
 import 'package:mdabali_report/resources/colors.dart';
 import 'package:mdabali_report/view/extracted_widgets/nepali_date_range_picker_card.dart';
 import 'package:mdabali_report/view/transaction_page/shimmer_transaction_cards.dart';
+import 'package:nepali_date_picker/nepali_date_picker.dart';
 
 import '../extracted_widgets/custom_text.dart';
 
@@ -17,6 +18,14 @@ class TransactionPage extends StatefulWidget {
 }
 
 class _TransactionPageState extends State<TransactionPage> {
+    TextEditingController startDate = TextEditingController();
+    TextEditingController endDate = TextEditingController();
+  @override
+  void dispose() {
+    startDate.dispose();
+    endDate.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     var colorScheme = Theme.of(context).colorScheme;
@@ -30,15 +39,22 @@ class _TransactionPageState extends State<TransactionPage> {
               alignment: Alignment.centerRight,
               child: GestureDetector(
                 onTap: () async {
-                  final range = await NepaliDateRangePicker.show(context);
+                  final range =await  NepaliDateRangePicker.show(context);
                   if (range != null) {
                     // Format the start and end dates to 'yyyy-MM-dd' format
                     String startFormatted =
                         DateFormat('yyyy-MM-dd').format(range.start);
                     print(startFormatted);
+                    
                     String endFormatted =
                         DateFormat('yyyy-MM-dd').format(range.end);
                     print(endFormatted);
+                   setState(() {
+                     startDate.text=range.start.toNepaliDateTime().toString();
+                     
+                     endDate.text = range.end.toNepaliDateTime().toString();
+                     
+                   });
                     // ignore: use_build_context_synchronously
                     context.read<SummaryReportBloc>().add(FetchSummaryReport(
                         dateFrom: startFormatted,
@@ -64,16 +80,26 @@ class _TransactionPageState extends State<TransactionPage> {
                         color: colorScheme.primaryFixedDim,
                       ),
                       SizedBox(width: 8),
-                      Text(
-                        "Select date Range",
-                        style: TextStyle(
-                            fontSize: 12, color: colorScheme.onSurfaceVariant),
-                      ),
+                      
+                       CustomText(
+                        text: startDate.text.isEmpty && endDate.text.isEmpty
+                        ?'Select date range':
+                        '${startDate.text.substring(0,10)} to ${endDate.text.substring(0,10)}',
+                        weight: FontWeight.w300,
+                        fontSize: 12,)
+
+                      // Text(
+                      //   "Select date Range",
+                      //   style: TextStyle(
+                      //       fontSize: 12, color: colorScheme.onSurfaceVariant),
+                      // ),
                     ],
                   ),
                 ),
               ),
             ),
+
+           
             _buildTransactionList(context = context),
             const SizedBox(
               height: 24,

@@ -368,13 +368,13 @@ class CharacterPainter extends CustomPainter {
 
     // Draw "503" text on sign
     final textStyle = TextStyle(
-      color: secondaryColor,
-      fontSize: signHeight * 0.6,
+      color: Colors.white,
+      fontSize: signHeight * 0.2,
       fontWeight: FontWeight.bold,
     );
 
     final textSpan = TextSpan(
-      text: '503',
+      text: 'Service Unavailable',
       style: textStyle,
     );
 

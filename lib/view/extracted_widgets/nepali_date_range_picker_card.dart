@@ -4,7 +4,8 @@ import 'package:nepali_date_picker/nepali_date_picker.dart' as nepali;
 
 class NepaliDateRangePicker {
   /// Shows the picker in a bottom sheet and returns a valid Gregorian range if selected.
-  static Future<DateTimeRange?> show(BuildContext context) async {
+  static Future<DateTimeRange?> show(BuildContext context,
+      nepali.NepaliDateTime startDate, nepali.NepaliDateTime endDate) async {
     final nepaliRange = await showModalBottomSheet<nepali.NepaliDateTimeRange>(
       context: context,
       isScrollControlled: true,
@@ -12,7 +13,10 @@ class NepaliDateRangePicker {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (context) => const NepaliDatePicker(),
+      builder: (context) => NepaliDatePicker(
+        startDate: startDate,
+        endDate: endDate,
+      ),
     );
 
     if (nepaliRange != null) {
@@ -25,14 +29,24 @@ class NepaliDateRangePicker {
   }
 }
 
+// ignore: must_be_immutable
 class NepaliDatePicker extends StatefulWidget {
-  const NepaliDatePicker({super.key});
+  nepali.NepaliDateTime startDate;
+  nepali.NepaliDateTime endDate;
+  NepaliDatePicker({super.key, required this.startDate, required this.endDate});
 
   @override
   State<NepaliDatePicker> createState() => _NepaliDatePickerState();
 }
 
 class _NepaliDatePickerState extends State<NepaliDatePicker> {
+  @override
+  void initState() {
+    super.initState();
+    _range = nepali.NepaliDateTimeRange(
+        start: widget.startDate, end: widget.endDate);
+  }
+
   final nepali.NepaliDateTime _today = nepali.NepaliDateTime.now();
   nepali.NepaliDateTimeRange? _range;
   nepali.NepaliDateTime? _tempStart;
@@ -167,23 +181,23 @@ class _NepaliDatePickerState extends State<NepaliDatePicker> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
-                    style: ButtonStyle(
-                      backgroundColor: WidgetStatePropertyAll(Colors.red)
-                    ),
-                    onPressed: () => Navigator.pop(context),
-                    child: CustomText(text: 'Cancel', color: Colors.white,)
-                  ),
+                      style: ButtonStyle(
+                          backgroundColor: WidgetStatePropertyAll(Colors.red)),
+                      onPressed: () => Navigator.pop(context),
+                      child: CustomText(
+                        text: 'Cancel',
+                        color: Colors.white,
+                      )),
                   const SizedBox(width: 8),
                   TextButton(
                     style: ButtonStyle(
-                                            backgroundColor: WidgetStatePropertyAll(colorScheme.primary)
-                    ),
-                      onPressed: _range != null && _error == null
-                          ? () => Navigator.of(context).pop(_range)
-                          : null,
-                      child: CustomText(
-                          text: 'Submit',
-                          color: Colors.white),)
+                        backgroundColor:
+                            WidgetStatePropertyAll(colorScheme.primary)),
+                    onPressed: _range != null && _error == null
+                        ? () => Navigator.of(context).pop(_range)
+                        : null,
+                    child: CustomText(text: 'Submit', color: Colors.white),
+                  )
                 ],
               ),
             ),
@@ -266,6 +280,10 @@ class _NepaliCalendar extends StatelessWidget {
           date.isBefore(range!.end);
       //   final isStartOrEnd =(tempStart != null && tempStart == date) ||
       // (range != null && (range!.start == date || range!.end == date));
+      final isStart = isSameDay(tempStart, date) ||
+          (range != null && (isSameDay(range!.start, date)));
+      final isEnd = isSameDay(tempStart, date) ||
+          (range != null && (isSameDay(range!.end, date)));
       final isStartOrEnd = isSameDay(tempStart, date) ||
           (range != null &&
               (isSameDay(range!.start, date) || isSameDay(range!.end, date)));
@@ -274,19 +292,25 @@ class _NepaliCalendar extends StatelessWidget {
         GestureDetector(
           onTap: isDisabled ? null : () => onDaySelected(date),
           child: Container(
-            margin: const EdgeInsets.all(2),
+            margin: const EdgeInsets.all(1),
             decoration: BoxDecoration(
+              borderRadius: isStart
+                  ? BorderRadius.horizontal(left: Radius.circular(8))
+                  : isEnd
+                      ? BorderRadius.horizontal(right: Radius.circular(8))
+                      : null,
               color: isStartOrEnd
                   ? colorScheme.primary
                   : isInRange
                       ? colorScheme.primary.withValues(alpha: 0.2)
                       : null,
-              shape: BoxShape.circle,
+              //shape: BoxShape.circle,
             ),
             child: Center(
               child: Text(
                 '$day',
                 style: TextStyle(
+                  fontSize: 18,
                   color: isStartOrEnd
                       ? Colors.white
                       : isDisabled
@@ -305,7 +329,7 @@ class _NepaliCalendar extends StatelessWidget {
         GridView.count(
           shrinkWrap: true,
           crossAxisCount: 7,
-          childAspectRatio: 1.5,
+          childAspectRatio: 1.2,
           children: dayWidgets,
         ),
       ],

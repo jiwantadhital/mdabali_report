@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -6,6 +8,7 @@ import 'package:mdabali_report/data/shared_preferences/shared_preferences.dart';
 import 'package:mdabali_report/resources/colors.dart';
 import 'package:mdabali_report/view/extracted_widgets/nepali_date_range_picker_card.dart';
 import 'package:mdabali_report/view/transaction_page/shimmer_transaction_cards.dart';
+import 'package:nepali_date_picker/nepali_date_picker.dart';
 
 import '../extracted_widgets/custom_text.dart';
 
@@ -17,6 +20,23 @@ class TransactionPage extends StatefulWidget {
 }
 
 class _TransactionPageState extends State<TransactionPage> {
+  NepaliDateTime? _startDate;
+  NepaliDateTime? _endDate;
+
+  @override
+  void initState() {
+    final today = NepaliDateTime.now();
+    final oneMonthAgo = NepaliDateTime(
+      today.month == 1 ? today.year - 1 : today.year,
+      today.month - 1 <= 0 ? 12 : today.month - 1,
+      today.day,
+    );
+
+    _startDate = oneMonthAgo;
+    _endDate = today;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var colorScheme = Theme.of(context).colorScheme;
@@ -35,10 +55,14 @@ class _TransactionPageState extends State<TransactionPage> {
                     // Format the start and end dates to 'yyyy-MM-dd' format
                     String startFormatted =
                         DateFormat('yyyy-MM-dd').format(range.start);
-                    print(startFormatted);
+                    print(range.start);
                     String endFormatted =
                         DateFormat('yyyy-MM-dd').format(range.end);
-                    print(endFormatted);
+                    print(range.end);
+                    setState(() {
+                      _startDate = NepaliDateTime.fromDateTime(range.start);
+                      _endDate = NepaliDateTime.fromDateTime(range.end);
+                    });
                     // ignore: use_build_context_synchronously
                     context.read<SummaryReportBloc>().add(FetchSummaryReport(
                         dateFrom: startFormatted,
@@ -65,7 +89,10 @@ class _TransactionPageState extends State<TransactionPage> {
                       ),
                       SizedBox(width: 8),
                       Text(
-                        "Select date Range",
+                        _startDate != null && _endDate != null
+                            ? '${NepaliDateFormat('yyyy/MM/dd').format(_startDate!)} '
+                                'to ${NepaliDateFormat('yyyy/MM/dd').format(_endDate!)}'
+                            : "Select date Range",
                         style: TextStyle(
                             fontSize: 12, color: colorScheme.onSurfaceVariant),
                       ),

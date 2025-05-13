@@ -9,7 +9,6 @@ import 'package:mdabali_report/resources/colors.dart';
 import 'package:mdabali_report/view/extracted_widgets/nepali_date_range_picker_card.dart';
 import 'package:mdabali_report/view/transaction_page/shimmer_transaction_cards.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
-import 'package:nepali_date_picker/nepali_date_picker.dart';
 
 import '../extracted_widgets/custom_text.dart';
 
@@ -51,7 +50,8 @@ class _TransactionPageState extends State<TransactionPage> {
               alignment: Alignment.centerRight,
               child: GestureDetector(
                 onTap: () async {
-                  final range = await NepaliDateRangePicker.show(context);
+                  final range = await NepaliDateRangePicker.show(
+                      context, _startDate!, _endDate!);
                   if (range != null) {
                     // Format the start and end dates to 'yyyy-MM-dd' format
                     String startFormatted =

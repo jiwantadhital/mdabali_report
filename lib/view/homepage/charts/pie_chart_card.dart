@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +10,7 @@ import 'package:mdabali_report/resources/colors.dart';
 import 'package:mdabali_report/view/extracted_widgets/custom_text.dart';
 import 'package:mdabali_report/view/extracted_widgets/nepali_date_range_picker_card.dart';
 import 'package:mdabali_report/view/homepage/charts/pie_chart_shimmer.dart';
+import 'package:nepali_date_picker/nepali_date_picker.dart';
 
 class PieChartCard extends StatefulWidget {
   const PieChartCard({super.key});
@@ -20,6 +23,21 @@ class _PieChartCardState extends State<PieChartCard> {
   int touchedIndex = -1;
 
   bool _showAllOthers = false;
+  NepaliDateTime? _startDate;
+  NepaliDateTime? _endDate;
+  @override
+  void initState() {
+    final today = NepaliDateTime.now();
+    final oneMonthAgo = NepaliDateTime(
+      today.month == 1 ? today.year - 1 : today.year,
+      today.month - 1 <= 0 ? 12 : today.month - 1,
+      today.day,
+    );
+
+    _startDate = oneMonthAgo;
+    _endDate = today;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -145,14 +163,19 @@ class _PieChartCardState extends State<PieChartCard> {
                       alignment: Alignment.centerRight,
                       child: GestureDetector(
                         onTap: () async {
-                          final range =
-                              await NepaliDateRangePicker.show(context);
+                          final range = await NepaliDateRangePicker.show(
+                              context, _startDate!, _endDate!);
                           if (range != null) {
                             // Format the start and end dates to 'yyyy-MM-dd' format
                             String startFormatted =
                                 DateFormat('yyyy-MM-dd').format(range.start);
                             String endFormatted =
                                 DateFormat('yyyy-MM-dd').format(range.end);
+                            setState(() {
+                              _startDate =
+                                  NepaliDateTime.fromDateTime(range.start);
+                              _endDate = NepaliDateTime.fromDateTime(range.end);
+                            });
                             // ignore: use_build_context_synchronously
                             context.read<SummaryReportBloc>().add(
                                 FetchSummaryReport(

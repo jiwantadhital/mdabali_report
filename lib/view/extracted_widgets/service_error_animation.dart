@@ -9,19 +9,19 @@ class CharacterErrorAnimation extends StatefulWidget {
   final VoidCallback? onTap;
 
   const CharacterErrorAnimation({
-    Key? key,
+    super.key,
     this.size = 220.0,
     this.primaryColor = Colors.blueGrey,
     this.secondaryColor = Colors.red,
     this.characterColor = Colors.blue,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
-  _CharacterErrorAnimationState createState() => _CharacterErrorAnimationState();
+  CharacterErrorAnimationState createState() => CharacterErrorAnimationState();
 }
 
-class _CharacterErrorAnimationState extends State<CharacterErrorAnimation>
+class CharacterErrorAnimationState extends State<CharacterErrorAnimation>
     with TickerProviderStateMixin {
   late AnimationController _bounceController;
   late AnimationController _swayController;
@@ -130,13 +130,15 @@ class _CharacterErrorAnimationState extends State<CharacterErrorAnimation>
   void _setupBlinking() {
     Future<void> blinkLoop() async {
       while (mounted) {
-        await Future.delayed(Duration(milliseconds: 2500 + math.Random().nextInt(500)));
+        await Future.delayed(
+            Duration(milliseconds: 2500 + math.Random().nextInt(500)));
         if (mounted && !_isSurprised) {
           await _blinkController.forward();
           await _blinkController.reverse();
         }
       }
     }
+
     blinkLoop();
   }
 
@@ -155,7 +157,9 @@ class _CharacterErrorAnimationState extends State<CharacterErrorAnimation>
       });
     });
 
-    _particleController.forward(from: 0.0).then((_) => _particleController.reset());
+    _particleController
+        .forward(from: 0.0)
+        .then((_) => _particleController.reset());
 
     if (widget.onTap != null) {
       widget.onTap!();
@@ -179,7 +183,9 @@ class _CharacterErrorAnimationState extends State<CharacterErrorAnimation>
       });
     });
 
-    _particleController.forward(from: 0.0).then((_) => _particleController.reset());
+    _particleController
+        .forward(from: 0.0)
+        .then((_) => _particleController.reset());
   }
 
   void _handleHover(bool hovering) {
@@ -240,11 +246,19 @@ class _CharacterErrorAnimationState extends State<CharacterErrorAnimation>
           builder: (context, child) {
             return Transform.translate(
               offset: Offset(
-                _dragOffset + _waveAnimation.value * 6.0 * math.sin(_waveAnimation.value * 12 * math.pi),
-                -_bounceAnimation.value - (_waveAnimation.value * 12.0) - (_isJumping ? 20.0 : 0.0),
+                _dragOffset +
+                    _waveAnimation.value *
+                        6.0 *
+                        math.sin(_waveAnimation.value * 12 * math.pi),
+                -_bounceAnimation.value -
+                    (_waveAnimation.value * 12.0) -
+                    (_isJumping ? 20.0 : 0.0),
               ),
               child: Transform.rotate(
-                angle: _swayAnimation.value + (_waveAnimation.value * 0.12 * math.sin(_waveAnimation.value * 10)),
+                angle: _swayAnimation.value +
+                    (_waveAnimation.value *
+                        0.12 *
+                        math.sin(_waveAnimation.value * 10)),
                 child: Transform.scale(
                   scale: _scaleAnimation.value,
                   child: SizedBox(
@@ -326,17 +340,16 @@ class CharacterPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.5;
 
-
     final Paint facePaint = Paint()
       ..color = const Color(0xFFFEDCBA)
       ..style = PaintingStyle.fill;
 
     final Paint shadowPaint = Paint()
-      ..color = Colors.black.withOpacity(0.2)
+      ..color = Colors.black.withValues(alpha: 0.2)
       ..style = PaintingStyle.fill;
 
     final Paint particlePaint = Paint()
-      ..color = Colors.yellow.withOpacity(1.0 - particleValue)
+      ..color = Colors.yellow.withValues(alpha: 1.0 - particleValue)
       ..style = PaintingStyle.fill;
 
     // Calculate dimensions
@@ -401,8 +414,10 @@ class CharacterPainter extends CustomPainter {
     final bodyPath = Path();
 
     // Calculate positions with bounce and jump
-    final double headCenterY = size.height * (0.65 - 0.03 * math.sin(bounceValue * math.pi));
-    final double armSway = 0.15 * math.sin(swayValue * math.pi * 2 + (isWaving ? waveValue * 2 : 0));
+    final double headCenterY =
+        size.height * (0.65 - 0.03 * math.sin(bounceValue * math.pi));
+    final double armSway = 0.15 *
+        math.sin(swayValue * math.pi * 2 + (isWaving ? waveValue * 2 : 0));
 
     // Head
     final double headRadius = characterWidth * 0.35;
@@ -451,7 +466,8 @@ class CharacterPainter extends CustomPainter {
       final eyelidPaint = Paint()..color = facePaint.color;
       final leftEyelidPath = Path();
       leftEyelidPath.addArc(
-        Rect.fromCircle(center: Offset(centerX - eyeDistance, eyeY), radius: eyeRadius),
+        Rect.fromCircle(
+            center: Offset(centerX - eyeDistance, eyeY), radius: eyeRadius),
         math.pi,
         math.pi * (1.0 - blinkValue),
       );
@@ -459,7 +475,8 @@ class CharacterPainter extends CustomPainter {
 
       final rightEyelidPath = Path();
       rightEyelidPath.addArc(
-        Rect.fromCircle(center: Offset(centerX + eyeDistance, eyeY), radius: eyeRadius),
+        Rect.fromCircle(
+            center: Offset(centerX + eyeDistance, eyeY), radius: eyeRadius),
         math.pi,
         math.pi * (1.0 - blinkValue),
       );
@@ -484,7 +501,8 @@ class CharacterPainter extends CustomPainter {
     );
 
     // Expression
-    final double expressionAlpha = isSurprised ? 1.0 : (isWaving ? waveValue : 0.0);
+    final double expressionAlpha =
+        isSurprised ? 1.0 : (isWaving ? waveValue : 0.0);
     if (isSurprised || isWaving) {
       final mouthPath = Path();
       final double mouthSize = headRadius * 0.25;
@@ -498,7 +516,7 @@ class CharacterPainter extends CustomPainter {
       canvas.drawPath(
         mouthPath,
         Paint()
-          ..color = Colors.black87.withOpacity(expressionAlpha)
+          ..color = Colors.black87.withValues(alpha: expressionAlpha)
           ..style = PaintingStyle.stroke
           ..strokeWidth = 2.0,
       );
@@ -506,13 +524,15 @@ class CharacterPainter extends CustomPainter {
       final eyebrowPath = Path();
       final double eyebrowY = eyeY - eyeRadius * 1.2;
       eyebrowPath.moveTo(centerX - eyeDistance - eyeRadius * 0.8, eyebrowY);
-      eyebrowPath.lineTo(centerX - eyeDistance + eyeRadius * 0.8, eyebrowY - eyeRadius * 0.4);
-      eyebrowPath.moveTo(centerX + eyeDistance - eyeRadius * 0.8, eyebrowY - eyeRadius * 0.4);
+      eyebrowPath.lineTo(
+          centerX - eyeDistance + eyeRadius * 0.8, eyebrowY - eyeRadius * 0.4);
+      eyebrowPath.moveTo(
+          centerX + eyeDistance - eyeRadius * 0.8, eyebrowY - eyeRadius * 0.4);
       eyebrowPath.lineTo(centerX + eyeDistance + eyeRadius * 0.8, eyebrowY);
       canvas.drawPath(
         eyebrowPath,
         Paint()
-          ..color = Colors.black87.withOpacity(expressionAlpha)
+          ..color = Colors.black87.withValues(alpha: expressionAlpha)
           ..style = PaintingStyle.stroke
           ..strokeWidth = 2.0,
       );
@@ -532,7 +552,7 @@ class CharacterPainter extends CustomPainter {
       canvas.drawPath(
         smilePath,
         Paint()
-          ..color = Colors.black87.withOpacity(1.0 - expressionAlpha)
+          ..color = Colors.black87.withValues(alpha: 1.0 - expressionAlpha)
           ..style = PaintingStyle.stroke
           ..strokeWidth = 2.0,
       );
@@ -562,7 +582,8 @@ class CharacterPainter extends CustomPainter {
     final rightArmPath = Path();
     rightArmPath.moveTo(centerX + characterWidth * 0.3, shoulderY);
     rightArmPath.quadraticBezierTo(
-      centerX + characterWidth * (0.4 - armSway + (isWaving ? waveValue * 0.2 : 0)),
+      centerX +
+          characterWidth * (0.4 - armSway + (isWaving ? waveValue * 0.2 : 0)),
       (shoulderY + handY) / 2,
       centerX + signWidth * 0.4,
       handY,
@@ -591,7 +612,8 @@ class CharacterPainter extends CustomPainter {
       final random = math.Random();
       for (int i = 0; i < 8; i++) {
         final double angle = random.nextDouble() * 2 * math.pi;
-        final double distance = particleValue * random.nextDouble() * headRadius * 1.5;
+        final double distance =
+            particleValue * random.nextDouble() * headRadius * 1.5;
         final particleSize = 2.0 + random.nextDouble() * 3.0;
         canvas.drawCircle(
           Offset(

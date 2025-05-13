@@ -1,16 +1,16 @@
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class HttpErrorHandler {
-
-  static void handleErrorResponse(int statusCode){
-    if(statusCode==503|| statusCode==502||statusCode==440){
+  static void handleErrorResponse(int statusCode) {
+    if (statusCode == 503 || statusCode == 502 || statusCode == 440) {
       //unvailable function load gardini
       _showServiceUnavailablePage();
-
     }
   }
-  static void _showServiceUnavailablePage(){
-    Get.offNamed('/service_error',);
+
+  static void _showServiceUnavailablePage() {
+    Get.offNamed(
+      '/service_error',
+    );
   }
 }

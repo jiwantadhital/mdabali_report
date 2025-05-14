@@ -22,7 +22,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final ValueNotifier<String> selectedNepaliDate = ValueNotifier('');
+  final ValueNotifier<NepaliDateTime?> selectedNepaliDate = ValueNotifier(null);
 
   @override
   void dispose() {
@@ -32,10 +32,11 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> selectNepaliDate(BuildContext context) async {
     NepaliDateTime currentNepaliDate = NepaliDateTime.now();
-
+    NepaliDateTime initialDate =
+        selectedNepaliDate.value ?? NepaliDateTime.now();
     final NepaliDateTime? picked = await showMaterialDatePicker(
       context: context,
-      initialDate: currentNepaliDate,
+      initialDate: initialDate,
       firstDate: NepaliDateTime(2075),
       lastDate: currentNepaliDate,
       initialDatePickerMode: DatePickerMode.day,
@@ -55,11 +56,8 @@ class _HomePageState extends State<HomePage> {
     );
 
     if (picked != null) {
-      String nepaliDateFormatted =
-          "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
-
       //to show selected date in container
-      selectedNepaliDate.value = nepaliDateFormatted;
+      selectedNepaliDate.value = picked;
       DateTime englishDate = picked.toDateTime();
       String englishDateFormatted =
           "${englishDate.year}-${englishDate.month.toString().padLeft(2, '0')}-${englishDate.day.toString().padLeft(2, '0')}";
@@ -269,14 +267,26 @@ class _HomePageState extends State<HomePage> {
                             color: colorScheme.primaryFixedDim,
                           ),
                           SizedBox(width: 8),
-                          ValueListenableBuilder<String>(
+                          ValueListenableBuilder<NepaliDateTime?>(
                             valueListenable: selectedNepaliDate,
                             builder: (context, value, _) {
+                              bool isToday(NepaliDateTime? date) {
+                                if (date == null) return false;
+
+                                final now = NepaliDateTime.now();
+                                return date.year == now.year &&
+                                    date.month == now.month &&
+                                    date.day == now.day;
+                              }
+
+                              String text = (value == null || isToday(value))
+                                  ? "Today"
+                                  : "${value.year}-${value.month.toString().padLeft(2, '0')}-${value.day.toString().padLeft(2, '0')}";
                               return Text(
-                                value.isEmpty ? "Select date" : value,
+                                text,
                                 style: TextStyle(
                                   fontSize: 12,
-                                  color: value.isEmpty
+                                  color: value == null
                                       ? colorScheme.onSurfaceVariant
                                       : colorScheme.onSurface,
                                 ),

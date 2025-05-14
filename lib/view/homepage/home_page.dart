@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -10,7 +9,6 @@ import 'package:mdabali_report/bloc/summary_report_bloc/bloc/summary_report_bloc
 import 'package:mdabali_report/data/shared_preferences/shared_preferences.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:shimmer/shimmer.dart';
-
 import '../extracted_widgets/custom_text.dart';
 import 'charts/line_chart_card.dart';
 import 'charts/pie_chart_card.dart';
@@ -24,12 +22,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final TextEditingController summaryDateController = TextEditingController();
+  final ValueNotifier<String> selectedNepaliDate = ValueNotifier('');
 
   @override
   void dispose() {
-    // Always dispose controllers
-    summaryDateController.dispose();
+    selectedNepaliDate.dispose();
     super.dispose();
   }
 
@@ -61,14 +58,12 @@ class _HomePageState extends State<HomePage> {
       String nepaliDateFormatted =
           "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
 
-      setState(() {
-        summaryDateController.text = nepaliDateFormatted;
-      });
-
+      //to show selected date in container
+      selectedNepaliDate.value = nepaliDateFormatted;
       DateTime englishDate = picked.toDateTime();
       String englishDateFormatted =
           "${englishDate.year}-${englishDate.month.toString().padLeft(2, '0')}-${englishDate.day.toString().padLeft(2, '0')}";
-
+      print("five month date:$englishDateFormatted");
       // ignore: use_build_context_synchronously
       context
           .read<FiveMonthDataBloc>()
@@ -274,16 +269,19 @@ class _HomePageState extends State<HomePage> {
                             color: colorScheme.primaryFixedDim,
                           ),
                           SizedBox(width: 8),
-                          Text(
-                            summaryDateController.text.isEmpty
-                                ? "Select date"
-                                : summaryDateController.text,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: summaryDateController.text.isEmpty
-                                  ? colorScheme.onSurfaceVariant
-                                  : colorScheme.onSurface,
-                            ),
+                          ValueListenableBuilder<String>(
+                            valueListenable: selectedNepaliDate,
+                            builder: (context, value, _) {
+                              return Text(
+                                value.isEmpty ? "Select date" : value,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: value.isEmpty
+                                      ? colorScheme.onSurfaceVariant
+                                      : colorScheme.onSurface,
+                                ),
+                              );
+                            },
                           ),
                         ],
                       ),

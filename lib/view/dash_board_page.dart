@@ -34,10 +34,6 @@ class _DashBoardPageState extends State<DashBoardPage> {
 
     context.read<InitBloc>().add(FetchInitData());
     context.read<MonthlyAggregateBloc>().add(FetchMonthlyAggregate());
-    // context
-    //     .read<SummaryReportBloc>()
-    //     .add(FetchSummaryReport(dateFrom: dateFrom, dateTo: todayDate));
-
     //this is for line chart data
     context
         .read<FiveMonthDataBloc>()
@@ -94,7 +90,10 @@ class _DashBoardPageState extends State<DashBoardPage> {
           opacity: animation,
           child: child,
         ),
-        child: _pages[_selectedIndex],
+        child: IndexedStack(
+          index: _selectedIndex,
+          children: _pages,
+        ),
       ),
       bottomNavigationBar: _buildBottomNavBar(),
     );

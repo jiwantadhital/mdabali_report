@@ -4,7 +4,7 @@ import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:get/get.dart';
 import 'package:mdabali_report/bloc/five_month_data_bloc/bloc/five_month_data_bloc.dart';
 import 'package:mdabali_report/bloc/init_bloc/bloc/init_bloc.dart';
-import 'package:mdabali_report/bloc/login_bloc/bloc/login_bloc.dart';
+
 import 'package:mdabali_report/bloc/member_limit_bloc/bloc/member_limit_bloc.dart';
 import 'package:mdabali_report/bloc/monthly_aggregate_bloc/bloc/monthly_aggregate_bloc.dart';
 import 'package:mdabali_report/bloc/sms_summary_bloc/bloc/sms_summary_bloc.dart';
@@ -16,7 +16,7 @@ import 'package:mdabali_report/controller/theme_controller.dart';
 import 'package:mdabali_report/data/repos/get_repo.dart';
 import 'package:mdabali_report/data/repos/repositories/five_month_data_repository.dart';
 import 'package:mdabali_report/data/repos/repositories/init_repository.dart';
-import 'package:mdabali_report/data/repos/repositories/login_repository.dart';
+
 import 'package:mdabali_report/data/repos/repositories/member_limit_repository.dart';
 import 'package:mdabali_report/data/repos/repositories/monthly_aggreagate_repository.dart';
 import 'package:mdabali_report/data/repos/repositories/sms_summary_repository.dart';
@@ -59,9 +59,9 @@ class _MyAppState extends State<MyApp> {
       builder: (context, orientation, deviceType) {
         return MultiBlocProvider(
           providers: [
-            BlocProvider(
-              create: (context) => LoginBloc(LoginRepository()),
-            ),
+            // BlocProvider(
+            //   create: (context) => LoginBloc(LoginRepository()),
+            // ),
             BlocProvider(create: (context) => TOtpBloc(TotpRepository())),
             BlocProvider(
                 create: (context) =>
@@ -105,8 +105,10 @@ class _MyAppState extends State<MyApp> {
               ),
               initialRoute: '/splash',
               getPages: [
-                GetPage(name: '/service_error', page: ()=> ServiceUnavailablePage()),
-                GetPage(name: '/splash', page: ()=> SplashScreen()),
+                GetPage(
+                    name: '/service_error',
+                    page: () => ServiceUnavailablePage()),
+                GetPage(name: '/splash', page: () => SplashScreen()),
                 GetPage(name: '/login', page: () => PasswordLoginPage()),
                 GetPage(name: '/dashboard', page: () => DashBoardPage()),
                 GetPage(

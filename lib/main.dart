@@ -103,7 +103,7 @@ class _MyAppState extends State<MyApp> {
                   backgroundColor: Color(0xFFFFFFFF),
                 ),
               ),
-              initialRoute: '/login',
+              initialRoute: '/splash',
               getPages: [
                 GetPage(name: '/service_error', page: ()=> ServiceUnavailablePage()),
                 GetPage(name: '/splash', page: ()=> SplashScreen()),

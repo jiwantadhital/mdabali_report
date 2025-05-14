@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 
 class HttpErrorHandler {
   static void handleErrorResponse(int statusCode) {
-    if (statusCode == 503 || statusCode == 502 || statusCode == 440) {
+    if (statusCode == 503 || statusCode == 502 ) {
       //unvailable function load gardini
       _showServiceUnavailablePage();
     }

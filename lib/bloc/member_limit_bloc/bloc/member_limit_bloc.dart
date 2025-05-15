@@ -19,7 +19,9 @@ class MemberLimitBloc extends Bloc<MemberLimitEvent, MemberLimitState> {
     emit(MemberLimitLoading());
     try {
       final data = await memberLimitRepository.fetchMemberLimitData();
-      emit(MemberLimitLoaded(memeberLimitModel: data));
+      data.status == true
+          ? emit(MemberLimitLoaded(memeberLimitModel: data))
+          : emit(MemberLimitError(data.message.toString()));
     } catch (e) {
       emit(MemberLimitError(e.toString()));
     }

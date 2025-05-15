@@ -65,6 +65,7 @@ class _TransactionPageState extends State<TransactionPage> {
         return Future.delayed(const Duration(milliseconds: 1200));
       },
       child: SingleChildScrollView(
+        physics: AlwaysScrollableScrollPhysics(),
         child: Padding(
           padding: EdgeInsets.all(16),
           child: Column(
@@ -161,20 +162,23 @@ class _TransactionPageState extends State<TransactionPage> {
                       summaryReportData?[index].failedCount ?? 0,
                       summaryReportData?[index].failedAmount ?? 0)));
         } else if (state is SummaryReportError) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.error_outline,
-                    color: Theme.of(context).colorScheme.error, size: 24),
-                SizedBox(height: 8),
-                CustomText(
-                  text: state.error,
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  fontSize: 16,
-                  textAlign: TextAlign.center,
-                ),
-              ],
+          return Padding(
+            padding: const EdgeInsets.only(top: 100.0),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.error_outline,
+                      color: Theme.of(context).colorScheme.error, size: 24),
+                  SizedBox(height: 8),
+                  CustomText(
+                    text: state.error,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    fontSize: 16,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
             ),
           );
         } else {

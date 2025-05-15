@@ -17,13 +17,19 @@ class LineChartCard extends StatelessWidget {
     if (maxValue <= 1000) {
       return 100; // Small values, smaller interval
     } else if (maxValue <= 5000) {
-      return 500; // Medium range
+      return 1000; // Medium range
     } else if (maxValue <= 20000) {
       return 2000; // Larger range
     } else if (maxValue <= 50000) {
       return 5000; // Even larger
+    } else if (maxValue <= 100000) {
+      return 10000;
+    } else if (maxValue <= 500000) {
+      return 50000;
+    } else if (maxValue <= 1000000) {
+      return 100000;
     } else {
-      return 10000; // Very large values
+      return 200000; // Very large values
     }
   }
 

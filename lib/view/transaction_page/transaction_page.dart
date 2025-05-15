@@ -40,73 +40,89 @@ class _TransactionPageState extends State<TransactionPage> {
   @override
   Widget build(BuildContext context) {
     var colorScheme = Theme.of(context).colorScheme;
-    return SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Align(
-              alignment: Alignment.centerRight,
-              child: GestureDetector(
-                onTap: () async {
-                  final range = await NepaliDateRangePicker.show(
-                      context, _startDate!, _endDate!);
-                  if (range != null) {
-                    // Format the start and end dates to 'yyyy-MM-dd' format
-                    String startFormatted =
-                        DateFormat('yyyy-MM-dd').format(range.start);
-                    print(range.start);
-                    String endFormatted =
-                        DateFormat('yyyy-MM-dd').format(range.end);
-                    print(range.end);
-                    setState(() {
-                      _startDate = NepaliDateTime.fromDateTime(range.start);
-                      _endDate = NepaliDateTime.fromDateTime(range.end);
-                    });
-                    // ignore: use_build_context_synchronously
-                    context.read<SummaryReportBloc>().add(FetchSummaryReport(
-                        dateFrom: startFormatted,
-                        dateTo: endFormatted,
-                        clientId:
-                            UserSimplePreferences.getClientId().toString()));
-                  }
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: colorScheme.surface,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                        color: colorScheme.onSurfaceVariant, width: 1),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.calendar_today,
-                        size: 14,
-                        color: colorScheme.primaryFixedDim,
-                      ),
-                      SizedBox(width: 8),
-                      Text(
-                        _startDate != null && _endDate != null
-                            ? '${NepaliDateFormat('yyyy/MM/dd').format(_startDate!)} '
-                                'to ${NepaliDateFormat('yyyy/MM/dd').format(_endDate!)}'
-                            : "Select date Range",
-                        style: TextStyle(
-                            fontSize: 12, color: colorScheme.onSurfaceVariant),
-                      ),
-                    ],
+    return RefreshIndicator(
+      onRefresh: () {
+        final today = NepaliDateTime.now();
+        final oneMonthAgo = NepaliDateTime(
+          today.month == 1 ? today.year - 1 : today.year,
+          today.month - 1 <= 0 ? 12 : today.month - 1,
+          today.day,
+        );
+        context.read<SummaryReportBloc>().add(FetchSummaryReport(
+            dateFrom: oneMonthAgo.toString(),
+            dateTo: today.toString(),
+            clientId: UserSimplePreferences.getClientId().toString()));
+        return Future.delayed(const Duration(milliseconds: 1200));
+      },
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Align(
+                alignment: Alignment.centerRight,
+                child: GestureDetector(
+                  onTap: () async {
+                    final range = await NepaliDateRangePicker.show(
+                        context, _startDate!, _endDate!);
+                    if (range != null) {
+                      // Format the start and end dates to 'yyyy-MM-dd' format
+                      String startFormatted =
+                          DateFormat('yyyy-MM-dd').format(range.start);
+                      print(range.start);
+                      String endFormatted =
+                          DateFormat('yyyy-MM-dd').format(range.end);
+                      print(range.end);
+                      setState(() {
+                        _startDate = NepaliDateTime.fromDateTime(range.start);
+                        _endDate = NepaliDateTime.fromDateTime(range.end);
+                      });
+                      // ignore: use_build_context_synchronously
+                      context.read<SummaryReportBloc>().add(FetchSummaryReport(
+                          dateFrom: startFormatted,
+                          dateTo: endFormatted,
+                          clientId:
+                              UserSimplePreferences.getClientId().toString()));
+                    }
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: colorScheme.surface,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                          color: colorScheme.onSurfaceVariant, width: 1),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.calendar_today,
+                          size: 14,
+                          color: colorScheme.primaryFixedDim,
+                        ),
+                        SizedBox(width: 8),
+                        Text(
+                          _startDate != null && _endDate != null
+                              ? '${NepaliDateFormat('yyyy/MM/dd').format(_startDate!)} '
+                                  'to ${NepaliDateFormat('yyyy/MM/dd').format(_endDate!)}'
+                              : "Select date Range",
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: colorScheme.onSurfaceVariant),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            _buildTransactionList(context = context),
-            const SizedBox(
-              height: 24,
-            ),
-          ],
+              _buildTransactionList(context = context),
+              const SizedBox(
+                height: 24,
+              ),
+            ],
+          ),
         ),
       ),
     );

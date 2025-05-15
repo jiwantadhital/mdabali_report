@@ -22,66 +22,74 @@ class _MdabaliPageState extends State<MdabaliPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            BlocBuilder<MemberLimitBloc, MemberLimitState>(
-                builder: (context, state) {
-              if (state is MemberLimitLoading) {
-                return ShimmerTopupCard(
-                  context: context,
-                );
-              } else if (state is MemberLimitLoaded) {
-                final memberData = state.memeberLimitModel.data;
-                final remainingLimit =
-                    memberData!.memberLimit! - memberData.verifiedUser!.toInt();
-                return buildMdabaliCard(
-                    membersLimit: memberData.memberLimit.toString(),
-                    verifiedUser: memberData.verifiedUser.toString(),
-                    closedUser: memberData.closedUser.toString(),
-                    totalUser: memberData.totalUser.toString(),
+    return RefreshIndicator(
+      onRefresh: () {
+        context.read<MemberLimitBloc>().add(FetchMemberLimit());
+        return Future.delayed(const Duration(milliseconds: 1200));
+      },
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              BlocBuilder<MemberLimitBloc, MemberLimitState>(
+                  builder: (context, state) {
+                if (state is MemberLimitLoading) {
+                  return ShimmerTopupCard(
                     context: context,
-                    remainingLimit: remainingLimit.toString());
-              } else if (state is MemberLimitError) {
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.error_outline,
-                          color: Theme.of(context).colorScheme.error, size: 24),
-                      SizedBox(height: 8),
-                      CustomText(
-                        text: state.error,
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        fontSize: 16,
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                );
-              } else {
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.error_outline,
-                          color: Theme.of(context).colorScheme.error, size: 24),
-                      SizedBox(height: 8),
-                      CustomText(
-                        text: 'Failed to load Data',
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        fontSize: 16,
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                );
-              }
-            })
-          ],
+                  );
+                } else if (state is MemberLimitLoaded) {
+                  final memberData = state.memeberLimitModel.data;
+                  final remainingLimit = memberData!.memberLimit! -
+                      memberData.verifiedUser!.toInt();
+                  return buildMdabaliCard(
+                      membersLimit: memberData.memberLimit.toString(),
+                      verifiedUser: memberData.verifiedUser.toString(),
+                      closedUser: memberData.closedUser.toString(),
+                      totalUser: memberData.totalUser.toString(),
+                      context: context,
+                      remainingLimit: remainingLimit.toString());
+                } else if (state is MemberLimitError) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.error_outline,
+                            color: Theme.of(context).colorScheme.error,
+                            size: 24),
+                        SizedBox(height: 8),
+                        CustomText(
+                          text: state.error,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          fontSize: 16,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  );
+                } else {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.error_outline,
+                            color: Theme.of(context).colorScheme.error,
+                            size: 24),
+                        SizedBox(height: 8),
+                        CustomText(
+                          text: 'Failed to load Data',
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          fontSize: 16,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              })
+            ],
+          ),
         ),
       ),
     );

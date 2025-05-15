@@ -28,140 +28,151 @@ class _SmsPageState extends State<SmsPage> {
   @override
   Widget build(BuildContext context) {
     var colorScheme = Theme.of(context).colorScheme;
-    return SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CustomText(
-              text: 'SMS Summary',
-              fontSize: 16,
-              weight: FontWeight.w600,
-              color: colorScheme.onSurface,
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            BlocBuilder<SmsSummaryBloc, SmsSummaryState>(
-              builder: (context, state) {
-                if (state is SmsSummaryLoading) {
-                  return ShimmerTopupCard(context: context);
-                } else if (state is SmsSummaryLoaded) {
-                  final smsData = state.smsSummaryModel.data;
-                  return _buildSMSCard(
-                      smsCount: smsData!.smsCount ?? 0,
-                      rate: smsData.smsRate ?? 0,
-                      totalAmount: smsData.totalAmount ?? 0,
-                      availableBalance: smsData.availableCount ?? 0,
-                      context: context);
-                } else if (state is SmsSummaryError) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.error_outline,
-                            color: Theme.of(context).colorScheme.error,
-                            size: 24),
-                        SizedBox(height: 8),
-                        CustomText(
-                          text: state.error,
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          fontSize: 16,
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  );
-                } else {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.error_outline,
-                            color: Theme.of(context).colorScheme.error,
-                            size: 24),
-                        SizedBox(height: 8),
-                        CustomText(
-                          text: 'Failed to load Data',
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          fontSize: 16,
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  );
-                }
-              },
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            CustomText(
-              text: 'TopUp Summary',
-              fontSize: 16,
-              weight: FontWeight.w600,
-              color: colorScheme.onSurface,
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            BlocBuilder<TopupSummaryBloc, TopupSummaryState>(
-              builder: (context, state) {
-                if (state is TopupSummaryLoading) {
-                  return ShimmerTopupCard(
-                    context: context,
-                  );
-                } else if (state is TopupSummaryLoaded) {
-                  final topupData = state.topupSummaryModel.data;
-                  return _buildTopupCard(
-                      transactionAmount: topupData?.transactionAmount ?? 0,
-                      remainingBalance: topupData?.remainingBalance ?? 0,
-                      transactionCount: topupData?.transactionCount ?? 0,
-                      context: context);
-                } else if (state is TopupSummaryError) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.error_outline,
-                            color: Theme.of(context).colorScheme.error,
-                            size: 24),
-                        SizedBox(height: 8),
-                        CustomText(
-                          text: state.error,
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          fontSize: 16,
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  );
-                } else {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.error_outline,
-                            color: Theme.of(context).colorScheme.error,
-                            size: 24),
-                        SizedBox(height: 8),
-                        CustomText(
-                          text: 'Failed to load Data',
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          fontSize: 16,
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  );
-                }
-              },
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-          ],
+    return RefreshIndicator(
+      onRefresh: () {
+        context.read<TopupSummaryBloc>().add(FetchTopupSummary());
+        context.read<SmsSummaryBloc>().add(FetchSmsSummary());
+        return Future.delayed(const Duration(milliseconds: 1200));
+      },
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomText(
+                text: 'SMS Summary',
+                fontSize: 16,
+                weight: FontWeight.w600,
+                color: colorScheme.onSurface,
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              BlocBuilder<SmsSummaryBloc, SmsSummaryState>(
+                builder: (context, state) {
+                  if (state is SmsSummaryLoading) {
+                    return ShimmerTopupCard(context: context);
+                  } else if (state is SmsSummaryLoaded) {
+                    final smsData = state.smsSummaryModel.data;
+                    return _buildSMSCard(
+                        smsCount: smsData!.smsCount ?? 0,
+                        rate: smsData.smsRate ?? 0,
+                        totalAmount: smsData.totalAmount ?? 0,
+                        availableBalance: smsData.availableCount ?? 0,
+                        context: context);
+                  } else if (state is SmsSummaryError) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.error_outline,
+                              color: Theme.of(context).colorScheme.error,
+                              size: 24),
+                          SizedBox(height: 8),
+                          CustomText(
+                            text: state.error,
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                            fontSize: 16,
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.error_outline,
+                              color: Theme.of(context).colorScheme.error,
+                              size: 24),
+                          SizedBox(height: 8),
+                          CustomText(
+                            text: 'Failed to load Data',
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                            fontSize: 16,
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                },
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              CustomText(
+                text: 'TopUp Summary',
+                fontSize: 16,
+                weight: FontWeight.w600,
+                color: colorScheme.onSurface,
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              BlocBuilder<TopupSummaryBloc, TopupSummaryState>(
+                builder: (context, state) {
+                  if (state is TopupSummaryLoading) {
+                    return ShimmerTopupCard(
+                      context: context,
+                    );
+                  } else if (state is TopupSummaryLoaded) {
+                    final topupData = state.topupSummaryModel.data;
+                    return _buildTopupCard(
+                        transactionAmount: topupData?.transactionAmount ?? 0,
+                        remainingBalance: topupData?.remainingBalance ?? 0,
+                        transactionCount: topupData?.transactionCount ?? 0,
+                        context: context);
+                  } else if (state is TopupSummaryError) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.error_outline,
+                              color: Theme.of(context).colorScheme.error,
+                              size: 24),
+                          SizedBox(height: 8),
+                          CustomText(
+                            text: state.error,
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                            fontSize: 16,
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.error_outline,
+                              color: Theme.of(context).colorScheme.error,
+                              size: 24),
+                          SizedBox(height: 8),
+                          CustomText(
+                            text: 'Failed to load Data',
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                            fontSize: 16,
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                },
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -305,7 +316,7 @@ class _SmsPageState extends State<SmsPage> {
                         buildDivider(),
                         buildMetricRow(
                           'Transaction Amount',
-                          NumberFormatter.formatAmount(transactionAmount),
+                          "Rs ${NumberFormatter.formatAmount(transactionAmount)}",
                           CupertinoIcons.creditcard,
                           colorScheme.onSurface,
                           iconBgColor:
@@ -314,7 +325,7 @@ class _SmsPageState extends State<SmsPage> {
                         buildDivider(),
                         buildMetricRow(
                           'Available Balance',
-                          NumberFormatter.formatAmount(remainingBalance),
+                          "Rs ${NumberFormatter.formatAmount(remainingBalance)}",
                           Icons.balance,
                           colorScheme.onSurface,
                           iconBgColor:

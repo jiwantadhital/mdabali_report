@@ -22,7 +22,7 @@ class MemberLimitRepository {
             jsonDecode(response.body)['message'] ?? "Failed to load data");
       }
     } catch (e) {
-      throw Exception("Error: $e");
+      throw Exception("$e");
     }
   }
 }

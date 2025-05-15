@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -10,7 +9,6 @@ import 'package:mdabali_report/bloc/summary_report_bloc/bloc/summary_report_bloc
 import 'package:mdabali_report/data/shared_preferences/shared_preferences.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:shimmer/shimmer.dart';
-
 import '../extracted_widgets/custom_text.dart';
 import 'charts/line_chart_card.dart';
 import 'charts/pie_chart_card.dart';
@@ -24,21 +22,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final TextEditingController summaryDateController = TextEditingController();
+  final ValueNotifier<NepaliDateTime?> selectedNepaliDate = ValueNotifier(null);
 
   @override
   void dispose() {
-    // Always dispose controllers
-    summaryDateController.dispose();
+    selectedNepaliDate.dispose();
     super.dispose();
   }
 
   Future<void> selectNepaliDate(BuildContext context) async {
     NepaliDateTime currentNepaliDate = NepaliDateTime.now();
-
+    NepaliDateTime initialDate =
+        selectedNepaliDate.value ?? NepaliDateTime.now();
     final NepaliDateTime? picked = await showMaterialDatePicker(
       context: context,
-      initialDate: currentNepaliDate,
+      initialDate: initialDate,
       firstDate: NepaliDateTime(2075),
       lastDate: currentNepaliDate,
       initialDatePickerMode: DatePickerMode.day,
@@ -58,17 +56,12 @@ class _HomePageState extends State<HomePage> {
     );
 
     if (picked != null) {
-      String nepaliDateFormatted =
-          "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
-
-      setState(() {
-        summaryDateController.text = nepaliDateFormatted;
-      });
-
+      //to show selected date in container
+      selectedNepaliDate.value = picked;
       DateTime englishDate = picked.toDateTime();
       String englishDateFormatted =
           "${englishDate.year}-${englishDate.month.toString().padLeft(2, '0')}-${englishDate.day.toString().padLeft(2, '0')}";
-
+      print("five month date:$englishDateFormatted");
       // ignore: use_build_context_synchronously
       context
           .read<FiveMonthDataBloc>()
@@ -274,16 +267,31 @@ class _HomePageState extends State<HomePage> {
                             color: colorScheme.primaryFixedDim,
                           ),
                           SizedBox(width: 8),
-                          Text(
-                            summaryDateController.text.isEmpty
-                                ? "Select date"
-                                : summaryDateController.text,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: summaryDateController.text.isEmpty
-                                  ? colorScheme.onSurfaceVariant
-                                  : colorScheme.onSurface,
-                            ),
+                          ValueListenableBuilder<NepaliDateTime?>(
+                            valueListenable: selectedNepaliDate,
+                            builder: (context, value, _) {
+                              bool isToday(NepaliDateTime? date) {
+                                if (date == null) return false;
+
+                                final now = NepaliDateTime.now();
+                                return date.year == now.year &&
+                                    date.month == now.month &&
+                                    date.day == now.day;
+                              }
+
+                              String text = (value == null || isToday(value))
+                                  ? "Today"
+                                  : "${value.year}-${value.month.toString().padLeft(2, '0')}-${value.day.toString().padLeft(2, '0')}";
+                              return Text(
+                                text,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: value == null
+                                      ? colorScheme.onSurfaceVariant
+                                      : colorScheme.onSurface,
+                                ),
+                              );
+                            },
                           ),
                         ],
                       ),

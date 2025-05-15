@@ -171,11 +171,10 @@ class _PieChartCardState extends State<PieChartCard> {
                                 DateFormat('yyyy-MM-dd').format(range.start);
                             String endFormatted =
                                 DateFormat('yyyy-MM-dd').format(range.end);
-                            setState(() {
-                              _startDate =
-                                  NepaliDateTime.fromDateTime(range.start);
-                              _endDate = NepaliDateTime.fromDateTime(range.end);
-                            });
+                            _startDate =
+                                NepaliDateTime.fromDateTime(range.start);
+                            _endDate = NepaliDateTime.fromDateTime(range.end);
+
                             // ignore: use_build_context_synchronously
                             context.read<SummaryReportBloc>().add(
                                 FetchSummaryReport(
@@ -184,9 +183,8 @@ class _PieChartCardState extends State<PieChartCard> {
                                     clientId:
                                         UserSimplePreferences.getClientId()
                                             .toString()));
-                            setState(() {
-                              _showAllOthers = false;
-                            });
+                            //flag to toggle view all or show less
+                            _showAllOthers = false;
                           }
                         },
                         child: Container(

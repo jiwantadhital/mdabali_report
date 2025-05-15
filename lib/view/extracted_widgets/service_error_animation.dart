@@ -381,7 +381,7 @@ class CharacterPainter extends CustomPainter {
 
     // Draw "503" text on sign
     final textStyle = TextStyle(
-      color: Colors.white,
+      color: Colors.blue,
       fontSize: signHeight * 0.2,
       fontWeight: FontWeight.bold,
     );

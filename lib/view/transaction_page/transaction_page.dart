@@ -42,15 +42,25 @@ class _TransactionPageState extends State<TransactionPage> {
     var colorScheme = Theme.of(context).colorScheme;
     return RefreshIndicator(
       onRefresh: () {
-        final today = NepaliDateTime.now();
-        final oneMonthAgo = NepaliDateTime(
+        //this is to get today date and one month ago date
+        final today = DateTime.now();
+        final oneMonthAgo = DateTime(
           today.month == 1 ? today.year - 1 : today.year,
           today.month - 1 <= 0 ? 12 : today.month - 1,
           today.day,
         );
+        //this is to hit fetch summary report event
+        String startFormatted = DateFormat('yyyy-MM-dd').format(oneMonthAgo);
+        String endFormatted = DateFormat('yyyy-MM-dd').format(today);
+
+        //this is to show selected date in the calendar
+        setState(() {
+          _startDate = NepaliDateTime.fromDateTime(oneMonthAgo);
+          _endDate = NepaliDateTime.fromDateTime(today);
+        });
         context.read<SummaryReportBloc>().add(FetchSummaryReport(
-            dateFrom: oneMonthAgo.toString(),
-            dateTo: today.toString(),
+            dateFrom: startFormatted.toString(),
+            dateTo: endFormatted.toString(),
             clientId: UserSimplePreferences.getClientId().toString()));
         return Future.delayed(const Duration(milliseconds: 1200));
       },

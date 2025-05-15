@@ -163,7 +163,7 @@ class _PasswordLoginPageState extends State<PasswordLoginPage> {
                           CustomTextField(
                               hintText: 'Password',
                               controller: passwordController,
-                              maxLength: 16,
+                              //maxLength: 16,
                               onchange: (value) {
                                 passwordNotifier.value = value;
                               },

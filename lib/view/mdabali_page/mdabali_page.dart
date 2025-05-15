@@ -28,6 +28,7 @@ class _MdabaliPageState extends State<MdabaliPage> {
         return Future.delayed(const Duration(milliseconds: 1200));
       },
       child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
         child: Padding(
           padding: EdgeInsets.all(16),
           child: Column(
@@ -51,41 +52,11 @@ class _MdabaliPageState extends State<MdabaliPage> {
                       context: context,
                       remainingLimit: remainingLimit.toString());
                 } else if (state is MemberLimitError) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.error_outline,
-                            color: Theme.of(context).colorScheme.error,
-                            size: 24),
-                        SizedBox(height: 8),
-                        CustomText(
-                          text: state.error,
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          fontSize: 16,
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
+                  return ErrorWidget(
+                    state.error,
                   );
                 } else {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.error_outline,
-                            color: Theme.of(context).colorScheme.error,
-                            size: 24),
-                        SizedBox(height: 8),
-                        CustomText(
-                          text: 'Failed to load Data',
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          fontSize: 16,
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  );
+                  return ErrorWidget('Failed to load data');
                 }
               })
             ],

@@ -15,7 +15,7 @@ class LineChartCard extends StatelessWidget {
       required this.months});
   double getOptimalInterval(double maxValue) {
     if (maxValue <= 1000) {
-      return 100; // Small values, smaller interval
+      return 200; // Small values, smaller interval
     } else if (maxValue <= 5000) {
       return 1000; // Medium range
     } else if (maxValue <= 20000) {
@@ -28,8 +28,28 @@ class LineChartCard extends StatelessWidget {
       return 50000;
     } else if (maxValue <= 1000000) {
       return 100000;
+    } else if (maxValue <= 5000000) {
+      return 500000; // Very large values
+    } else if (maxValue <= 10000000) {
+      // 1 Crore
+      return 1000000;
+    } else if (maxValue <= 25000000) {
+      // 2.5 Cr
+      return 2500000;
+    } else if (maxValue <= 50000000) {
+      // 5 Cr
+      return 5000000;
+    } else if (maxValue <= 100000000) {
+      // 10 Cr
+      return 10000000;
+    } else if (maxValue <= 250000000) {
+      // 25 Cr
+      return 25000000;
+    } else if (maxValue <= 500000000) {
+      // 50 Cr
+      return 50000000;
     } else {
-      return 200000; // Very large values
+      return 100000000; // 10 Cr+
     }
   }
 

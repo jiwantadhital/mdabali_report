@@ -52,11 +52,42 @@ class _MdabaliPageState extends State<MdabaliPage> {
                       context: context,
                       remainingLimit: remainingLimit.toString());
                 } else if (state is MemberLimitError) {
-                  return ErrorWidget(
-                    state.error,
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.error_outline,
+                            color: Theme.of(context).colorScheme.error,
+                            size: 24),
+                        SizedBox(height: 8),
+                        CustomText(
+                          text: state.error,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          fontSize: 16,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
                   );
                 } else {
-                  return ErrorWidget('Failed to load data');
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.error_outline,
+                            color: Theme.of(context).colorScheme.error,
+                            size: 24),
+                        SizedBox(height: 8),
+                        CustomText(
+                          text:
+                              'Failed to load data, Please refresh to load data.',
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          fontSize: 16,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  );
                 }
               })
             ],

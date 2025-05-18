@@ -20,10 +20,17 @@ class SummaryReportBloc extends Bloc<SummaryReportEvent, SummaryReportState> {
     emit(SummaryReportLoading());
     try {
       final data = await summaryReportRepository.fetchSummaryReport(
-          dateFrom: event.dateFrom, dateTo: event.dateTo,clientId: event.clientId);
-      data.status == true
-          ? emit(SummaryReportLoaded(data))
-          : emit(SummaryReportError(data.message.toString()));
+          dateFrom: event.dateFrom,
+          dateTo: event.dateTo,
+          clientId: event.clientId);
+
+      if (data.status == true) {
+        emit(SummaryReportLoaded(data));
+      } else {
+        final String errorMessage = data.message ?? "Unknown error";
+        // Use the actual error message from the response
+        emit(SummaryReportError(errorMessage));
+      }
     } catch (e) {
       emit(SummaryReportError(e.toString()));
     }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -10,7 +12,6 @@ import '../../view/extracted_widgets/custom_text.dart';
 class GetRepo {
   // final CustomHttpInterceptor client;
   // http.BaseClient client;
-
 
   bool isLogout = false;
   GetRepo();
@@ -47,12 +48,12 @@ class GetRepo {
         throw Exception(response.reasonPhrase);
       }
     }
-    if(response.statusCode==503){
+    if (response.statusCode == 503) {
       HttpErrorHandler.handleErrorResponse(response.statusCode);
       return response;
-    } 
-    else {
-      throw Exception(response.reasonPhrase);
+    } else {
+      throw Exception(
+          jsonDecode(response.body)['message'] ?? response.reasonPhrase);
     }
   }
 }

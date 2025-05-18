@@ -2,11 +2,11 @@ class SummaryReportModel {
   bool? status;
   String? message;
   List<Data>? data;
-  String? errors;
+  List<String>? error;
   bool? genericMessage;
 
   SummaryReportModel(
-      {this.status, this.message, this.data, this.errors, this.genericMessage});
+      {this.status, this.message, this.data, this.error, this.genericMessage});
 
   SummaryReportModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -17,7 +17,9 @@ class SummaryReportModel {
         data!.add(Data.fromJson(v));
       });
     }
-    errors = json['errors'];
+    error = json['error'] != null
+        ? (json['error'] as List).map((e) => e.toString()).toList()
+        : null;
     genericMessage = json['genericMessage'];
   }
 
@@ -28,7 +30,7 @@ class SummaryReportModel {
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
-    data['errors'] = errors;
+    data['error'] = error;
     data['genericMessage'] = genericMessage;
     return data;
   }

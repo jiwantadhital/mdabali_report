@@ -158,11 +158,14 @@ class _HomePageState extends State<HomePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Center(
-                            child: Image.memory(
-                          Uint8List.fromList(state.imageBytes!),
-                          height: 40,
-                          width: 40,
-                        )),
+                            child: (state.imageBytes!.isEmpty ||
+                                    state.imageBytes == null)
+                                ? Image.asset('assets/images/mdabali.png')
+                                : Image.memory(
+                                    Uint8List.fromList(state.imageBytes!),
+                                    height: 40,
+                                    width: 40,
+                                  )),
                         const SizedBox(
                           width: 5,
                         ),

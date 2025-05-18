@@ -90,9 +90,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         return CircleAvatar(
                             radius: 50,
                             backgroundColor: colorScheme.onSecondary,
-                            backgroundImage: MemoryImage(
-                              Uint8List.fromList(state.imageBytes!),
-                            ));
+                            backgroundImage: (state.imageBytes!.isEmpty ||
+                                    state.imageBytes == null)
+                                ? AssetImage('assets/images/mdabali.png')
+                                : MemoryImage(
+                                    Uint8List.fromList(state.imageBytes!),
+                                  ));
                       } else {
                         return CircleAvatar(
                           radius: 40,

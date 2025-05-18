@@ -16,16 +16,18 @@ class SummaryReportRepository {
       final response = await getRepo.getRepository(
         "${ApiClass.summaryReportUrl}fromDate=$dateFrom&toDate=$dateTo&clientId=$clientId",
       );
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        return SummaryReportModel.fromJson(data);
-      } else {
-        throw Exception(
-            jsonDecode(response.body)['message'] ?? "Failed to load data");
-      }
+      print("Response received with status code: ${response.statusCode}");
+      print("Response body: ${response.body}");
+      final data = jsonDecode(response.body);
+      return SummaryReportModel.fromJson(data);
     } catch (e) {
-      throw Exception("Error: $e");
+      print("Exception caught in repository: $e");
+      // For network or parsing errors
+      return SummaryReportModel(
+        status: false,
+        message: e.toString(),
+        error: [e.toString()],
+      );
     }
   }
 }

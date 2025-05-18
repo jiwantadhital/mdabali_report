@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:get/get.dart';
@@ -39,7 +40,12 @@ void main() async {
   final themeController = ThemeController();
   await themeController.loadThemeMode();
   Get.put(themeController);
-  runApp(MyApp());
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((_) {
+    runApp(MyApp());
+  });
 }
 
 class MyApp extends StatefulWidget {

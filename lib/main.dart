@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,6 +42,7 @@ void main() async {
   final themeController = ThemeController();
   await themeController.loadThemeMode();
   Get.put(themeController);
+  HttpOverrides.global = MyHttpOverrides();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -130,5 +133,15 @@ class _MyAppState extends State<MyApp> {
         );
       },
     );
+  }
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate crt, String host, int port) {
+        return true;
+      };
   }
 }

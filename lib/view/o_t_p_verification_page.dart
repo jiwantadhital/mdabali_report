@@ -1,11 +1,7 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:get/get.dart';
 import 'package:mdabali_report/bloc/totp_bloc/bloc/t_otp_bloc.dart';
-
 import 'package:mdabali_report/data/shared_preferences/shared_preferences.dart';
 import 'package:mdabali_report/view/dash_board_page.dart';
 import 'package:mdabali_report/view/extracted_widgets/custom_snackbar.dart';
@@ -22,54 +18,35 @@ class OTPVerificationPage extends StatefulWidget {
 }
 
 class _OTPVerificationPageState extends State<OTPVerificationPage> {
-  //final controller = Get.put(OTPController());
-
   final _pinController = TextEditingController();
   final _isButtonEnabled = ValueNotifier<bool>(false);
-  final _remainingTime = ValueNotifier<int>(30);
+
   final _otpformKey = GlobalKey<FormState>();
-  Timer? _timer;
-  bool _isCodeExpired = false;
+
+  final bool _isCodeExpired = false;
 
   @override
   void initState() {
     super.initState();
-    _startTimer();
+
     _pinController.addListener(() {
       _isButtonEnabled.value = _pinController.text.length == 6;
     });
   }
 
-  void _startTimer() {
-    _remainingTime.value = 30;
-    _isCodeExpired = false;
-    _timer?.cancel();
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_remainingTime.value > 0) {
-        _remainingTime.value--;
-      } else {
-        _isCodeExpired = true;
-        _pinController.clear();
-        _isButtonEnabled.value = false;
-        // Automatically resend OTP
-        // context.read<TOtpBloc>().add(
-        //       VerifyOtpEvent(
-        //         secret: widget.secret,
-        //         otp: '',
-        //       ),
-        //     );
-        _startTimer();
-      }
-    });
+  @override
+  void dispose() {
+    _pinController.dispose();
+    _isButtonEnabled.dispose();
+    _otpformKey.currentState?.dispose();
+
+    super.dispose();
   }
 
   @override
-  void dispose() {
-    _timer?.cancel();
-    //_pinController.dispose();
-    _isButtonEnabled.dispose();
-    _remainingTime.dispose();
-    super.dispose();
+  void didUpdateWidget(covariant OTPVerificationPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _otpformKey.currentState?.save();
   }
 
   @override
@@ -82,7 +59,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
             onPressed: () {
               Get.back();
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.arrow_back_ios,
               size: 20,
             )),
@@ -96,7 +73,6 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
           child: BlocConsumer<TOtpBloc, TOtpState>(
             listener: (context, state) async {
               if (state is TOtpSuccess) {
-                _timer?.cancel();
                 CustomSnackbar(
                         title: 'Success',
                         message: state.tOtpModel.message.toString(),
@@ -106,12 +82,15 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                         textColor:
                             Theme.of(context).colorScheme.onSurfaceVariant)
                     .show();
-                Get.off(() => DashBoardPage());
-                final token = state.tOtpModel.data?.accessToken ?? "";
+                Get.off(() => const DashBoardPage());
+                final token = state.tOtpModel.data?.accessToken ?? '';
                 await UserSimplePreferences.setToken(token);
               } else if (state is TOtpFailure) {
-                _pinController.clear();
-                _isButtonEnabled.value = false;
+                setState(() {
+                  _pinController.text = '';
+
+                  //_isButtonEnabled.value = false;
+                });
                 CustomSnackbar(
                         title: 'Error',
                         message: state.error,
@@ -131,11 +110,6 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                   const SizedBox(
                     height: 48,
                   ),
-                  // CustomText(
-                  //   text: 'New device detected!',
-                  //   fontSize: 16,
-                  //   color: colorScheme.inverseSurface,
-                  // ),
                   const SizedBox(
                     height: 8,
                   ),
@@ -151,7 +125,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                   ),
                   CustomText(
                     text:
-                        "Please enter the verification code from your authenticator app (such as Google Authenticator) to access the account",
+                        'Please enter the verification code from your authenticator app (such as Google Authenticator) to access the account',
                     fontSize: 16,
                     textAlign: TextAlign.start,
                     color: colorScheme.onSurface,
@@ -163,50 +137,20 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                     appContext: context,
                     length: 6,
                     controller: _pinController,
-                    // onCompleted: (value) {
-                    //   controller.verifyOtp(value);
-                    // },
-                    // onChanged: (value) {
-                    //   setState(() {
-                    //     _currentOtp=value;
-                    //    // _isButtonEnsbled=value.length==6;
-                    //   });
-                    // },
                     pinTheme: PinTheme(
                       shape: PinCodeFieldShape.box,
                       borderRadius: BorderRadius.circular(12),
                       fieldHeight: 45,
                       fieldWidth: 45,
                       activeFillColor: colorScheme.onSurface,
-                      //activeColor: Colors.grey[200]!,
                       inactiveFillColor: Colors.grey[200]!,
                     ),
                     keyboardType: TextInputType.number,
-                    enabled: state is! TOtpLoading && !_isCodeExpired,
-                    //!controller.isCodeExpired.value,
                     animationType: AnimationType.fade,
                   ),
-
                   const SizedBox(
                     height: 24,
                   ),
-
-                  //   ValueListenableBuilder<int>(
-                  //     valueListenable: _remainingTime,
-                  //     builder: (context, time, _) {
-                  //       return CustomText(
-                  //         text: _isCodeExpired
-                  //             ? 'Code expired. Requesting a new one.'
-                  //             : 'Your code expires in $time seconds',
-                  //         fontSize: 16,
-                  //         color: _isCodeExpired
-                  //             ? colorScheme.primary
-                  //             : colorScheme.onSurfaceVariant,
-                  //         textAlign: TextAlign.center,
-                  //         weight: FontWeight.w500,
-                  //       );
-                  //     },
-                  //   ),
                   const SizedBox(
                     height: 72,
                   ),
@@ -232,7 +176,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                                           otp: _pinController.text,
                                         ),
                                       );
-                                  _pinController.clear();
+                                  //_pinController.clear();
                                   _isButtonEnabled.value = false;
                                 }
                               },

@@ -1,3 +1,8 @@
 {
-  "cmake.sourceDirectory": "/Users/jiwantadhital/Documents/fprojects/office/mdabali_report/linux"
+  "cmake.configureOnOpen": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.removeUnusedImports": "explicit",
+    "source.organizeImports": "explicit"
+  }
 }

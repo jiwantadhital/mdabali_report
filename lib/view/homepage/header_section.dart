@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mdabali_report/bloc/monthly_aggregate_bloc/bloc/monthly_aggregate_bloc.dart';
 import 'package:mdabali_report/utils/number_formatter.dart';
-
 import 'package:mdabali_report/view/extracted_widgets/custom_text.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -33,7 +32,7 @@ class _HeaderSectionState extends State<HeaderSection> {
                 currentMonthAmount: aggergateData?.utility?.currentMonth ?? 0,
                 previousMonthAmount: aggergateData?.utility?.previousMonth ?? 0,
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               buildSummaryCard(
                 context: context,
                 title: 'DFS(Dr)',
@@ -41,7 +40,7 @@ class _HeaderSectionState extends State<HeaderSection> {
                 previousMonthAmount:
                     aggergateData?.dfsDebit?.previousMonth ?? 0,
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               buildSummaryCard(
                 context: context,
                 title: 'DFS(Cr)',
@@ -59,7 +58,7 @@ class _HeaderSectionState extends State<HeaderSection> {
               children: [
                 Icon(Icons.error_outline,
                     color: Theme.of(context).colorScheme.error, size: 24),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 CustomText(
                   text: state.error,
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -76,7 +75,7 @@ class _HeaderSectionState extends State<HeaderSection> {
               children: [
                 Icon(Icons.error_outline,
                     color: Theme.of(context).colorScheme.error, size: 24),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 CustomText(
                   text: 'Something went wrong',
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -123,13 +122,13 @@ class _HeaderSectionState extends State<HeaderSection> {
     var result = calculateGrowth(previousMonthAmount, currentMonthAmount);
     String change = result['change'];
     bool isPositive = result['isPositive'];
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Color(0xFF4285F4).withValues(alpha: 0.1),
-            offset: Offset(0, 4),
+            color: const Color(0xFF4285F4).withValues(alpha: 0.1),
+            offset: const Offset(0, 4),
             blurRadius: 12,
             spreadRadius: 0,
           ),
@@ -144,7 +143,7 @@ class _HeaderSectionState extends State<HeaderSection> {
           borderRadius: BorderRadius.circular(16),
         ),
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: IntrinsicHeight(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -157,7 +156,7 @@ class _HeaderSectionState extends State<HeaderSection> {
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
-                SizedBox(width: 16),
+                const SizedBox(width: 16),
                 Expanded(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -177,7 +176,7 @@ class _HeaderSectionState extends State<HeaderSection> {
                               ),
                             ],
                           ),
-                          SizedBox(height: 12),
+                          const SizedBox(height: 12),
                           CustomText(
                             text:
                                 'Rs ${NumberFormatter.formatAmount(currentMonthAmount)}',
@@ -186,9 +185,9 @@ class _HeaderSectionState extends State<HeaderSection> {
                             color: colorScheme.onSurface,
                             letterSpacing: 0.2,
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           Container(
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 4),
                             decoration: BoxDecoration(
                               color: isPositive
@@ -208,7 +207,7 @@ class _HeaderSectionState extends State<HeaderSection> {
                                       : colorScheme.error,
                                   size: 12,
                                 ),
-                                SizedBox(width: 4),
+                                const SizedBox(width: 4),
                                 CustomText(
                                   text: '$change over month',
                                   fontSize: 12,
@@ -226,7 +225,7 @@ class _HeaderSectionState extends State<HeaderSection> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Container(
-                            padding: EdgeInsets.all(8),
+                            padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
                               color: isPositive
                                   ? colorScheme.tertiaryFixedDim
@@ -270,14 +269,14 @@ class _HeaderSectionState extends State<HeaderSection> {
         : colorScheme.onSurface.withValues(alpha: 0.6);
 
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 12),
+      margin: const EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Color(0xFF4285F4)
+            color: const Color(0xFF4285F4)
                 .withValues(alpha: brightness == Brightness.light ? 0.1 : 0.2),
-            offset: Offset(0, 4),
+            offset: const Offset(0, 4),
             blurRadius: 12,
             spreadRadius: 0,
           ),
@@ -291,7 +290,7 @@ class _HeaderSectionState extends State<HeaderSection> {
           borderRadius: BorderRadius.circular(16),
         ),
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: IntrinsicHeight(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -308,7 +307,7 @@ class _HeaderSectionState extends State<HeaderSection> {
                     ),
                   ),
                 ),
-                SizedBox(width: 16),
+                const SizedBox(width: 16),
                 Expanded(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -331,7 +330,7 @@ class _HeaderSectionState extends State<HeaderSection> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 12),
+                          const SizedBox(height: 12),
                           // Amount shimmer
                           Shimmer.fromColors(
                             baseColor: baseColor,
@@ -345,7 +344,7 @@ class _HeaderSectionState extends State<HeaderSection> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           // Percentage change shimmer
                           Shimmer.fromColors(
                             baseColor: baseColor,

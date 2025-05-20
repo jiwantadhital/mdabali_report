@@ -7,7 +7,6 @@ import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:get/get.dart';
 import 'package:mdabali_report/bloc/five_month_data_bloc/bloc/five_month_data_bloc.dart';
 import 'package:mdabali_report/bloc/init_bloc/bloc/init_bloc.dart';
-
 import 'package:mdabali_report/bloc/member_limit_bloc/bloc/member_limit_bloc.dart';
 import 'package:mdabali_report/bloc/monthly_aggregate_bloc/bloc/monthly_aggregate_bloc.dart';
 import 'package:mdabali_report/bloc/sms_summary_bloc/bloc/sms_summary_bloc.dart';
@@ -19,7 +18,6 @@ import 'package:mdabali_report/controller/theme_controller.dart';
 import 'package:mdabali_report/data/repos/get_repo.dart';
 import 'package:mdabali_report/data/repos/repositories/five_month_data_repository.dart';
 import 'package:mdabali_report/data/repos/repositories/init_repository.dart';
-
 import 'package:mdabali_report/data/repos/repositories/member_limit_repository.dart';
 import 'package:mdabali_report/data/repos/repositories/monthly_aggreagate_repository.dart';
 import 'package:mdabali_report/data/repos/repositories/sms_summary_repository.dart';
@@ -29,12 +27,11 @@ import 'package:mdabali_report/data/repos/repositories/totp_repository.dart';
 import 'package:mdabali_report/data/shared_preferences/shared_preferences.dart';
 import 'package:mdabali_report/resources/colors.dart';
 import 'package:mdabali_report/view/dash_board_page.dart';
+import 'package:mdabali_report/view/no_internet_page.dart';
 import 'package:mdabali_report/view/o_t_p_verification_page.dart';
 import 'package:mdabali_report/view/password_login_page.dart';
 import 'package:mdabali_report/view/service_unavailable_page.dart';
 import 'package:mdabali_report/view/splash_screen.dart';
-
-import 'view/no_internet_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,7 +44,7 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]).then((_) {
-    runApp(MyApp());
+    runApp(const MyApp());
   });
 }
 
@@ -116,13 +113,13 @@ class _MyAppState extends State<MyApp> {
               getPages: [
                 GetPage(
                     name: '/service_error',
-                    page: () => ServiceUnavailablePage()),
-                GetPage(name: '/splash', page: () => SplashScreen()),
-                GetPage(name: '/login', page: () => PasswordLoginPage()),
-                GetPage(name: '/dashboard', page: () => DashBoardPage()),
+                    page: () => const ServiceUnavailablePage()),
+                GetPage(name: '/splash', page: () => const SplashScreen()),
+                GetPage(name: '/login', page: () => const PasswordLoginPage()),
+                GetPage(name: '/dashboard', page: () => const DashBoardPage()),
                 GetPage(
                     name: '/otppage',
-                    page: () => OTPVerificationPage(secret: '')),
+                    page: () => const OTPVerificationPage(secret: '')),
                 GetPage(
                     name: '/NoInternetPage',
                     page: () => const NoInternetPage()),

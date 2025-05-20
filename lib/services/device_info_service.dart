@@ -1,8 +1,9 @@
 import 'dart:io';
+
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:flutter/services.dart';
 
 class DeviceInfoService {
   static const MethodChannel _channel =
@@ -11,10 +12,8 @@ class DeviceInfoService {
   static Future<String?> getAndroidId() async {
     try {
       final String? androidId = await _channel.invokeMethod('getAndroidId');
-      print('Android ID: $androidId');
       return androidId;
-    } on PlatformException catch (e) {
-      print("Failed to get Android ID: '${e.message}'.");
+    } on PlatformException {
       return null;
     }
   }
@@ -26,7 +25,7 @@ class DeviceInfoService {
     String osVersion = '';
     String deviceModel = '';
     String androidApiLevel = '';
-    String androidId = await getAndroidId() ?? "UNKNOWN";
+    String androidId = await getAndroidId() ?? 'UNKNOWN';
     String mobileOs = Platform.isAndroid ? 'ANDROID' : 'IOS';
 
     if (Platform.isAndroid) {
@@ -56,18 +55,16 @@ class DeviceInfoService {
         lat = position.latitude;
         lng = position.longitude;
       }
-    } catch (e) {
-      print("Location error: $e");
-    }
+    } catch (e) {}
 
     return {
-      "OSVersion": osVersion,
-      "appVersion": "${packageInfo.version}+${packageInfo.buildNumber}",
-      "androidApiLevel": androidApiLevel,
-      "device": deviceModel,
-      "location": {"lat": lat, "lng": lng},
-      "IMEI": androidId,
-      "mobileOs": mobileOs
+      'OSVersion': osVersion,
+      'appVersion': '${packageInfo.version}+${packageInfo.buildNumber}',
+      'androidApiLevel': androidApiLevel,
+      'device': deviceModel,
+      'location': {'lat': lat, 'lng': lng},
+      'IMEI': androidId,
+      'mobileOs': mobileOs
     };
   }
 }

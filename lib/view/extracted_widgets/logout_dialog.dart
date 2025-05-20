@@ -16,7 +16,7 @@ void showLogoutDialog(BuildContext context) {
           borderRadius: BorderRadius.circular(16),
         ),
         child: Container(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -28,27 +28,27 @@ void showLogoutDialog(BuildContext context) {
                 color: colorScheme.onSurface,
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               CustomText(
                 text: 'Are you sure you want to logout?',
                 fontSize: 16,
                 color: colorScheme.onSurfaceVariant,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   OutlinedButton(
                     style: OutlinedButton.styleFrom(
                       foregroundColor: colorScheme.primary,
-                      minimumSize: Size(100, 36),
+                      minimumSize: const Size(100, 36),
                       side: BorderSide(color: colorScheme.outline),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
                     onPressed: () => Navigator.of(context).pop(),
-                    child: CustomText(
+                    child: const CustomText(
                       text: 'No',
                       fontSize: 16,
                     ),
@@ -57,7 +57,7 @@ void showLogoutDialog(BuildContext context) {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: colorScheme.error,
                       foregroundColor: colorScheme.onError,
-                      minimumSize: Size(100, 36),
+                      minimumSize: const Size(100, 36),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -74,7 +74,7 @@ void showLogoutDialog(BuildContext context) {
                         (route) => false,
                       );
                     },
-                    child: CustomText(
+                    child: const CustomText(
                       text: 'Logout',
                       color: Colors.white,
                       fontSize: 16,
@@ -82,9 +82,6 @@ void showLogoutDialog(BuildContext context) {
                   ),
                 ],
               ),
-              //   SizedBox(height: 12),
-
-              //   SizedBox(height: 12),
             ],
           ),
         ),

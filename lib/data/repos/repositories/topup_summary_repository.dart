@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:mdabali_report/data/models/topup_summary_model.dart';
 import 'package:mdabali_report/data/repos/get_repo.dart';
 import 'package:mdabali_report/resources/constants.dart';
@@ -19,10 +20,10 @@ class TopupSummaryRepository {
         return TopupSummaryModel.fromJson(data);
       } else {
         throw Exception(
-            jsonDecode(response.body)['message'] ?? "Failed to load data");
+            jsonDecode(response.body)['message'] ?? 'Failed to load data');
       }
     } catch (e) {
-      throw Exception("Error: $e");
+      throw Exception('Error: $e');
     }
   }
 }

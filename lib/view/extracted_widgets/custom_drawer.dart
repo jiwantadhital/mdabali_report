@@ -47,10 +47,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
         children: [
           // Top user information card
           Card(
-            margin: EdgeInsets.all(0),
+            margin: const EdgeInsets.all(0),
             elevation: 0,
             color: colorScheme.secondary.withValues(alpha: 0.9),
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(16),
                 bottomRight: Radius.circular(16),
@@ -60,7 +60,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  SizedBox(height: 40), // For safe area
+                  const SizedBox(height: 40), // For safe area
                   BlocBuilder<InitBloc, InitState>(
                     builder: (context, state) {
                       if (state is InitLoading) {
@@ -80,7 +80,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                           child: Container(
                             height: 80,
                             width: 80,
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               shape: BoxShape.circle,
                               color: Colors.white,
                             ),
@@ -92,7 +92,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                             backgroundColor: colorScheme.onSecondary,
                             backgroundImage: (state.imageBytes!.isEmpty ||
                                     state.imageBytes == null)
-                                ? AssetImage('assets/images/mdabali.png')
+                                ? const AssetImage('assets/images/mdabali.png')
                                 : MemoryImage(
                                     Uint8List.fromList(state.imageBytes!),
                                   ));
@@ -101,19 +101,19 @@ class _CustomDrawerState extends State<CustomDrawer> {
                           radius: 40,
                           backgroundColor: colorScheme.onSecondary,
                           backgroundImage:
-                              AssetImage(ImagesConstants.mdabaliLogo),
+                              const AssetImage(ImagesConstants.mdabaliLogo),
                         );
                       }
                     },
                   ),
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
                   CustomText(
                     text: UserSimplePreferences.getUsername().toString(),
                     fontSize: 18,
                     weight: FontWeight.w500,
                     color: colorScheme.onSecondary,
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   BlocBuilder<InitBloc, InitState>(
                     builder: (context, state) {
                       if (state is InitLoading) {
@@ -144,7 +144,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       }
                     },
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                 ],
               ),
             ),
@@ -152,7 +152,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
           // Divider
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 0),
+            padding: const EdgeInsets.symmetric(vertical: 0),
             child: Container(
               height: 1,
               decoration: BoxDecoration(
@@ -179,7 +179,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 color: colorScheme.primary,
                 size: 18,
               ),
-              title: CustomText(text: "Settings", fontSize: 16),
+              title: const CustomText(text: 'Settings', fontSize: 16),
               onTap: () {
                 // Toggle expanded settings
                 setState(() {
@@ -196,9 +196,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
           // Expandable theme settings
           if (_isSettingsExpanded) ...[
             ListTile(
-              contentPadding: EdgeInsets.only(left: 56, right: 16),
+              contentPadding: const EdgeInsets.only(left: 56, right: 16),
               leading: Icon(Icons.light_mode, color: colorScheme.primary),
-              title: CustomText(text: "Light Theme"),
+              title: const CustomText(text: 'Light Theme'),
               trailing: controller.themeMode.value == ThemeMode.light
                   ? Icon(Icons.check, color: colorScheme.primary)
                   : null,
@@ -207,9 +207,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
               },
             ),
             ListTile(
-              contentPadding: EdgeInsets.only(left: 56, right: 16),
+              contentPadding: const EdgeInsets.only(left: 56, right: 16),
               leading: Icon(Icons.dark_mode, color: colorScheme.primary),
-              title: CustomText(text: "Dark Theme"),
+              title: const CustomText(text: 'Dark Theme'),
               trailing: controller.themeMode.value == ThemeMode.dark
                   ? Icon(Icons.check, color: colorScheme.primary)
                   : null,
@@ -218,10 +218,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
               },
             ),
             ListTile(
-              contentPadding: EdgeInsets.only(left: 56, right: 16),
+              contentPadding: const EdgeInsets.only(left: 56, right: 16),
               leading: Icon(Icons.settings_system_daydream_rounded,
                   color: colorScheme.primary),
-              title: CustomText(text: "System Theme"),
+              title: const CustomText(text: 'System Theme'),
               trailing: controller.themeMode.value == ThemeMode.system
                   ? Icon(Icons.check, color: colorScheme.primary)
                   : null,
@@ -229,7 +229,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
             ),
           ],
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 0),
+            padding: const EdgeInsets.symmetric(vertical: 0),
             child: Container(
               height: 1,
               decoration: BoxDecoration(
@@ -257,7 +257,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 size: 18,
               ),
               title: CustomText(
-                  text: "Logout", fontSize: 16, color: colorScheme.error),
+                  text: 'Logout', fontSize: 16, color: colorScheme.error),
               onTap: _handleLogout,
             ),
           ),

@@ -16,7 +16,7 @@ class ShimmerTransactionCard extends StatelessWidget {
         : colorScheme.onSurface.withValues(alpha: 0.6);
 
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 12),
+      margin: const EdgeInsets.symmetric(vertical: 12),
       child: Card(
         elevation: 0,
         shape: RoundedRectangleBorder(
@@ -28,8 +28,8 @@ class ShimmerTransactionCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: Color(0xFF4285F4).withValues(alpha: 0.1),
-                offset: Offset(0, 4),
+                color: const Color(0xFF4285F4).withValues(alpha: 0.1),
+                offset: const Offset(0, 4),
                 blurRadius: 12,
                 spreadRadius: 0,
               ),
@@ -39,7 +39,7 @@ class ShimmerTransactionCard extends StatelessWidget {
               width: 1.5,
             ),
           ),
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Shimmer.fromColors(
             baseColor: baseColor,
             highlightColor: highlightColor,
@@ -59,7 +59,7 @@ class ShimmerTransactionCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        SizedBox(width: 12),
+                        const SizedBox(width: 12),
                         Container(
                           height: 20,
                           width: 120,
@@ -80,13 +80,13 @@ class ShimmerTransactionCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Container(
                   decoration: BoxDecoration(
                     color: colorScheme.surfaceContainer,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -127,12 +127,12 @@ class ShimmerTransactionCard extends StatelessWidget {
               Container(
                 height: 16,
                 width: 16,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.white,
                   shape: BoxShape.circle,
                 ),
               ),
-              SizedBox(width: 4),
+              const SizedBox(width: 4),
               Container(
                 height: 12,
                 width: 50,
@@ -143,7 +143,7 @@ class ShimmerTransactionCard extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           // Count value
           Container(
             height: 18,
@@ -153,7 +153,7 @@ class ShimmerTransactionCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(4),
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           // Amount value
           Container(
             height: 14,
@@ -177,11 +177,11 @@ class ShimmerTransactionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemCount: itemCount,
       itemBuilder: (context, index) {
-        return ShimmerTransactionCard();
+        return const ShimmerTransactionCard();
       },
     );
   }

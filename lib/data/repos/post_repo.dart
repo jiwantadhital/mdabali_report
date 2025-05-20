@@ -5,25 +5,24 @@ import 'package:mdabali_report/data/shared_preferences/shared_preferences.dart';
 import 'package:mdabali_report/resources/constants.dart';
 import 'package:mdabali_report/services/http_error_handler.dart';
 
-
 class PostRepo {
   http.BaseClient client;
   // final CustomHttpInterceptor client;
-   PostRepo(this.client);
+  PostRepo(this.client);
   Future<http.Response> postRepository(api,
       {Map<String, dynamic>? body, bool tokenrequired = true}) async {
     const Duration timeoutDuration = Duration(seconds: 60);
 
     // Common headers
     final Map<String, String> headers = {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       'Authorization': tokenrequired == true
-          ? "Bearer ${UserSimplePreferences.getToken()}"
-          : "",
+          ? 'Bearer ${UserSimplePreferences.getToken()}'
+          : '',
     };
 
     try {
-      final Uri uri = Uri.parse("${ApiClass.testUrl}$api");
+      final Uri uri = Uri.parse('${ApiClass.testUrl}$api');
 
       final http.Response response = await client
           .post(
@@ -39,11 +38,10 @@ class PostRepo {
       if (response.statusCode == 200) {
         return response;
       }
-      if(response.statusCode==503){
-       HttpErrorHandler.handleErrorResponse(response.statusCode);
-       return response;
-      }
-       else {
+      if (response.statusCode == 503) {
+        HttpErrorHandler.handleErrorResponse(response.statusCode);
+        return response;
+      } else {
         throw Exception(response.reasonPhrase);
       }
     } catch (e) {

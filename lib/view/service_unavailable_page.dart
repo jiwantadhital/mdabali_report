@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:mdabali_report/bloc/sms_summary_bloc/bloc/sms_summary_bloc.dart';
 import 'package:mdabali_report/view/extracted_widgets/custom_snackbar.dart';
 import 'package:mdabali_report/view/extracted_widgets/custom_text.dart';
-import 'extracted_widgets/service_error_animation.dart'; // Update with your actual import
+import 'package:mdabali_report/view/extracted_widgets/service_error_animation.dart'; // Update with your actual import
 
 class ServiceUnavailablePage extends StatelessWidget {
   const ServiceUnavailablePage({
@@ -17,25 +17,21 @@ class ServiceUnavailablePage extends StatelessWidget {
 
     return BlocListener<SmsSummaryBloc, SmsSummaryState>(
       listener: (context, state) {
-        print(state);
-        if(state is SmsSummaryError){
-           CustomSnackbar(
-          title: 'Service unavailable',
-           message: 'Still no Service found',
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: colorScheme.surfaceContainer,
-          textColor: colorScheme.secondary).show();
-       
-       print('state failed');
+        if (state is SmsSummaryError) {
+          CustomSnackbar(
+                  title: 'Service unavailable',
+                  message: 'Still no Service found',
+                  snackPosition: SnackPosition.TOP,
+                  backgroundColor: colorScheme.surfaceContainer,
+                  textColor: colorScheme.secondary)
+              .show();
         }
-        if(state is SmsSummaryLoaded){
-       
-          Get.back();  
-           
-        } 
+        if (state is SmsSummaryLoaded) {
+          Get.back();
+        }
       },
       child: PopScope(
-        canPop:false,
+        canPop: false,
         child: Scaffold(
           backgroundColor: colorScheme.surface,
           body: SafeArea(
@@ -55,7 +51,7 @@ class ServiceUnavailablePage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 24),
-        
+
                   // // Title
                   // CustomText(text: 'Service Unavailable',
                   // weight: FontWeight.bold,
@@ -63,9 +59,9 @@ class ServiceUnavailablePage extends StatelessWidget {
                   // textAlign: TextAlign.center,
                   // fontSize: 24,
                   // ),
-        
+
                   // const SizedBox(height: 16),
-        
+
                   // Message
                   CustomText(
                     text:
@@ -74,16 +70,16 @@ class ServiceUnavailablePage extends StatelessWidget {
                     color: colorScheme.onSurface,
                     fontSize: 16,
                   ),
-        
+
                   const SizedBox(height: 40),
-        
+
                   // Retry button with animation
                   _AnimatedRetryButton(onPressed: () {
-                  context.read<SmsSummaryBloc>().add(FetchSmsSummary());
+                    context.read<SmsSummaryBloc>().add(FetchSmsSummary());
                   }),
-        
+
                   const SizedBox(height: 16),
-        
+
                   // // Contact support button
                   // TextButton.icon(
                   //     onPressed: () {},
@@ -174,13 +170,13 @@ class _AnimatedRetryButtonState extends State<_AnimatedRetryButton>
                 ),
                 elevation: _isHovering ? 4 : 2,
               ),
-              child: Row(
+              child: const Row(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.refresh),
-                  const SizedBox(width: 8),
-                  const Text(
+                  Icon(Icons.refresh),
+                  SizedBox(width: 8),
+                  Text(
                     'Retry Connection',
                     style: TextStyle(
                       fontSize: 16,

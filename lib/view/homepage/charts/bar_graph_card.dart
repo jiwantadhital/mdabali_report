@@ -47,7 +47,7 @@ class _BarGraphCardState extends State<BarGraphCard> {
     return BlocBuilder<SummaryReportBloc, SummaryReportState>(
       builder: (context, state) {
         if (state is SummaryReportLoading) {
-          return ShimmerBarCard();
+          return const ShimmerBarCard();
         } else if (state is SummaryReportLoaded) {
           final barGraphData = state.summaryReportModel.data;
           final List<double> successValues =
@@ -86,8 +86,9 @@ class _BarGraphCardState extends State<BarGraphCard> {
                       }
                     },
                     child: Container(
-                      margin: EdgeInsets.only(right: 8),
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                      margin: const EdgeInsets.only(right: 8),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 8),
                       decoration: BoxDecoration(
                         color: colorScheme.primary,
                         shape: BoxShape.circle,
@@ -105,7 +106,7 @@ class _BarGraphCardState extends State<BarGraphCard> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 16,
                 ),
                 AspectRatio(
@@ -140,7 +141,7 @@ class _BarGraphCardState extends State<BarGraphCard> {
                                     color:
                                         chartColors[index % chartColors.length],
                                     width: 24,
-                                    borderRadius: BorderRadius.only(
+                                    borderRadius: const BorderRadius.only(
                                         topLeft: Radius.circular(6),
                                         topRight: Radius.circular(6))),
                               ],
@@ -155,7 +156,7 @@ class _BarGraphCardState extends State<BarGraphCard> {
                                   (group, groupIndex, rod, rodIndex) {
                                 return BarTooltipItem(
                                   rod.toY.toString(),
-                                  TextStyle(
+                                  const TextStyle(
                                       fontSize: 12,
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold),
@@ -171,7 +172,8 @@ class _BarGraphCardState extends State<BarGraphCard> {
                                 reservedSize: 80,
                                 getTitlesWidget: (value, meta) {
                                   return Padding(
-                                    padding: EdgeInsets.only(right: 0, top: 8),
+                                    padding:
+                                        const EdgeInsets.only(right: 0, top: 8),
                                     child: CustomText(
                                       text: 'Rs ${value.toInt().toString()}',
                                       fontSize: 12,

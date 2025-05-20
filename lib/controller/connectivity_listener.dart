@@ -40,8 +40,6 @@ class _ConnectivityListenerState extends State<ConnectivityListener> {
 
   void _showNoInternetPage() {
     if (!_isNoInternetPageShown && mounted) {
-      print(
-          'Pushing NoInternetPage, isShown: $_isNoInternetPageShown, route: ${Get.currentRoute}');
       setState(() {
         _isNoInternetPageShown = true;
       });
@@ -57,8 +55,7 @@ class _ConnectivityListenerState extends State<ConnectivityListener> {
     if (_isNoInternetPageShown &&
         Get.currentRoute == '/NoInternetPage' &&
         mounted) {
-      print(
-          'Popping NoInternetPage, isShown: $_isNoInternetPageShown'); // Debug log
+      // Debug log
       setState(() {
         _isNoInternetPageShown = false;
       });
@@ -85,8 +82,6 @@ class _ConnectivityListenerState extends State<ConnectivityListener> {
           final isConnected = snapshot.hasData
               ? !snapshot.data!.contains(ConnectivityResult.none)
               : true;
-          print(
-              'Snapshot: ${snapshot.data}, isConnected: $isConnected, currentRoute: ${Get.currentRoute}');
           WidgetsBinding.instance.addPersistentFrameCallback((_) {
             _handleConnectivityChange(isConnected);
           });

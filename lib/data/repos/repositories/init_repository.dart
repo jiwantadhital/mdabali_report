@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
+
 import 'package:http/http.dart' as http;
 import 'package:mdabali_report/data/models/init_model.dart';
 import 'package:mdabali_report/data/repos/get_repo.dart';
@@ -21,10 +22,10 @@ class InitRepository {
         return InitModel.fromJson(data);
       } else {
         throw Exception(
-            jsonDecode(response.body)['message'] ?? "Failed to load data");
+            jsonDecode(response.body)['message'] ?? 'Failed to load data');
       }
     } catch (e) {
-      throw Exception("$e");
+      throw Exception('$e');
     }
   }
 
@@ -33,7 +34,7 @@ class InitRepository {
         Uri.parse('${ApiClass.testUrl}/webApi/client/image/$clientId');
     final response = await http.get(imageUrl);
     if (response.statusCode != 200) {
-      throw Exception("Failed to fetch image");
+      throw Exception('Failed to fetch image');
     }
     final imageBytes = response.bodyBytes;
     return imageBytes;

@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:mdabali_report/data/models/summary_report_model.dart';
 import 'package:mdabali_report/data/repos/get_repo.dart';
 import 'package:mdabali_report/resources/constants.dart';
@@ -14,14 +15,11 @@ class SummaryReportRepository {
       required String clientId}) async {
     try {
       final response = await getRepo.getRepository(
-        "${ApiClass.summaryReportUrl}fromDate=$dateFrom&toDate=$dateTo&clientId=$clientId",
+        '${ApiClass.summaryReportUrl}fromDate=$dateFrom&toDate=$dateTo&clientId=$clientId',
       );
-      print("Response received with status code: ${response.statusCode}");
-      print("Response body: ${response.body}");
       final data = jsonDecode(response.body);
       return SummaryReportModel.fromJson(data);
     } catch (e) {
-      print("Exception caught in repository: $e");
       // For network or parsing errors
       return SummaryReportModel(
         status: false,

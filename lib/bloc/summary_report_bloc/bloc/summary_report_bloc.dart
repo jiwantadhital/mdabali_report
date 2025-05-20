@@ -27,7 +27,7 @@ class SummaryReportBloc extends Bloc<SummaryReportEvent, SummaryReportState> {
       if (data.status == true) {
         emit(SummaryReportLoaded(data));
       } else {
-        final String errorMessage = data.message ?? "Unknown error";
+        final String errorMessage = data.message ?? 'Unknown error';
         // Use the actual error message from the response
         emit(SummaryReportError(errorMessage));
       }

@@ -54,7 +54,7 @@ class LoginButton extends StatelessWidget {
                     height: 22,
                     width: 22,
                     child: RotationTransition(
-                      turns: AlwaysStoppedAnimation(0.5),
+                      turns: const AlwaysStoppedAnimation(0.5),
                       child: CircularProgressIndicator(
                         strokeWidth: 3.0,
                         color: Theme.of(context).primaryColor,
@@ -79,7 +79,7 @@ class LoginButton extends StatelessWidget {
                                 ),
                               ),
                         CustomText(
-                          text: text ?? "",
+                          text: text ?? '',
                           fontSize: 13.dp,
                           weight: FontWeight.w400,
                           color: textcolor ??

@@ -25,7 +25,6 @@ class TOtpBloc extends Bloc<TOtpEvent, TOtpState> {
         emit(TOtpFailure(error: response.message ?? 'Failed to verify OTP'));
       }
     } catch (e) {
-      print(e.toString());
       emit(TOtpFailure(error: e.toString()));
     }
   }

@@ -6,9 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mdabali_report/bloc/sms_summary_bloc/bloc/sms_summary_bloc.dart';
 import 'package:mdabali_report/bloc/topup_summary_bloc/bloc/topup_summary_bloc.dart';
 import 'package:mdabali_report/utils/number_formatter.dart';
+import 'package:mdabali_report/view/extracted_widgets/custom_text.dart';
 import 'package:shimmer/shimmer.dart';
-
-import '../extracted_widgets/custom_text.dart';
 
 class SmsPage extends StatefulWidget {
   const SmsPage({super.key});
@@ -36,7 +35,7 @@ class _SmsPageState extends State<SmsPage> {
       },
       child: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -69,7 +68,7 @@ class _SmsPageState extends State<SmsPage> {
                           Icon(Icons.error_outline,
                               color: Theme.of(context).colorScheme.error,
                               size: 24),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           CustomText(
                             text: state.error,
                             color:
@@ -88,7 +87,7 @@ class _SmsPageState extends State<SmsPage> {
                           Icon(Icons.error_outline,
                               color: Theme.of(context).colorScheme.error,
                               size: 24),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           CustomText(
                             text: 'Failed to load Data',
                             color:
@@ -135,7 +134,7 @@ class _SmsPageState extends State<SmsPage> {
                           Icon(Icons.error_outline,
                               color: Theme.of(context).colorScheme.error,
                               size: 24),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           CustomText(
                             text: state.error,
                             color:
@@ -154,7 +153,7 @@ class _SmsPageState extends State<SmsPage> {
                           Icon(Icons.error_outline,
                               color: Theme.of(context).colorScheme.error,
                               size: 24),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           CustomText(
                             text: 'Failed to load Data',
                             color:
@@ -187,14 +186,14 @@ class _SmsPageState extends State<SmsPage> {
   }) {
     var colorScheme = Theme.of(context).colorScheme;
     return Container(
-      margin: EdgeInsets.symmetric(
+      margin: const EdgeInsets.symmetric(
         vertical: 16,
       ),
       child: Stack(
         children: [
           // Main Card with Glassmorphism Effect
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             decoration: BoxDecoration(
               border: Border.all(
                   color: colorScheme.primary.withValues(alpha: 0.3),
@@ -284,14 +283,14 @@ class _SmsPageState extends State<SmsPage> {
   }) {
     var colorScheme = Theme.of(context).colorScheme;
     return Container(
-      margin: EdgeInsets.symmetric(
+      margin: const EdgeInsets.symmetric(
         vertical: 16,
       ),
       child: Stack(
         children: [
           // Main Card with Glassmorphism Effect
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             decoration: BoxDecoration(
               border: Border.all(
                   color: colorScheme.primary.withValues(alpha: 0.3),
@@ -316,7 +315,7 @@ class _SmsPageState extends State<SmsPage> {
                         buildDivider(),
                         buildMetricRow(
                           'Transaction Amount',
-                          "Rs ${NumberFormatter.formatAmount(transactionAmount)}",
+                          'Rs ${NumberFormatter.formatAmount(transactionAmount)}',
                           CupertinoIcons.creditcard,
                           colorScheme.onSurface,
                           iconBgColor:
@@ -325,7 +324,7 @@ class _SmsPageState extends State<SmsPage> {
                         buildDivider(),
                         buildMetricRow(
                           'Available Balance',
-                          "Rs ${NumberFormatter.formatAmount(remainingBalance)}",
+                          'Rs ${NumberFormatter.formatAmount(remainingBalance)}',
                           Icons.balance,
                           colorScheme.onSurface,
                           iconBgColor:
@@ -378,8 +377,8 @@ class _SmsPageState extends State<SmsPage> {
     Color? iconBgColor,
   }) {
     return AnimatedContainer(
-      duration: Duration(milliseconds: 300),
-      padding: EdgeInsets.symmetric(vertical: 4),
+      duration: const Duration(milliseconds: 300),
+      padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -388,14 +387,14 @@ class _SmsPageState extends State<SmsPage> {
               children: [
                 // Icon with Custom Background
                 Container(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     color: iconBgColor ?? Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withValues(alpha: 0.1),
-                        offset: Offset(0, 2),
+                        offset: const Offset(0, 2),
                         blurRadius: 6,
                       ),
                     ],
@@ -406,7 +405,7 @@ class _SmsPageState extends State<SmsPage> {
                     size: 18,
                   ),
                 ),
-                SizedBox(width: 14),
+                const SizedBox(width: 14),
                 // Label Text
                 Expanded(
                   child: CustomText(
@@ -421,7 +420,7 @@ class _SmsPageState extends State<SmsPage> {
           ),
           // Value with Highlight
           Container(
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
@@ -444,7 +443,7 @@ class _SmsPageState extends State<SmsPage> {
 
   Widget buildDivider() {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: Container(
         height: 1,
         decoration: BoxDecoration(
@@ -486,7 +485,7 @@ class ShimmerTopupCard extends StatelessWidget {
       baseColor: baseColor,
       highlightColor: highlightColor,
       child: Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: baseColor,
           borderRadius: BorderRadius.circular(24),
@@ -507,14 +506,14 @@ class ShimmerTopupCard extends StatelessWidget {
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
-                          SizedBox(width: 14),
+                          const SizedBox(width: 14),
                           Expanded(
                             child: Container(
                               height: 16,
                               color: baseColor,
                             ),
                           ),
-                          SizedBox(width: 14),
+                          const SizedBox(width: 14),
                           Container(
                             height: 16,
                             width: 50,
@@ -522,13 +521,13 @@ class ShimmerTopupCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       if (index < 2)
                         Container(
                           height: 1,
                           color: baseColor,
                         ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                     ],
                   )),
         ),

@@ -3,8 +3,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mdabali_report/bloc/member_limit_bloc/bloc/member_limit_bloc.dart';
+import 'package:mdabali_report/view/extracted_widgets/custom_text.dart';
 import 'package:mdabali_report/view/sms_page/sms_page.dart';
-import '../extracted_widgets/custom_text.dart';
 
 class MdabaliPage extends StatefulWidget {
   const MdabaliPage({super.key});
@@ -30,7 +30,7 @@ class _MdabaliPageState extends State<MdabaliPage> {
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -59,7 +59,7 @@ class _MdabaliPageState extends State<MdabaliPage> {
                         Icon(Icons.error_outline,
                             color: Theme.of(context).colorScheme.error,
                             size: 24),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         CustomText(
                           text: state.error,
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -77,7 +77,7 @@ class _MdabaliPageState extends State<MdabaliPage> {
                         Icon(Icons.error_outline,
                             color: Theme.of(context).colorScheme.error,
                             size: 24),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         CustomText(
                           text:
                               'Failed to load data, Please refresh to load data.',
@@ -107,14 +107,14 @@ class _MdabaliPageState extends State<MdabaliPage> {
   }) {
     var colorScheme = Theme.of(context).colorScheme;
     return Container(
-      margin: EdgeInsets.symmetric(
+      margin: const EdgeInsets.symmetric(
         vertical: 16,
       ),
       child: Stack(
         children: [
           // Main Card with Glassmorphism Effect
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             decoration: BoxDecoration(
               border: Border.all(
                   color: colorScheme.primary.withValues(alpha: 0.3),
@@ -220,8 +220,8 @@ class _MdabaliPageState extends State<MdabaliPage> {
     Color? iconBgColor,
   }) {
     return AnimatedContainer(
-      duration: Duration(milliseconds: 300),
-      padding: EdgeInsets.symmetric(vertical: 6),
+      duration: const Duration(milliseconds: 300),
+      padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -230,14 +230,14 @@ class _MdabaliPageState extends State<MdabaliPage> {
               children: [
                 // Icon with Custom Background
                 Container(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     color: iconBgColor ?? Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withValues(alpha: 0.1),
-                        offset: Offset(0, 2),
+                        offset: const Offset(0, 2),
                         blurRadius: 6,
                       ),
                     ],
@@ -248,7 +248,7 @@ class _MdabaliPageState extends State<MdabaliPage> {
                     size: 18,
                   ),
                 ),
-                SizedBox(width: 14),
+                const SizedBox(width: 14),
                 // Label Text
                 Expanded(
                   child: CustomText(
@@ -263,7 +263,7 @@ class _MdabaliPageState extends State<MdabaliPage> {
           ),
           // Value with Highlight
           Container(
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
@@ -286,7 +286,7 @@ class _MdabaliPageState extends State<MdabaliPage> {
 
   Widget buildDivider() {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: Container(
         height: 1,
         decoration: BoxDecoration(

@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -7,12 +8,12 @@ import 'package:mdabali_report/bloc/init_bloc/bloc/init_bloc.dart';
 import 'package:mdabali_report/bloc/monthly_aggregate_bloc/bloc/monthly_aggregate_bloc.dart';
 import 'package:mdabali_report/bloc/summary_report_bloc/bloc/summary_report_bloc.dart';
 import 'package:mdabali_report/data/shared_preferences/shared_preferences.dart';
+import 'package:mdabali_report/view/extracted_widgets/custom_text.dart';
+import 'package:mdabali_report/view/homepage/charts/line_chart_card.dart';
+import 'package:mdabali_report/view/homepage/charts/pie_chart_card.dart';
+import 'package:mdabali_report/view/homepage/header_section.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
 import 'package:shimmer/shimmer.dart';
-import '../extracted_widgets/custom_text.dart';
-import 'charts/line_chart_card.dart';
-import 'charts/pie_chart_card.dart';
-import 'header_section.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -61,7 +62,6 @@ class _HomePageState extends State<HomePage> {
       DateTime englishDate = picked.toDateTime();
       String englishDateFormatted =
           "${englishDate.year}-${englishDate.month.toString().padLeft(2, '0')}-${englishDate.day.toString().padLeft(2, '0')}";
-      print("five month date:$englishDateFormatted");
       // ignore: use_build_context_synchronously
       context
           .read<FiveMonthDataBloc>()
@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePage> {
       },
       child: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -112,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                             child: Container(
                               height: 30,
                               width: 30,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: Colors.white,
                               ),
@@ -152,7 +152,6 @@ class _HomePageState extends State<HomePage> {
                         dateTo: todayDate,
                         clientId:
                             UserSimplePreferences.getClientId().toString()));
-                    print('Client Id; ${UserSimplePreferences.getClientId()}');
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -198,9 +197,9 @@ class _HomePageState extends State<HomePage> {
                       ),
                     );
                   } else {
-                    return Center(
+                    return const Center(
                       child: CustomText(
-                        text: "Something went wrong!",
+                        text: 'Something went wrong!',
                         textOverflow: TextOverflow.ellipsis,
                         letterSpacing: 1,
                         fontSize: 14,
@@ -222,7 +221,7 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(
                 height: 24,
               ),
-              HeaderSection(),
+              const HeaderSection(),
               const SizedBox(
                 height: 24,
               ),
@@ -239,14 +238,14 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(
                 height: 24,
               ),
-              PieChartCard(),
+              const PieChartCard(),
               const SizedBox(
                 height: 24,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CustomText(
+                  const CustomText(
                     text: 'Transaction Trends',
                     fontSize: 16,
                     weight: FontWeight.bold,
@@ -254,7 +253,8 @@ class _HomePageState extends State<HomePage> {
                   GestureDetector(
                     onTap: () => selectNepaliDate(context),
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 8),
                       decoration: BoxDecoration(
                         color: colorScheme.surface,
                         borderRadius: BorderRadius.circular(12),
@@ -269,7 +269,7 @@ class _HomePageState extends State<HomePage> {
                             size: 14,
                             color: colorScheme.primaryFixedDim,
                           ),
-                          SizedBox(width: 8),
+                          const SizedBox(width: 8),
                           ValueListenableBuilder<NepaliDateTime?>(
                             valueListenable: selectedNepaliDate,
                             builder: (context, value, _) {
@@ -283,7 +283,7 @@ class _HomePageState extends State<HomePage> {
                               }
 
                               String text = (value == null || isToday(value))
-                                  ? "Today"
+                                  ? 'Today'
                                   : "${value.year}-${value.month.toString().padLeft(2, '0')}-${value.day.toString().padLeft(2, '0')}";
                               return Text(
                                 text,
@@ -307,17 +307,17 @@ class _HomePageState extends State<HomePage> {
                 height: 16,
               ),
               //line chart for Utility
-              UtilityLineChartSection(),
+              const UtilityLineChartSection(),
               const SizedBox(
                 height: 24,
               ),
               //line chart for Dfs(Dr)
-              DfsDrLineChartSection(),
+              const DfsDrLineChartSection(),
               const SizedBox(
                 height: 24,
               ),
               //line chart for Dfs(cr   )
-              DfsCrLineChartSection(),
+              const DfsCrLineChartSection(),
               const SizedBox(
                 height: 24,
               ),
@@ -339,7 +339,7 @@ class DfsCrLineChartSection extends StatelessWidget {
     return BlocBuilder<FiveMonthDataBloc, FiveMonthDataState>(
       builder: (context, state) {
         if (state is FiveMonthDataLoading) {
-          return ShimmerLineChartCard();
+          return const ShimmerLineChartCard();
         } else if (state is FiveMonthDataLoaded) {
           final dfsCrData = state.data.data?.dfsCredit ?? [];
           return LineChartCard(
@@ -359,7 +359,7 @@ class DfsCrLineChartSection extends StatelessWidget {
               children: [
                 Icon(Icons.error_outline,
                     color: Theme.of(context).colorScheme.error, size: 24),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 CustomText(
                   text: state.message,
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -376,7 +376,7 @@ class DfsCrLineChartSection extends StatelessWidget {
               children: [
                 Icon(Icons.error_outline,
                     color: Theme.of(context).colorScheme.error, size: 24),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 CustomText(
                   text: 'Failed to load Data',
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -402,7 +402,7 @@ class UtilityLineChartSection extends StatelessWidget {
     return BlocBuilder<FiveMonthDataBloc, FiveMonthDataState>(
       builder: (context, state) {
         if (state is FiveMonthDataLoading) {
-          return ShimmerLineChartCard();
+          return const ShimmerLineChartCard();
         } else if (state is FiveMonthDataLoaded) {
           final utilityData = state.data.data?.utility ?? [];
           return LineChartCard(
@@ -425,7 +425,7 @@ class UtilityLineChartSection extends StatelessWidget {
               children: [
                 Icon(Icons.error_outline,
                     color: Theme.of(context).colorScheme.error, size: 24),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 CustomText(
                   text: state.message,
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -442,7 +442,7 @@ class UtilityLineChartSection extends StatelessWidget {
               children: [
                 Icon(Icons.error_outline,
                     color: Theme.of(context).colorScheme.error, size: 24),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 CustomText(
                   text: 'Failed to load Data',
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -468,7 +468,7 @@ class DfsDrLineChartSection extends StatelessWidget {
     return BlocBuilder<FiveMonthDataBloc, FiveMonthDataState>(
       builder: (context, state) {
         if (state is FiveMonthDataLoading) {
-          return ShimmerLineChartCard();
+          return const ShimmerLineChartCard();
         } else if (state is FiveMonthDataLoaded) {
           final dfsDrData = state.data.data?.dfsDebit ?? [];
           return LineChartCard(
@@ -488,7 +488,7 @@ class DfsDrLineChartSection extends StatelessWidget {
               children: [
                 Icon(Icons.error_outline,
                     color: Theme.of(context).colorScheme.error, size: 24),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 CustomText(
                   text: state.message,
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -505,7 +505,7 @@ class DfsDrLineChartSection extends StatelessWidget {
               children: [
                 Icon(Icons.error_outline,
                     color: Theme.of(context).colorScheme.error, size: 24),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 CustomText(
                   text: 'Failed to load Data',
                   color: Theme.of(context).colorScheme.onSurfaceVariant,

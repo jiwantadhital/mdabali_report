@@ -12,5 +12,6 @@ class FetchSummaryReport extends SummaryReportEvent {
   final String dateTo;
   final String clientId;
 
-  const FetchSummaryReport({required this.dateFrom, required this.dateTo,required this.clientId});
+  const FetchSummaryReport(
+      {required this.dateFrom, required this.dateTo, required this.clientId});
 }

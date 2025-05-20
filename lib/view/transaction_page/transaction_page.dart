@@ -6,11 +6,10 @@ import 'package:intl/intl.dart';
 import 'package:mdabali_report/bloc/summary_report_bloc/bloc/summary_report_bloc.dart';
 import 'package:mdabali_report/data/shared_preferences/shared_preferences.dart';
 import 'package:mdabali_report/resources/colors.dart';
+import 'package:mdabali_report/view/extracted_widgets/custom_text.dart';
 import 'package:mdabali_report/view/extracted_widgets/nepali_date_range_picker_card.dart';
 import 'package:mdabali_report/view/transaction_page/shimmer_transaction_cards.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
-
-import '../extracted_widgets/custom_text.dart';
 
 class TransactionPage extends StatefulWidget {
   const TransactionPage({super.key});
@@ -65,9 +64,9 @@ class _TransactionPageState extends State<TransactionPage> {
         return Future.delayed(const Duration(milliseconds: 1200));
       },
       child: SingleChildScrollView(
-        physics: AlwaysScrollableScrollPhysics(),
+        physics: const AlwaysScrollableScrollPhysics(),
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -81,10 +80,8 @@ class _TransactionPageState extends State<TransactionPage> {
                       // Format the start and end dates to 'yyyy-MM-dd' format
                       String startFormatted =
                           DateFormat('yyyy-MM-dd').format(range.start);
-                      print(range.start);
                       String endFormatted =
                           DateFormat('yyyy-MM-dd').format(range.end);
-                      print(range.end);
                       setState(() {
                         _startDate = NepaliDateTime.fromDateTime(range.start);
                         _endDate = NepaliDateTime.fromDateTime(range.end);
@@ -98,7 +95,8 @@ class _TransactionPageState extends State<TransactionPage> {
                     }
                   },
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                     decoration: BoxDecoration(
                       color: colorScheme.surface,
                       borderRadius: BorderRadius.circular(12),
@@ -113,12 +111,12 @@ class _TransactionPageState extends State<TransactionPage> {
                           size: 14,
                           color: colorScheme.primaryFixedDim,
                         ),
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
                         Text(
                           _startDate != null && _endDate != null
                               ? '${NepaliDateFormat('yyyy/MM/dd').format(_startDate!)} '
                                   'to ${NepaliDateFormat('yyyy/MM/dd').format(_endDate!)}'
-                              : "Select date Range",
+                              : 'Select date Range',
                           style: TextStyle(
                               fontSize: 12,
                               color: colorScheme.onSurfaceVariant),
@@ -145,7 +143,7 @@ class _TransactionPageState extends State<TransactionPage> {
     return BlocBuilder<SummaryReportBloc, SummaryReportState>(
       builder: (context, state) {
         if (state is SummaryReportLoading) {
-          return ShimmerTransactionList();
+          return const ShimmerTransactionList();
         } else if (state is SummaryReportLoaded) {
           final summaryReportData = state.summaryReportModel.data;
           int index = summaryReportData?.length ?? 0;
@@ -170,7 +168,7 @@ class _TransactionPageState extends State<TransactionPage> {
                 children: [
                   Icon(Icons.error_outline,
                       color: Theme.of(context).colorScheme.error, size: 24),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   CustomText(
                     text: state.error,
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -188,7 +186,7 @@ class _TransactionPageState extends State<TransactionPage> {
               children: [
                 Icon(Icons.error_outline,
                     color: Theme.of(context).colorScheme.error, size: 24),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 CustomText(
                   text: 'Failed to load Data',
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -214,7 +212,7 @@ class _TransactionPageState extends State<TransactionPage> {
       double failAmount) {
     var colorScheme = Theme.of(context).colorScheme;
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 12),
+      margin: const EdgeInsets.symmetric(vertical: 12),
       child: Card(
         elevation: 0,
         shape: RoundedRectangleBorder(
@@ -226,8 +224,8 @@ class _TransactionPageState extends State<TransactionPage> {
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: Color(0xFF4285F4).withValues(alpha: 0.1),
-                offset: Offset(0, 4),
+                color: const Color(0xFF4285F4).withValues(alpha: 0.1),
+                offset: const Offset(0, 4),
                 blurRadius: 12,
                 spreadRadius: 0,
               ),
@@ -237,7 +235,7 @@ class _TransactionPageState extends State<TransactionPage> {
               width: 1.5,
             ),
           ),
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -248,7 +246,7 @@ class _TransactionPageState extends State<TransactionPage> {
                     child: Row(
                       children: [
                         Container(
-                          padding: EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
                             color: colorScheme.primaryFixedDim
                                 .withValues(alpha: 0.1),
@@ -261,7 +259,7 @@ class _TransactionPageState extends State<TransactionPage> {
                             size: 22,
                           ),
                         ),
-                        SizedBox(width: 12),
+                        const SizedBox(width: 12),
                         Expanded(
                           child: CustomText(
                             text: service,
@@ -274,33 +272,9 @@ class _TransactionPageState extends State<TransactionPage> {
                       ],
                     ),
                   ),
-                  //   Container(
-                  //     padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  //     decoration: BoxDecoration(
-                  //       color: colorScheme.primaryFixedDim.withValues(alpha:0.1),
-                  //       borderRadius: BorderRadius.circular(20),
-                  //     ),
-                  //     child: Row(
-                  //       children: [
-                  //         Icon(
-                  //           Icons.trending_up,
-                  //           color: colorScheme.primary,
-                  //           size: 16,
-                  //         ),
-                  //         SizedBox(width: 4),
-                  //         CustomText(
-                  //           text:
-                  //               '${_calculateSuccessRate(successCount, pendingCount, failCount)} %',
-                  //           fontSize: 14,
-                  //           weight: FontWeight.w600,
-                  //           color: colorScheme.primary,
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ),
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Container(
                 decoration: BoxDecoration(
                   color: colorScheme.surfaceContainer,
@@ -309,7 +283,7 @@ class _TransactionPageState extends State<TransactionPage> {
                     kBoxShadow,
                   ],
                 ),
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -369,7 +343,7 @@ class _TransactionPageState extends State<TransactionPage> {
                 color: color,
                 size: 16,
               ),
-              SizedBox(width: 4),
+              const SizedBox(width: 4),
               CustomText(
                 text: label,
                 fontSize: 12,
@@ -378,14 +352,14 @@ class _TransactionPageState extends State<TransactionPage> {
               )
             ],
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           CustomText(
             text: count.toString(),
             fontSize: 18,
             weight: FontWeight.w800,
             color: colorScheme.onSurface,
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           CustomText(
             text: 'Rs ${_formatAmount(amount)}',
             fontSize: 14,

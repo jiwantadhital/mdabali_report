@@ -46,7 +46,7 @@ class _PieChartCardState extends State<PieChartCard> {
     return BlocBuilder<SummaryReportBloc, SummaryReportState>(
       builder: (context, state) {
         if (state is SummaryReportLoading) {
-          return PieChartShimmer();
+          return const PieChartShimmer();
         } else if (state is SummaryReportError) {
           return Center(
             child: Column(
@@ -54,7 +54,7 @@ class _PieChartCardState extends State<PieChartCard> {
               children: [
                 Icon(Icons.error_outline,
                     color: Theme.of(context).colorScheme.error, size: 24),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 CustomText(
                   text: state.error,
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -188,9 +188,9 @@ class _PieChartCardState extends State<PieChartCard> {
                           }
                         },
                         child: Container(
-                          margin: EdgeInsets.only(right: 8),
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                          margin: const EdgeInsets.only(right: 8),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 8),
                           decoration: BoxDecoration(
                             color: colorScheme.primary,
                             shape: BoxShape.circle,
@@ -238,10 +238,10 @@ class _PieChartCardState extends State<PieChartCard> {
                           return GridView.builder(
                             shrinkWrap: true,
                             physics:
-                                NeverScrollableScrollPhysics(), // Prevents scrolling inside GridView
+                                const NeverScrollableScrollPhysics(), // Prevents scrolling inside GridView
                             itemCount: indicators.length,
                             gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
+                                const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2, // Two columns
                               childAspectRatio:
                                   3.5, // Adjust to keep the layout balanced
@@ -358,48 +358,7 @@ class _PieChartCardState extends State<PieChartCard> {
                         ),
                       const SizedBox(height: 16),
                     ],
-
-                    // if (othersEntries.isNotEmpty) ...[
-                    //   const SizedBox(height: 12),
-                    //   Padding(
-                    //     padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    //     child: Align(
-                    //       alignment: Alignment.centerLeft,
-                    //       child: CustomText(
-                    //         text: 'Other includes:',
-                    //         fontSize: 14,
-                    //         weight: FontWeight.bold,
-                    //         color: Theme.of(context).colorScheme.onSurface,
-                    //       ),
-                    //     ),
-                    //   ),
-                    //   const SizedBox(height: 8),
-                    //   Padding(
-                    //     padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    //     child: Align(
-                    //       alignment: Alignment.centerLeft,
-                    //       child: Column(
-                    //         crossAxisAlignment: CrossAxisAlignment.start,
-                    //         children: othersEntries.map((entry) {
-                    //           return Padding(
-                    //             padding: const EdgeInsets.only(bottom: 8),
-                    //             child: CustomText(
-                    //               text:
-                    //                   '• ${entry.label} (${entry.percentage.toStringAsFixed(1)}%)',
-                    //               fontSize: 13,
-                    //               color: Theme.of(context)
-                    //                   .colorScheme
-                    //                   .onSurfaceVariant,
-                    //               textOverflow: TextOverflow.ellipsis,
-                    //               maxLine: 2,
-                    //             ),
-                    //           );
-                    //         }).toList(),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ],
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     )
                   ],
@@ -414,7 +373,7 @@ class _PieChartCardState extends State<PieChartCard> {
               children: [
                 Icon(Icons.error_outline,
                     color: Theme.of(context).colorScheme.error, size: 24),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 CustomText(
                   text: 'Something went wrong',
                   color: Theme.of(context).colorScheme.onSurfaceVariant,

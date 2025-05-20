@@ -7,10 +7,10 @@ import 'package:mdabali_report/bloc/monthly_aggregate_bloc/bloc/monthly_aggregat
 import 'package:mdabali_report/resources/colors.dart';
 import 'package:mdabali_report/view/extracted_widgets/custom_drawer.dart';
 import 'package:mdabali_report/view/extracted_widgets/custom_text.dart';
-import 'homepage/home_page.dart';
-import 'mdabali_page/mdabali_page.dart';
-import 'sms_page/sms_page.dart';
-import 'transaction_page/transaction_page.dart';
+import 'package:mdabali_report/view/homepage/home_page.dart';
+import 'package:mdabali_report/view/mdabali_page/mdabali_page.dart';
+import 'package:mdabali_report/view/sms_page/sms_page.dart';
+import 'package:mdabali_report/view/transaction_page/transaction_page.dart';
 
 class DashBoardPage extends StatefulWidget {
   const DashBoardPage({super.key});
@@ -25,7 +25,12 @@ class _DashBoardPageState extends State<DashBoardPage> {
 
   @override
   void initState() {
-    _pages = [HomePage(), TransactionPage(), SmsPage(), MdabaliPage()];
+    _pages = [
+      const HomePage(),
+      const TransactionPage(),
+      const SmsPage(),
+      const MdabaliPage()
+    ];
     // Get today's date
     String todayDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
     DateTime now = DateTime.now();
@@ -53,7 +58,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
     var colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      drawer: CustomDrawer(),
+      drawer: const CustomDrawer(),
       appBar: AppBar(
         surfaceTintColor: colorScheme.surfaceTint,
         elevation: 0,
@@ -100,7 +105,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
   }
 
   Widget _buildBottomNavBar() {
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         boxShadow: [kBoxShadow],
       ),

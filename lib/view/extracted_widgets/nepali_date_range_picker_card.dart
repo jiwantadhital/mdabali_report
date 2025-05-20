@@ -156,16 +156,6 @@ class _NepaliDatePickerState extends State<NepaliDatePicker> {
               onDaySelected: _onDaySelected,
             ),
             const SizedBox(height: 8),
-            // if (_range != null)
-            //   CustomText(
-            //       text:
-            //           'Selected Date: ${_range!.start.format('yyyy-MM-dd')} to ${_range!.end.format('yyyy-MM-dd')}',
-            //       color: Theme.of(context).colorScheme.primary)
-            // else if (_tempStart != null)
-            //   CustomText(
-            //     text:
-            //         'Selected Date: ${_tempStart!.format('yyyy-MM-dd')} (Select end date)',
-            //   ),
             if (_error != null)
               Padding(
                 padding: const EdgeInsets.only(top: 8),
@@ -181,10 +171,10 @@ class _NepaliDatePickerState extends State<NepaliDatePicker> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
-                      style: ButtonStyle(
+                      style: const ButtonStyle(
                           backgroundColor: WidgetStatePropertyAll(Colors.red)),
                       onPressed: () => Navigator.pop(context),
-                      child: CustomText(
+                      child: const CustomText(
                         text: 'Cancel',
                         color: Colors.white,
                       )),
@@ -196,7 +186,8 @@ class _NepaliDatePickerState extends State<NepaliDatePicker> {
                     onPressed: _range != null && _error == null
                         ? () => Navigator.of(context).pop(_range)
                         : null,
-                    child: CustomText(text: 'Submit', color: Colors.white),
+                    child:
+                        const CustomText(text: 'Submit', color: Colors.white),
                   )
                 ],
               ),
@@ -295,9 +286,9 @@ class _NepaliCalendar extends StatelessWidget {
             margin: const EdgeInsets.all(1),
             decoration: BoxDecoration(
               borderRadius: isStart
-                  ? BorderRadius.horizontal(left: Radius.circular(8))
+                  ? const BorderRadius.horizontal(left: Radius.circular(8))
                   : isEnd
-                      ? BorderRadius.horizontal(right: Radius.circular(8))
+                      ? const BorderRadius.horizontal(right: Radius.circular(8))
                       : null,
               color: isStartOrEnd
                   ? colorScheme.primary

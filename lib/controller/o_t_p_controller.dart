@@ -18,7 +18,7 @@ class OTPController extends GetxController {
   }
 
   void startTimer() {
-    timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (remainingTime > 0) {
         remainingTime.value--;
       } else {
@@ -27,7 +27,6 @@ class OTPController extends GetxController {
       }
     });
   }
-  
 
   void resendCode() {
     remainingTime.value = 30;
@@ -45,7 +44,7 @@ class OTPController extends GetxController {
       Get.snackbar('Error', 'OTP has expired. Please resend OTP');
     } else if (correctOtp == enteredOtp) {
       Get.snackbar('Success', 'OTP verified successfully');
-      Get.off(() => DashBoardPage());
+      Get.off(() => const DashBoardPage());
     } else {
       Get.snackbar('Invalid', 'Invalid OTP code.Try again! ');
     }

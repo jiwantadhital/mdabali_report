@@ -26,7 +26,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         emit(LoginFailure(error: response.message ?? 'Failed to login'));
       }
     } catch (e) {
-      print(e.toString());
       emit(LoginFailure(error: e.toString()));
     }
   }

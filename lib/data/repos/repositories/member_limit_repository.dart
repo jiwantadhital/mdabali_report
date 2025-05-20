@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:mdabali_report/data/models/member_limit_model.dart';
 import 'package:mdabali_report/data/repos/get_repo.dart';
 import 'package:mdabali_report/resources/constants.dart';
@@ -19,10 +20,10 @@ class MemberLimitRepository {
         return MemeberLimitModel.fromJson(data);
       } else {
         throw Exception(
-            jsonDecode(response.body)['message'] ?? "Failed to load data");
+            jsonDecode(response.body)['message'] ?? 'Failed to load data');
       }
     } catch (e) {
-      throw Exception("$e");
+      throw Exception('$e');
     }
   }
 }

@@ -3,7 +3,6 @@ import 'dart:typed_data';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-
 import 'package:mdabali_report/data/models/init_model.dart';
 import 'package:mdabali_report/data/repos/repositories/init_repository.dart';
 

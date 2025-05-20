@@ -1,8 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:mdabali_report/view/extracted_widgets/custom_text.dart';
 import 'package:shimmer/shimmer.dart';
-
-import '../../extracted_widgets/custom_text.dart';
 
 class LineChartCard extends StatelessWidget {
   final String title;
@@ -121,7 +120,7 @@ class LineChartCard extends StatelessWidget {
                             reservedSize: 70,
                             getTitlesWidget: (value, meta) {
                               return Padding(
-                                padding: EdgeInsets.only(right: 0),
+                                padding: const EdgeInsets.only(right: 0),
                                 child: CustomText(
                                   text: 'Rs ${value.toInt().toString()}',
                                   fontSize: 12,
@@ -150,12 +149,12 @@ class LineChartCard extends StatelessWidget {
                                 return const SizedBox.shrink();
                               }),
                         ),
-                        rightTitles: AxisTitles(
+                        rightTitles: const AxisTitles(
                           sideTitles: SideTitles(
                             showTitles: false,
                           ),
                         ),
-                        topTitles: AxisTitles(
+                        topTitles: const AxisTitles(
                             sideTitles: SideTitles(
                           showTitles: false,
                         )),
@@ -174,7 +173,7 @@ class LineChartCard extends StatelessWidget {
                             isCurved: true,
                             curveSmoothness: 0.35,
                             color: Colors.blue[200],
-                            dotData: FlDotData(show: true)),
+                            dotData: const FlDotData(show: true)),
                       ]),
                 ),
               ),

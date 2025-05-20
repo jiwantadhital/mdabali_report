@@ -1,5 +1,3 @@
-// ignore_for_file:  constant_identifier_names, non_constant_identifier_names
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -7,13 +5,13 @@ import 'package:intl/intl.dart';
 const accentColor = Color(0xFFFB5656);
 
 const Color primary = Color(0xFF0986FF);
-const Color on_primary = Color(0xFFFFFFFF);
-const Color primary_container = Color(0x140986FF);
-const Color primary_on_container = Color(0xFF0B72EB);
+const Color onPrimary = Color(0xFFFFFFFF);
+const Color primaryContainer = Color(0x140986FF);
+const Color primaryOnContainer = Color(0xFF0B72EB);
 const Color secondary = Color(0xFF001A49);
-const Color on_secondary = Color(0xFFFFFFFF);
-const Color secondary_container = Color(0x14AD6016);
-const Color secondary_on_container = Color(0xFF0986FF);
+const Color onSecondary = Color(0xFFFFFFFF);
+const Color secondaryContainer = Color(0x14AD6016);
+const Color secondaryOnContainer = Color(0xFF0986FF);
 
 const Color dividerColor = Color(0xFFBCCCDC);
 
@@ -22,53 +20,53 @@ var lightColorScheme = ThemeData(
   bottomSheetTheme:
       const BottomSheetThemeData(backgroundColor: Colors.transparent),
   primaryColor: primary,
-  canvasColor: Color(0xFFF0F2F6),
+  canvasColor: const Color(0xFFF0F2F6),
 //disabled
-  disabledColor: Color(0xFFBCCCDC),
+  disabledColor: const Color(0xFFBCCCDC),
 //on_disabled
-  dividerColor: Color(0xFFE4E4E4),
+  dividerColor: const Color(0xFFE4E4E4),
   colorScheme: ColorScheme(
     brightness: Brightness.light,
     primary: primary,
-    onPrimary: on_primary,
-    primaryContainer: primary_container,
-    onPrimaryContainer: primary_on_container,
+    onPrimary: onPrimary,
+    primaryContainer: primaryContainer,
+    onPrimaryContainer: primaryOnContainer,
     secondary: secondary,
-    onSecondary: on_secondary,
-    secondaryContainer: secondary_container,
-    onSecondaryContainer: secondary_on_container,
-    error: Color(0xFFD41717),
-    onError: Color(0xFFFFFFFF),
-    errorContainer: Color(0xFFFDEDED),
-    onErrorContainer: Color(0xFF4A0808),
-    surface: Color(0xFFFFFFFF),
-    onSurface: Color(0xFF232323),
-    surfaceContainerHighest: Color(0xFFDBDFE5),
-    surfaceContainer: Color(0xFFF0F2F6),
-    onSurfaceVariant: Color(0xFF5C5C5C),
-    outline: Color(0xFFACB8C3),
-    outlineVariant: Color(0xFFDBE1E5),
+    onSecondary: onSecondary,
+    secondaryContainer: secondaryContainer,
+    onSecondaryContainer: secondaryOnContainer,
+    error: const Color(0xFFD41717),
+    onError: const Color(0xFFFFFFFF),
+    errorContainer: const Color(0xFFFDEDED),
+    onErrorContainer: const Color(0xFF4A0808),
+    surface: const Color(0xFFFFFFFF),
+    onSurface: const Color(0xFF232323),
+    surfaceContainerHighest: const Color(0xFFDBDFE5),
+    surfaceContainer: const Color(0xFFF0F2F6),
+    onSurfaceVariant: const Color(0xFF5C5C5C),
+    outline: const Color(0xFFACB8C3),
+    outlineVariant: const Color(0xFFDBE1E5),
 //success
-    tertiary: Color(0xFF34C759),
-    tertiaryFixedDim: Color(0xFF34C759).withValues(alpha: 0.1),
+    tertiary: const Color(0xFF34C759),
+    tertiaryFixedDim: const Color(0xFF34C759).withValues(alpha: 0.1),
 //on_success
-    onTertiary: Color(0xFFFFFFFF),
+    onTertiary: const Color(0xFFFFFFFF),
 //success_container
-    tertiaryContainer: Color(0x14117E2A),
+    tertiaryContainer: const Color(0x14117E2A),
 //success_on_container
-    onTertiaryContainer: Color(0xFF0A4818),
+    onTertiaryContainer: const Color(0xFF0A4818),
 //text_field_disabled
-    shadow: Color(0xFF72767A),
+    shadow: const Color(0xFF72767A),
 //disabled_outline
-    scrim: Color(0xFFCAD2D9),
+    scrim: const Color(0xFFCAD2D9),
 //warning
-    inverseSurface: Color(0xFFF97316),
+    inverseSurface: const Color(0xFFF97316),
 //on_warning
-    onInverseSurface: Color(0xFF3C1A01),
+    onInverseSurface: const Color(0xFF3C1A01),
 //warning_container
-    inversePrimary: Color(0xFFFEF3EB),
+    inversePrimary: const Color(0xFFFEF3EB),
 //warning_on_container
-    surfaceTint: Color(0xFF3C1A01),
+    surfaceTint: const Color(0xFF3C1A01),
   ),
 );
 
@@ -76,56 +74,56 @@ var darkColorScheme = ThemeData(
   useMaterial3: true,
   bottomSheetTheme:
       const BottomSheetThemeData(backgroundColor: Colors.transparent),
-  fontFamily: "Urbanist",
+  fontFamily: 'Urbanist',
   primaryColor: primary,
-  canvasColor: Color(0xFF000000),
+  canvasColor: const Color(0xFF000000),
 //disabled
-  disabledColor: Color(0xFF292929),
+  disabledColor: const Color(0xFF292929),
 //on_disabled
-  dividerColor: Color(0xFF555555),
+  dividerColor: const Color(0xFF555555),
   colorScheme: ColorScheme(
     brightness: Brightness.dark,
     primary: primary,
-    onPrimary: on_primary,
-    primaryContainer: primary_container,
-    onPrimaryContainer: primary_on_container,
+    onPrimary: onPrimary,
+    primaryContainer: primaryContainer,
+    onPrimaryContainer: primaryOnContainer,
     secondary: secondary,
-    onSecondary: on_secondary,
-    secondaryContainer: secondary_container,
-    onSecondaryContainer: secondary_on_container,
-    error: Color(0xFFED5959),
-    onError: Color(0xFF4A0808),
-    errorContainer: Color(0xFFED5959),
-    onErrorContainer: Color(0xFF4A0808),
-    surfaceContainer: Color(0xFF1F1F1F),
-    surface: Color(0xFF000000),
-    onSurface: Color(0xFFF5F5F5),
-    surfaceContainerHighest: Color(0xFF292929),
-    surfaceContainerLowest: Color(0xFF292929),
-    onSurfaceVariant: Color(0xFFA3A3A3),
-    outline: Color(0xFF525252),
-    outlineVariant: Color(0xFF3D3D3D),
+    onSecondary: onSecondary,
+    secondaryContainer: secondaryContainer,
+    onSecondaryContainer: secondaryOnContainer,
+    error: const Color(0xFFED5959),
+    onError: const Color(0xFF4A0808),
+    errorContainer: const Color(0xFFED5959),
+    onErrorContainer: const Color(0xFF4A0808),
+    surfaceContainer: const Color(0xFF1F1F1F),
+    surface: const Color(0xFF000000),
+    onSurface: const Color(0xFFF5F5F5),
+    surfaceContainerHighest: const Color(0xFF292929),
+    surfaceContainerLowest: const Color(0xFF292929),
+    onSurfaceVariant: const Color(0xFFA3A3A3),
+    outline: const Color(0xFF525252),
+    outlineVariant: const Color(0xFF3D3D3D),
 //success
-    tertiary: Color(0xFF34C759),
-    tertiaryFixedDim: Color(0xFF34C759).withValues(alpha: 0.1),
+    tertiary: const Color(0xFF34C759),
+    tertiaryFixedDim: const Color(0xFF34C759).withValues(alpha: 0.1),
 //on_success
-    onTertiary: Color(0xFFFFFFFF),
+    onTertiary: const Color(0xFFFFFFFF),
 //success_container
-    tertiaryContainer: Color(0x14117E2A),
+    tertiaryContainer: const Color(0x14117E2A),
 //success_on_container
-    onTertiaryContainer: Color(0xFF0A4818),
+    onTertiaryContainer: const Color(0xFF0A4818),
 //text_field_disabled
-    shadow: Color(0xFF9D9D9D),
+    shadow: const Color(0xFF9D9D9D),
 //disabled_outline
-    scrim: Color(0xFF343434),
+    scrim: const Color(0xFF343434),
 //warning
-    inverseSurface: Color(0xFFF97316),
+    inverseSurface: const Color(0xFFF97316),
 //on_warning
-    onInverseSurface: Color(0xFF3C1A01),
+    onInverseSurface: const Color(0xFF3C1A01),
 //warning_container
-    inversePrimary: Color(0xFF3C1A01),
+    inversePrimary: const Color(0xFF3C1A01),
 //warning_on_container
-    surfaceTint: Color(0xFF025326),
+    surfaceTint: const Color(0xFF025326),
   ),
 );
 
@@ -155,7 +153,7 @@ final RegExp cdmaPrepaidPattern = RegExp(r'^(974)\d{7}$');
 final RegExp cdmaPostpaidPattern = RegExp(r'^(975)\d{7}$');
 //    private val cdmaPattern2 = "^(0)\\d{8}$"
 final RegExp smCellPattern = RegExp(r'^(961|962|988)\d{7}$');
-final RegExp LANDLINE_PATTERN = RegExp(r'^([1-9])\d{7}$');
+final RegExp landlinePattern = RegExp(r'^([1-9])\d{7}$');
 
 String emailPattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
 final RegExp emailRegExp = RegExp(emailPattern);
@@ -181,13 +179,13 @@ const kAppbarColor = Color.fromRGBO(240, 242, 246, 1);
 
 var kBoxShadow = BoxShadow(
     color: kShadow.withValues(alpha: .04),
-    offset: Offset(1, 1),
+    offset: const Offset(1, 1),
     spreadRadius: 1,
     blurRadius: 2);
 
 var kSheetShadow = BoxShadow(
     color: kShadow.withValues(alpha: 0.1),
-    offset: Offset(2, 0),
+    offset: const Offset(2, 0),
     spreadRadius: 6,
     blurRadius: 4);
 

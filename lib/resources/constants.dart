@@ -1,7 +1,6 @@
 class ApiClass {
-  static const String testUrl =
-      // "https://pg.bittiyasewa.com/api";
-      "http://pg.infodev.com.np/api";
+  static const String testUrl = 'https://pg.bittiyasewa.com/api';
+  // "http://pg.infodev.com.np/api";
   // "http://172.31.1.20";
   static const String loginUrl = '/web-login';
   static const String totpUrl = '/otp/verify/totp';
@@ -12,4 +11,6 @@ class ApiClass {
   static const String memberLimitUrl = '/mdabaliApi/customer/limit';
   static const String summaryReportUrl = '/reportingApi/summary-report?';
   static const String initUrl = '/mobileApi/user/init/reporting';
+  static const String monthlyAggerateUrl =
+      '/reportingApi/transaction/monthly-aggregate';
 }

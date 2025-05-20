@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -6,8 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:mdabali_report/data/shared_preferences/shared_preferences.dart';
 import 'package:mdabali_report/resources/constants.dart';
 import 'package:mdabali_report/services/http_error_handler.dart';
-
-import '../../view/extracted_widgets/custom_text.dart';
+import 'package:mdabali_report/view/extracted_widgets/custom_text.dart';
 
 class GetRepo {
   // final CustomHttpInterceptor client;
@@ -17,12 +18,12 @@ class GetRepo {
   GetRepo();
   Future<http.Response> getRepository(api, {bool tokenrequired = true}) async {
     var response = await http.get(
-      Uri.parse("${ApiClass.testUrl}$api"),
+      Uri.parse('${ApiClass.testUrl}$api'),
       headers: {
-        "Authorization": tokenrequired == true
-            ? "Bearer ${UserSimplePreferences.getToken()}"
-            : "",
-        "Accept-Language":
+        'Authorization': tokenrequired == true
+            ? 'Bearer ${UserSimplePreferences.getToken()}'
+            : '',
+        'Accept-Language':
             UserSimplePreferences.getLanguage() == true ? 'np' : 'en'
       },
     ).timeout(
@@ -66,14 +67,14 @@ void logout() {
         canPop: false,
         child: AlertDialog(
           title: const Text('Session Expired'),
-          content: Text('Session Expired, Please Login again'),
+          content: const Text('Session Expired, Please Login again'),
           actions: [
             Center(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromARGB(255, 9, 134, 255),
+                  backgroundColor: const Color.fromARGB(255, 9, 134, 255),
                   foregroundColor: Colors.white,
-                  minimumSize: Size(100, 36),
+                  minimumSize: const Size(100, 36),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -81,7 +82,7 @@ void logout() {
                 onPressed: () {
                   Get.offAllNamed('/login');
                 },
-                child: CustomText(
+                child: const CustomText(
                   text: 'ok',
                   color: Colors.white,
                   fontSize: 16,
@@ -94,7 +95,7 @@ void logout() {
       barrierDismissible: false,
     );
   } else {
-    print("ressetting");
+    print('ressetting');
     // _resetInactivityTimer();
   }
 }

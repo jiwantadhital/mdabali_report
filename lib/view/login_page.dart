@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mdabali_report/resources/colors.dart';
 import 'package:mdabali_report/resources/images_constants.dart';
+import 'package:mdabali_report/view/extracted_widgets/custom_text.dart';
 import 'package:mdabali_report/view/extracted_widgets/custom_textfield.dart';
 import 'package:mdabali_report/view/extracted_widgets/extracted_button.dart';
 import 'package:mdabali_report/view/password_login_page.dart';
-
-import 'extracted_widgets/custom_text.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -91,20 +90,20 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 40),
                 // Title section
-                CustomText(
+                const CustomText(
                   text: 'Secure and Convenient',
                   fontSize: 16,
                   color: Colors.grey,
                 ),
                 const SizedBox(height: 8),
-                CustomText(
+                const CustomText(
                   text: 'Mobile Banking',
                   fontSize: 24,
                   color: Colors.deepOrange,
                   weight: FontWeight.w500,
                 ),
                 const SizedBox(height: 60),
-                CustomText(
+                const CustomText(
                   text: 'Login or register',
                   fontSize: 20,
                   weight: FontWeight.w400,
@@ -115,13 +114,13 @@ class _LoginPageState extends State<LoginPage> {
                   hintText: 'User name',
                   controller: usernameController,
                   contentPadding:
-                      EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                   keyboardType: TextInputType.name,
-                  onchange: (value) {
+                  onChanged: (value) {
                     mobileNotifier.value = value.toString();
                   },
                   validator: (value) {
-                    if (value.isEmpty) {
+                    if (value == null || value.isEmpty) {
                       return 'Username is required';
                     }
                     return null;
@@ -140,10 +139,7 @@ class _LoginPageState extends State<LoginPage> {
                             ? () {
                                 if (_formKey.currentState?.validate() ??
                                     false) {
-                                  Get.off(() => PasswordLoginPage(
-                                      // username:
-                                      //     usernameController.text.trim(),
-                                      ));
+                                  Get.off(() => const PasswordLoginPage());
                                 }
                               }
                             : null,

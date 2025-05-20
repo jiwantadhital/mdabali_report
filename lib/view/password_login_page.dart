@@ -4,15 +4,14 @@ import 'package:get/get.dart';
 import 'package:mdabali_report/bloc/login_bloc/bloc/login_bloc.dart';
 import 'package:mdabali_report/data/repos/repositories/login_repository.dart';
 import 'package:mdabali_report/data/shared_preferences/shared_preferences.dart';
+import 'package:mdabali_report/resources/images_constants.dart';
 import 'package:mdabali_report/view/dash_board_page.dart';
 import 'package:mdabali_report/view/extracted_widgets/custom_snackbar.dart';
+import 'package:mdabali_report/view/extracted_widgets/custom_text.dart';
+import 'package:mdabali_report/view/extracted_widgets/custom_textfield.dart';
+import 'package:mdabali_report/view/extracted_widgets/extracted_button.dart';
+import 'package:mdabali_report/view/login_page.dart';
 import 'package:mdabali_report/view/o_t_p_verification_page.dart';
-
-import '../resources/images_constants.dart';
-import 'extracted_widgets/custom_text.dart';
-import 'extracted_widgets/custom_textfield.dart';
-import 'extracted_widgets/extracted_button.dart';
-import 'login_page.dart';
 
 class PasswordLoginPage extends StatefulWidget {
   const PasswordLoginPage({
@@ -71,7 +70,7 @@ class _PasswordLoginPageState extends State<PasswordLoginPage> {
                           ? Get.to(() => OTPVerificationPage(
                                 secret: loginData.data?.secret ?? '',
                               ))
-                          : Get.off(() => DashBoardPage());
+                          : Get.off(() => const DashBoardPage());
                       if (loginData.data!.accessToken != null) {
                         await UserSimplePreferences.setToken(
                             loginData.data!.accessToken ?? '');
@@ -132,14 +131,14 @@ class _PasswordLoginPageState extends State<PasswordLoginPage> {
                               color: colorScheme.onSurfaceVariant,
                             ),
                             const SizedBox(height: 8),
-                            CustomText(
+                            const CustomText(
                               text: 'Mdabali Report App',
                               fontSize: 24,
                               color: Colors.deepOrange,
                               weight: FontWeight.w500,
                             ),
                             const SizedBox(height: 40),
-                            CustomText(
+                            const CustomText(
                               text: 'Login',
                               fontSize: 20,
                               weight: FontWeight.w500,
@@ -148,36 +147,37 @@ class _PasswordLoginPageState extends State<PasswordLoginPage> {
                             CustomTextField(
                               hintText: 'User name',
                               controller: usernameController,
-                              contentPadding: EdgeInsets.symmetric(
+                              contentPadding: const EdgeInsets.symmetric(
                                   horizontal: 16, vertical: 16),
                               keyboardType: TextInputType.name,
-                              onchange: (value) {
+                              onChanged: (value) {
                                 mobileNotifier.value = value.toString();
                               },
                               validator: (value) {
-                                if (value.isEmpty) {
+                                if (value == null || value.isEmpty) {
                                   return 'Username is required';
                                 }
                                 return null;
                               },
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 16,
                             ),
                             CustomTextField(
                                 hintText: 'Password',
                                 controller: passwordController,
                                 //maxLength: 16,
-                                onchange: (value) {
+                                onChanged: (value) {
                                   passwordNotifier.value = value;
                                 },
                                 validator: (value) {
-                                  if (value.isEmpty) {
+                                  if (value == null || value.isEmpty) {
                                     return 'Required password';
                                   }
+                                  return null;
                                 },
                                 isPass: true,
-                                contentPadding: EdgeInsets.symmetric(
+                                contentPadding: const EdgeInsets.symmetric(
                                     horizontal: 16, vertical: 16),
                                 keyboardType: TextInputType.text,
                                 suffixIconEnabled: true),
@@ -267,7 +267,7 @@ class _UserPhoneNumState extends State<UserPhoneNum> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30),
           border: Border.all(color: Colors.grey[600]!)),
@@ -290,7 +290,7 @@ class _UserPhoneNumState extends State<UserPhoneNum> {
                 weight: FontWeight.w500,
                 color: Theme.of(context).colorScheme.onSurface,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 4,
               ),
               CustomText(

@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_typing_uninitialized_variables
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
@@ -7,6 +5,19 @@ import 'package:mdabali_report/view/extracted_widgets/custom_text.dart';
 import 'package:pinput/pinput.dart';
 
 class CustomPinput extends StatefulWidget {
+  final String typeName;
+  final TextEditingController pinController;
+  final bool isShow;
+  final bool isForgot;
+  final bool isChangeTrans;
+  final bool isCT;
+  final void Function()? onTap;
+  final Color? color;
+  final Color? focusColor;
+  final TextInputAction textAction;
+  final bool autoClose;
+  final int length;
+  final double width;
   const CustomPinput({
     super.key,
     required this.pinController,
@@ -16,20 +27,13 @@ class CustomPinput extends StatefulWidget {
     this.isCT = false,
     this.length = 4,
     this.onTap,
-    this.typeName = "Pin",
+    this.typeName = 'Pin',
     this.color,
     this.focusColor,
     this.textAction = TextInputAction.done,
     this.autoClose = true,
     this.width = double.infinity,
   });
-  final String typeName;
-  final TextEditingController pinController;
-  final bool isShow;
-  final bool isForgot, isChangeTrans, isCT;
-
-  final onTap, color, focusColor, textAction, autoClose;
-  final length, width;
 
   @override
   State<CustomPinput> createState() => _CustomPinputState();
@@ -68,7 +72,7 @@ class _CustomPinputState extends State<CustomPinput> {
             // width: 12.8.w,
             height: 5.8.h,
 
-            margin: EdgeInsets.symmetric(horizontal: 6),
+            margin: const EdgeInsets.symmetric(horizontal: 6),
             textStyle: TextStyle(fontSize: 18.dp, color: theme.onSurface),
             decoration: BoxDecoration(
               color: theme.surface,
@@ -87,10 +91,10 @@ class _CustomPinputState extends State<CustomPinput> {
           focusedPinTheme: PinTheme(
             width: double.infinity,
             height: 5.8.h,
-            margin: EdgeInsets.symmetric(horizontal: 6),
+            margin: const EdgeInsets.symmetric(horizontal: 6),
             textStyle: TextStyle(
               fontSize: 18.dp,
-              color: Color.fromRGBO(30, 60, 87, 1),
+              color: const Color.fromRGBO(30, 60, 87, 1),
             ),
             decoration: BoxDecoration(
               color: theme.surface,

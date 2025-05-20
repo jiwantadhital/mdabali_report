@@ -1,47 +1,43 @@
-// ignore_for_file: prefer_typing_uninitialized_variables, annotate_overrides, overridden_fields
-
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
 import 'package:mdabali_report/resources/images_constants.dart';
 
 class CustomTextField extends StatefulWidget {
-  final hintText,
-      controller,
-      keyboardType,
-      textInputAction,
-      maxLength,
-      isPass,
-      onchange,
-      suffixIconEnabled,
-      textAlign,
-      validator,
-      icon,
-      key,
-      isFloating,
-      readOnly,
-      onPress,
-      floatingLabelColor,
-      enabled,
-      focusedColor,
-      isLabel,
-      autoFocus,
-      onSubmit,
-      showCount,
-      prefixIcon,
-      maxLines,
-      focusNode,
-      inputFormatters,
-      textCap,
-      contentPadding,
-      onFocusChange;
+  final String? hintText;
+  final TextEditingController? controller;
+  final TextInputType keyboardType;
+  final TextInputAction textInputAction;
+  final int maxLength;
+  final bool isPass;
+  final void Function(String value)? onChanged;
+  final bool suffixIconEnabled;
+  final TextAlign textAlign;
+  final String? Function(String? value)? validator;
+  final Icon? icon;
+  final bool isFloating;
+  final bool readOnly;
+  final void Function()? onPress;
+  final Color? floatingLabelColor;
+  final bool enabled;
+  final Color? focusedColor;
+  final bool isLabel;
+  final bool autoFocus;
+  final void Function(String value)? onSubmit;
+  final bool showCount;
+  final Widget? prefixIcon;
+  final int maxLines;
+  final FocusNode? focusNode;
+  final List<TextInputFormatter>? inputFormatters;
+  final TextCapitalization textCap;
+  final EdgeInsetsGeometry? contentPadding;
+  final void Function(PointerDownEvent value)? onFocusChange;
 
-  // ignore: use_key_in_widget_constructors
   const CustomTextField(
-      {this.autoFocus = false,
-      this.key,
+      {super.key,
+      this.autoFocus = false,
       this.showCount = false,
-      // ignore: avoid_init_to_null
-      this.onSubmit = null,
+      this.onSubmit,
       this.onPress,
       this.maxLines = 1,
       this.suffixIconEnabled = true,
@@ -58,7 +54,7 @@ class CustomTextField extends StatefulWidget {
       this.icon,
       this.validator,
       this.enabled = true,
-      this.onchange,
+      this.onChanged,
       this.focusedColor,
       this.textInputAction = TextInputAction.next,
       // ignore: avoid_init_to_null
@@ -96,7 +92,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       inputFormatters: widget.inputFormatters, //
       textAlign: widget.textAlign,
       cursorColor: Theme.of(context).primaryColor,
-      onChanged: widget.onchange,
+      onChanged: widget.onChanged,
       focusNode: widget.focusNode,
       style: TextStyle(
         color: theme.onSurface,
@@ -159,12 +155,12 @@ class _CustomTextFieldState extends State<CustomTextField> {
           fontWeight: FontWeight.w500,
           fontSize: 12.dp,
         ),
-        border: OutlineInputBorder(),
+        border: const OutlineInputBorder(),
         labelText: widget.isLabel ? widget.hintText : null,
         contentPadding: widget.contentPadding ??
             (widget.suffixIconEnabled
-                ? EdgeInsets.only(right: 0, left: 16)
-                : EdgeInsets.only(right: 15, left: 0)),
+                ? const EdgeInsets.only(right: 0, left: 16)
+                : const EdgeInsets.only(right: 15, left: 0)),
       ),
     );
   }

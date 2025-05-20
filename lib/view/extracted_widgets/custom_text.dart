@@ -3,22 +3,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_sizer/flutter_sizer.dart';
 
-// ignore: must_be_immutable
 class CustomText extends StatelessWidget {
   final String text;
   final double hpadding;
   final double vpadding;
   final double height;
-  double? fontSize = 12.dp;
+  final double? fontSize;
   final FontWeight? weight;
   final Color? color;
   final String? family;
-  final textAlign;
-  final maxLine, decoration;
-  final textOverflow;
+  final TextAlign textAlign;
+  final int? maxLine;
+  final TextDecoration decoration;
+  final TextOverflow textOverflow;
   final double? letterSpacing;
 
-  CustomText(
+  const CustomText(
       {super.key,
       this.maxLine,
       this.height = 0,
@@ -43,7 +43,7 @@ class CustomText extends StatelessWidget {
         decoration: decoration,
         letterSpacing: letterSpacing,
         fontFamily: 'SFpro',
-        fontSize: fontSize,
+        fontSize: fontSize ?? 12.dp,
         color: color ?? Theme.of(context).colorScheme.onSurface,
         fontWeight: weight,
       ),

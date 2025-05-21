@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:mdabali_report/bloc/summary_report_bloc/bloc/summary_report_bloc.dart';
 import 'package:mdabali_report/data/shared_preferences/shared_preferences.dart';
 import 'package:mdabali_report/resources/colors.dart';
+import 'package:mdabali_report/resources/constants.dart';
 import 'package:mdabali_report/view/extracted_widgets/custom_text.dart';
 import 'package:mdabali_report/view/extracted_widgets/nepali_date_range_picker_card.dart';
 import 'package:mdabali_report/view/transaction_page/shimmer_transaction_cards.dart';
@@ -158,7 +159,8 @@ class _TransactionPageState extends State<TransactionPage> {
                       summaryReportData?[index].pendingCount ?? 0,
                       summaryReportData?[index].pendingAmount ?? 0,
                       summaryReportData?[index].failedCount ?? 0,
-                      summaryReportData?[index].failedAmount ?? 0)));
+                      summaryReportData?[index].failedAmount ?? 0,
+                      summaryReportData?[index].serviceIcon ?? '')));
         } else if (state is SummaryReportError) {
           return Padding(
             padding: const EdgeInsets.only(top: 100.0),
@@ -202,14 +204,16 @@ class _TransactionPageState extends State<TransactionPage> {
   }
 
   Widget _buildTransactionCard(
-      BuildContext context,
-      String service,
-      int successCount,
-      double successAmount,
-      int pendingCount,
-      double pendingAmount,
-      int failCount,
-      double failAmount) {
+    BuildContext context,
+    String service,
+    int successCount,
+    double successAmount,
+    int pendingCount,
+    double pendingAmount,
+    int failCount,
+    double failAmount,
+    String imageUrl,
+  ) {
     var colorScheme = Theme.of(context).colorScheme;
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 12),
@@ -245,18 +249,33 @@ class _TransactionPageState extends State<TransactionPage> {
                   Expanded(
                     child: Row(
                       children: [
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: colorScheme.primaryFixedDim
-                                .withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(10),
+                        Card(
+                          margin: const EdgeInsets.all(0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
                           ),
-                          child: Icon(
-                            _getServiceIcon(service),
-                            color: colorScheme.primary,
-                            //Color(0xFF4285F4),
-                            size: 22,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.network(
+                              '${ApiClass.testUrl}/webApi/images/get?filePath=${Uri.encodeComponent(imageUrl)}',
+                              height: 40,
+                              fit: BoxFit.contain,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Icon(
+                                  _getServiceIcon(service),
+                                  color: colorScheme.primary,
+                                  size: 30,
+                                ),
+                              ),
+                              loadingBuilder:
+                                  (context, child, loadingProgress) =>
+                                      loadingProgress == null
+                                          ? child
+                                          : const CircularProgressIndicator(
+                                              strokeWidth: 2),
+                            ),
                           ),
                         ),
                         const SizedBox(width: 12),

@@ -446,10 +446,10 @@ Widget _buildOthersItem(BuildContext context, _OthersEntry entry) {
       ),
       Expanded(
         child: CustomText(
-          text: '${entry.label} (${entry.percentage.toStringAsFixed(1)}%)',
+          text: '${entry.label}\n ${entry.percentage.toStringAsFixed(1)}%',
           fontSize: 13,
           color: Theme.of(context).colorScheme.onSurfaceVariant,
-          maxLine: 2,
+          maxLine: 3,
           textOverflow: TextOverflow.ellipsis,
         ),
       ),

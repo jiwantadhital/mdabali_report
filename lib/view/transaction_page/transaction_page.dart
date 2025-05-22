@@ -163,14 +163,16 @@ class _TransactionPageState extends State<TransactionPage> {
                       summaryReportData?[index].serviceIcon ?? '')));
         } else if (state is SummaryReportError) {
           return Padding(
-            padding: const EdgeInsets.only(top: 100.0),
+            padding: EdgeInsets.only(
+              top: MediaQuery.of(context).size.height * 0.25,
+            ),
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.error_outline,
-                      color: Theme.of(context).colorScheme.error, size: 24),
-                  const SizedBox(height: 8),
+                      color: Theme.of(context).colorScheme.error, size: 34),
+                  const SizedBox(height: 12),
                   CustomText(
                     text: state.error,
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -182,20 +184,25 @@ class _TransactionPageState extends State<TransactionPage> {
             ),
           );
         } else {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.error_outline,
-                    color: Theme.of(context).colorScheme.error, size: 24),
-                const SizedBox(height: 8),
-                CustomText(
-                  text: 'Failed to load Data',
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  fontSize: 16,
-                  textAlign: TextAlign.center,
-                ),
-              ],
+          return Padding(
+            padding: EdgeInsets.only(
+              top: MediaQuery.of(context).size.height * 0.25,
+            ),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.error_outline,
+                      color: Theme.of(context).colorScheme.error, size: 34),
+                  const SizedBox(height: 12),
+                  CustomText(
+                    text: 'Failed to load Data',
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    fontSize: 16,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
             ),
           );
         }

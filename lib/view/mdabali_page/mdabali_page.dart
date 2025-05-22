@@ -52,40 +52,53 @@ class _MdabaliPageState extends State<MdabaliPage> {
                       context: context,
                       remainingLimit: remainingLimit.toString());
                 } else if (state is MemberLimitError) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.error_outline,
-                            color: Theme.of(context).colorScheme.error,
-                            size: 24),
-                        const SizedBox(height: 8),
-                        CustomText(
-                          text: state.error,
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          fontSize: 16,
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
+                  return Padding(
+                    padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height * 0.25,
+                    ),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.error_outline,
+                              color: Theme.of(context).colorScheme.error,
+                              size: 34),
+                          const SizedBox(height: 12),
+                          CustomText(
+                            text: state.error,
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                            fontSize: 16,
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 } else {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.error_outline,
-                            color: Theme.of(context).colorScheme.error,
-                            size: 24),
-                        const SizedBox(height: 8),
-                        CustomText(
-                          text:
-                              'Failed to load data, Please refresh to load data.',
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          fontSize: 16,
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
+                  return Padding(
+                    padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height * 0.25,
+                    ),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.error_outline,
+                              color: Theme.of(context).colorScheme.error,
+                              size: 34),
+                          const SizedBox(height: 12),
+                          CustomText(
+                            text:
+                                'Failed to load data, Please refresh to load data.',
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                            fontSize: 16,
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 }

@@ -13,7 +13,7 @@ import 'package:mdabali_report/bloc/sms_summary_bloc/bloc/sms_summary_bloc.dart'
 import 'package:mdabali_report/bloc/summary_report_bloc/bloc/summary_report_bloc.dart';
 import 'package:mdabali_report/bloc/topup_summary_bloc/bloc/topup_summary_bloc.dart';
 import 'package:mdabali_report/bloc/totp_bloc/bloc/t_otp_bloc.dart';
-import 'package:mdabali_report/controller/connectivity_listener.dart';
+import 'package:mdabali_report/controller/connectivity_controller.dart';
 import 'package:mdabali_report/controller/theme_controller.dart';
 import 'package:mdabali_report/data/repos/get_repo.dart';
 import 'package:mdabali_report/data/repos/repositories/five_month_data_repository.dart';
@@ -35,10 +35,15 @@ import 'package:mdabali_report/view/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await UserSimplePreferences.init();
+
   final themeController = ThemeController();
   await themeController.loadThemeMode();
   Get.put(themeController);
+
+  Get.put(ConnectivityController());
+
   HttpOverrides.global = MyHttpOverrides();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -91,24 +96,25 @@ class _MyAppState extends State<MyApp> {
                 create: (context) =>
                     MemberLimitBloc(MemberLimitRepository(getRepo: GetRepo()))),
           ],
-          child: ConnectivityListener(
-              child: Obx(
+          child: Obx(
             () => GetMaterialApp(
               // navigatorObservers: [AuthNavigatorObserver()],
               debugShowCheckedModeBanner: false,
-              title: 'Flutter Demo',
+              title: 'mDabali Report',
+
               themeMode: themeController.themeMode.value,
-              darkTheme:
-                  //    ThemeData.dark(),
-                  darkColorScheme.copyWith(
+
+              darkTheme: darkColorScheme.copyWith(
                 bottomNavigationBarTheme: const BottomNavigationBarThemeData(
                     backgroundColor: Color(0xFF000000)),
               ),
+
               theme: lightColorScheme.copyWith(
                 bottomNavigationBarTheme: const BottomNavigationBarThemeData(
                   backgroundColor: Color(0xFFFFFFFF),
                 ),
               ),
+
               initialRoute: '/splash',
               getPages: [
                 GetPage(
@@ -124,9 +130,8 @@ class _MyAppState extends State<MyApp> {
                     name: '/NoInternetPage',
                     page: () => const NoInternetPage()),
               ],
-              //  home:PasswordLoginPage()
             ),
-          )),
+          ),
         );
       },
     );

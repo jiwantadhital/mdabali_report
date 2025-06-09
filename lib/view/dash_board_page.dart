@@ -7,6 +7,7 @@ import 'package:mdabali_report/bloc/monthly_aggregate_bloc/bloc/monthly_aggregat
 import 'package:mdabali_report/resources/colors.dart';
 import 'package:mdabali_report/view/extracted_widgets/custom_drawer.dart';
 import 'package:mdabali_report/view/extracted_widgets/custom_text.dart';
+import 'package:mdabali_report/view/extracted_widgets/logout_dialog.dart';
 import 'package:mdabali_report/view/homepage/home_page.dart';
 import 'package:mdabali_report/view/mdabali_page/mdabali_page.dart';
 import 'package:mdabali_report/view/sms_page/sms_page.dart';
@@ -56,51 +57,61 @@ class _DashBoardPageState extends State<DashBoardPage> {
       'mDabali Summary'
     ];
     var colorScheme = Theme.of(context).colorScheme;
-    return Scaffold(
-      backgroundColor: colorScheme.surface,
-      drawer: const CustomDrawer(),
-      appBar: AppBar(
-        surfaceTintColor: colorScheme.surfaceTint,
-        elevation: 0,
-        backgroundColor: colorScheme.surfaceDim,
-        leading: Builder(
-          builder: (context) => IconButton(
-            icon: Icon(Icons.menu, color: colorScheme.primary),
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
-          ),
-        ),
-        title: CustomText(
-          text: appBar[_selectedIndex],
-          fontSize: 18,
-          color: colorScheme.primary,
-          weight: FontWeight.bold,
-        ),
-        centerTitle: true,
-        // Actions for notification icon on the right
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: IconButton(
-              icon: Icon(Icons.notifications, color: colorScheme.primary),
-              onPressed: () {},
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, Object? result) async {
+        if (didPop) {
+          return;
+        }
+        // Navigate to the home view when back navigation is attempted
+        showLogoutDialog(context);
+      },
+      child: Scaffold(
+        backgroundColor: colorScheme.surface,
+        drawer: const CustomDrawer(),
+        appBar: AppBar(
+          surfaceTintColor: colorScheme.surfaceTint,
+          elevation: 0,
+          backgroundColor: colorScheme.surfaceDim,
+          leading: Builder(
+            builder: (context) => IconButton(
+              icon: Icon(Icons.menu, color: colorScheme.primary),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
             ),
           ),
-        ],
-      ),
-      body: AnimatedSwitcher(
-        duration: const Duration(microseconds: 300),
-        transitionBuilder: (child, animation) => FadeTransition(
-          opacity: animation,
-          child: child,
+          title: CustomText(
+            text: appBar[_selectedIndex],
+            fontSize: 18,
+            color: colorScheme.primary,
+            weight: FontWeight.bold,
+          ),
+          centerTitle: true,
+          // Actions for notification icon on the right
+          // actions: [
+          //   Padding(
+          //     padding: const EdgeInsets.only(right: 8.0),
+          //     child: IconButton(
+          //       icon: Icon(Icons.notifications, color: colorScheme.primary),
+          //       onPressed: () {},
+          //     ),
+          //   ),
+          // ],
         ),
-        child: IndexedStack(
-          index: _selectedIndex,
-          children: _pages,
+        body: AnimatedSwitcher(
+          duration: const Duration(microseconds: 300),
+          transitionBuilder: (child, animation) => FadeTransition(
+            opacity: animation,
+            child: child,
+          ),
+          child: IndexedStack(
+            index: _selectedIndex,
+            children: _pages,
+          ),
         ),
+        bottomNavigationBar: _buildBottomNavBar(),
       ),
-      bottomNavigationBar: _buildBottomNavBar(),
     );
   }
 

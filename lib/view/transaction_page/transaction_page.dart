@@ -147,20 +147,35 @@ class _TransactionPageState extends State<TransactionPage> {
           return const ShimmerTransactionList();
         } else if (state is SummaryReportLoaded) {
           final summaryReportData = state.summaryReportModel.data;
-          int index = summaryReportData?.length ?? 0;
+          // If the list is not null, sort it by successCount in descending order
+          final sortedData = [
+            ...?summaryReportData
+          ] // Spread to create a copy, handle null safely
+            ..sort(
+                (a, b) => (b.successCount ?? 0).compareTo(a.successCount ?? 0));
+          int index = sortedData.length; //summaryReportData?.length ?? 0;
           return Column(
               children: List.generate(
                   index,
                   (index) => _buildTransactionCard(
-                      context,
-                      summaryReportData?[index].services ?? 'Not found',
-                      summaryReportData?[index].successCount ?? 0,
-                      summaryReportData?[index].successAmount ?? 0,
-                      summaryReportData?[index].pendingCount ?? 0,
-                      summaryReportData?[index].pendingAmount ?? 0,
-                      summaryReportData?[index].failedCount ?? 0,
-                      summaryReportData?[index].failedAmount ?? 0,
-                      summaryReportData?[index].serviceIcon ?? '')));
+                        context,
+                        sortedData[index].services ?? 'Not found',
+                        sortedData[index].successCount ?? 0,
+                        sortedData[index].successAmount ?? 0,
+                        sortedData[index].pendingCount ?? 0,
+                        sortedData[index].pendingAmount ?? 0,
+                        sortedData[index].failedCount ?? 0,
+                        sortedData[index].failedAmount ?? 0,
+                        sortedData[index].serviceIcon ?? '',
+                        // summaryReportData?[index].services ?? 'Not found',
+                        // summaryReportData?[index].successCount ?? 0,
+                        // summaryReportData?[index].successAmount ?? 0,
+                        // summaryReportData?[index].pendingCount ?? 0,
+                        // summaryReportData?[index].pendingAmount ?? 0,
+                        // summaryReportData?[index].failedCount ?? 0,
+                        // summaryReportData?[index].failedAmount ?? 0,
+                        // summaryReportData?[index].serviceIcon ?? '',
+                      )));
         } else if (state is SummaryReportError) {
           return Padding(
             padding: EdgeInsets.only(

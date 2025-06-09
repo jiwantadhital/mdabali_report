@@ -167,16 +167,16 @@ class _MdabaliPageState extends State<MdabaliPage> {
                           iconBgColor:
                               Colors.deepOrangeAccent.withValues(alpha: 0.5),
                         ),
-                        buildDivider(),
-                        buildMetricRow(
-                          'Total Users',
-                          totalUser,
-                          Icons.people_rounded,
-                          colorScheme.onSurface,
-                          iconBgColor:
-                              Colors.amberAccent.withValues(alpha: 0.5),
-                          isLast: true,
-                        ),
+                        // buildDivider(),
+                        // buildMetricRow(
+                        //   'Total Users',
+                        //   totalUser,
+                        //   Icons.people_rounded,
+                        //   colorScheme.onSurface,
+                        //   iconBgColor:
+                        //       Colors.amberAccent.withValues(alpha: 0.5),
+                        //   isLast: true,
+                        // ),
                         buildDivider(),
                         buildMetricRow(
                           'Remaining Limit',

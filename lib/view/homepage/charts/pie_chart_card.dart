@@ -41,8 +41,6 @@ class _PieChartCardState extends State<PieChartCard> {
 
   @override
   Widget build(BuildContext context) {
-    var colorScheme = Theme.of(context).colorScheme;
-
     return BlocBuilder<SummaryReportBloc, SummaryReportState>(
       builder: (context, state) {
         if (state is SummaryReportLoading) {
@@ -71,10 +69,17 @@ class _PieChartCardState extends State<PieChartCard> {
             return const Center(child: Text('No data available'));
           }
 
-          double totalSuccessAmount = data.fold(
+          // Filter out entries with 0 successAmount
+          final filteredData =
+              data.where((item) => (item.successAmount ?? 0) > 0).toList();
+
+          if (filteredData.isEmpty) {
+            return const Center(child: Text('No data available'));
+          }
+
+          double totalSuccessAmount = filteredData.fold(
               0.0, (sum, item) => sum + (item.successAmount ?? 0).toDouble());
 
-          // List<Color> chartColors = kMemberColorList;
           List<Color> generateDistinctColors(int count) {
             return List<Color>.generate(count, (index) {
               final hue = (360.0 / count) * index;
@@ -83,38 +88,51 @@ class _PieChartCardState extends State<PieChartCard> {
           }
 
           List<Color> chartColors = List<Color>.from(kMemberColorList);
-          if (data.length > chartColors.length) {
-            chartColors.addAll(
-                generateDistinctColors(data.length - chartColors.length));
+          if (filteredData.length > chartColors.length) {
+            chartColors.addAll(generateDistinctColors(
+                filteredData.length - chartColors.length));
           }
 
           List<PieChartSectionData> sections = [];
           List<Widget> indicators = [];
-          double othersPercentage = 0.0;
           List<_OthersEntry> othersEntries = [];
+          double othersAmount = 0.0;
 
-          for (int i = 0; i < data.length; i++) {
+          for (int i = 0; i < filteredData.length; i++) {
+            final entry = filteredData[i];
+            final amount = (entry.successAmount ?? 0).toDouble();
+
+            if (amount == 0) continue;
+
             double percentage = totalSuccessAmount > 0
-                ? ((data[i].successAmount ?? 0) / totalSuccessAmount) * 100
-                : 0;
+                ? (amount / totalSuccessAmount) * 100
+                : 0.0;
+
+            // Round percentage to 2 decimals to avoid showing 0.00% values
+            double roundedPercentage =
+                double.parse(percentage.toStringAsFixed(2));
+
+            if (roundedPercentage == 0.0) {
+              continue; // Skip entries that contribute too little to matter
+            }
 
             if (percentage < 5.0) {
+              othersAmount += amount;
               othersEntries.add(_OthersEntry(
-                label: data[i].services ?? 'Unknown',
+                label: entry.services ?? 'Unknown',
                 percentage: percentage,
               ));
-              othersPercentage += percentage;
               continue;
             }
 
-            // Normal section
+            // Add to main pie sections
             sections.add(PieChartSectionData(
               color: chartColors[i % chartColors.length],
-              value: percentage,
-              title: percentage.toStringAsFixed(1),
+              value: roundedPercentage,
+              title: roundedPercentage.toStringAsFixed(2),
               radius: touchedIndex == i ? 65.0 : 50.0,
-              titleStyle: TextStyle(
-                fontSize: touchedIndex == i ? 12.0 : 12.0,
+              titleStyle: const TextStyle(
+                fontSize: 12.0,
                 fontWeight: FontWeight.w500,
                 color: Colors.white,
               ),
@@ -122,18 +140,22 @@ class _PieChartCardState extends State<PieChartCard> {
 
             indicators.add(_buildIndicator(
               color: chartColors[i % chartColors.length],
-              text: data[i].services ?? 'Unknown',
-              percentage: '${percentage.toStringAsFixed(1)}%',
+              text: entry.services ?? 'Unknown',
+              percentage: '${roundedPercentage.toStringAsFixed(2)}%',
               context: context,
             ));
           }
+          othersEntries.sort((a, b) => b.percentage.compareTo(a.percentage));
 
-// ✅ Add "Others" once, after loop
-          if (othersEntries.isNotEmpty) {
+          double othersPercentage = totalSuccessAmount > 0
+              ? (othersAmount / totalSuccessAmount) * 100
+              : 0;
+
+          if (othersEntries.isNotEmpty && othersPercentage > 0.0) {
             sections.add(PieChartSectionData(
               color: Colors.grey[400],
               value: othersPercentage,
-              title: othersPercentage.toStringAsFixed(1),
+              title: othersPercentage.toStringAsFixed(4),
               radius: 50.0,
               titleStyle: const TextStyle(
                 fontSize: 12.0,
@@ -145,7 +167,7 @@ class _PieChartCardState extends State<PieChartCard> {
             indicators.add(_buildIndicator(
               color: Colors.grey,
               text: 'Others',
-              percentage: '${othersPercentage.toStringAsFixed(1)}%',
+              percentage: '${othersPercentage.toStringAsFixed(3)}%',
               context: context,
             ));
           }
@@ -166,7 +188,6 @@ class _PieChartCardState extends State<PieChartCard> {
                           final range = await NepaliDateRangePicker.show(
                               context, _startDate!, _endDate!);
                           if (range != null) {
-                            // Format the start and end dates to 'yyyy-MM-dd' format
                             String startFormatted =
                                 DateFormat('yyyy-MM-dd').format(range.start);
                             String endFormatted =
@@ -175,7 +196,6 @@ class _PieChartCardState extends State<PieChartCard> {
                                 NepaliDateTime.fromDateTime(range.start);
                             _endDate = NepaliDateTime.fromDateTime(range.end);
 
-                            // ignore: use_build_context_synchronously
                             context.read<SummaryReportBloc>().add(
                                 FetchSummaryReport(
                                     dateFrom: startFormatted,
@@ -183,7 +203,7 @@ class _PieChartCardState extends State<PieChartCard> {
                                     clientId:
                                         UserSimplePreferences.getClientId()
                                             .toString()));
-                            //flag to toggle view all or show less
+
                             _showAllOthers = false;
                           }
                         },
@@ -192,18 +212,13 @@ class _PieChartCardState extends State<PieChartCard> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 8, vertical: 8),
                           decoration: BoxDecoration(
-                            color: colorScheme.primary,
+                            color: Theme.of(context).colorScheme.primary,
                             shape: BoxShape.circle,
                           ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.calendar_month,
-                                size: 18,
-                                color: colorScheme.onPrimary,
-                              ),
-                            ],
+                          child: Icon(
+                            Icons.calendar_month,
+                            size: 18,
+                            color: Theme.of(context).colorScheme.onPrimary,
                           ),
                         ),
                       ),
@@ -237,14 +252,12 @@ class _PieChartCardState extends State<PieChartCard> {
                         builder: (context, constraints) {
                           return GridView.builder(
                             shrinkWrap: true,
-                            physics:
-                                const NeverScrollableScrollPhysics(), // Prevents scrolling inside GridView
+                            physics: const NeverScrollableScrollPhysics(),
                             itemCount: indicators.length,
                             gridDelegate:
                                 const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2, // Two columns
-                              childAspectRatio:
-                                  3.5, // Adjust to keep the layout balanced
+                              crossAxisCount: 2,
+                              childAspectRatio: 3.5,
                               crossAxisSpacing: 24,
                               mainAxisSpacing: 10,
                             ),
@@ -282,9 +295,12 @@ class _PieChartCardState extends State<PieChartCard> {
                           builder: (context, constraints) {
                             final displayedEntries = _showAllOthers
                                 ? othersEntries
+                                    .where((e) => e.percentage > 0.0)
+                                    .toList()
                                 : othersEntries
+                                    .where((e) => e.percentage > 0.0)
                                     .take(4)
-                                    .toList(); // limit to 4 if collapsed
+                                    .toList();
 
                             return Wrap(
                               spacing: 24,
@@ -358,9 +374,7 @@ class _PieChartCardState extends State<PieChartCard> {
                         ),
                       const SizedBox(height: 16),
                     ],
-                    const SizedBox(
-                      height: 20,
-                    )
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),
@@ -446,7 +460,7 @@ Widget _buildOthersItem(BuildContext context, _OthersEntry entry) {
       ),
       Expanded(
         child: CustomText(
-          text: '${entry.label}\n ${entry.percentage.toStringAsFixed(1)}%',
+          text: '${entry.label}\n ${entry.percentage.toStringAsFixed(4)}%',
           fontSize: 13,
           color: Theme.of(context).colorScheme.onSurfaceVariant,
           maxLine: 3,

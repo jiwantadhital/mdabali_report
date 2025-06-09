@@ -100,10 +100,26 @@ class LineChartCard extends StatelessWidget {
                           interval, // Rounded max
                       minX: 0,
                       maxX: 4,
+                      lineTouchData: LineTouchData(
+                        touchTooltipData: LineTouchTooltipData(
+                          tooltipBgColor: colorScheme.primary,
+                          getTooltipItems: (List<LineBarSpot> touchedSpots) {
+                            return touchedSpots.map((spot) {
+                              return LineTooltipItem(
+                                'Rs ${spot.y.toInt().toString()}',
+                                TextStyle(
+                                  color: colorScheme.onPrimary,
+                                  fontSize: 16,
+                                ),
+                              );
+                            }).toList();
+                          },
+                        ),
+                      ),
                       gridData: FlGridData(
                           show: true,
                           drawVerticalLine: false,
-                          drawHorizontalLine: true,
+                          drawHorizontalLine: false,
                           horizontalInterval: interval,
                           getDrawingHorizontalLine: (value) {
                             return FlLine(
@@ -120,7 +136,7 @@ class LineChartCard extends StatelessWidget {
                             reservedSize: 70,
                             getTitlesWidget: (value, meta) {
                               return Padding(
-                                padding: const EdgeInsets.only(right: 0),
+                                padding: const EdgeInsets.only(right: 4),
                                 child: CustomText(
                                   text: 'Rs ${value.toInt().toString()}',
                                   fontSize: 12,
@@ -139,7 +155,7 @@ class LineChartCard extends StatelessWidget {
                                 if (index >= 0 && index < months.length) {
                                   return Padding(
                                     padding: const EdgeInsets.only(
-                                        top: 8, right: 12),
+                                        top: 8, right: 10, left: 12),
                                     child: CustomText(
                                       text: months[index], // Use dynamic month
                                       color: colorScheme.primaryFixed,
@@ -160,20 +176,36 @@ class LineChartCard extends StatelessWidget {
                         )),
                       ),
                       borderData: FlBorderData(
-                          show: true,
+                          show: false,
                           border:
                               Border.all(color: colorScheme.onSurfaceVariant)),
                       lineBarsData: [
                         LineChartBarData(
-                            spots: List.generate(
-                              dataPoints.length,
-                              (index) =>
-                                  FlSpot(index.toDouble(), dataPoints[index]),
+                          spots: List.generate(
+                            dataPoints.length,
+                            (index) =>
+                                FlSpot(index.toDouble(), dataPoints[index]),
+                          ),
+                          preventCurveOverShooting: true,
+                          belowBarData: BarAreaData(
+                            show: true,
+                            // color:LinearGradient(colors: colors)
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              stops: [0.0, 0.5, 1.0],
+                              colors: [
+                                colorScheme.primary.withValues(alpha: 0.7),
+                                colorScheme.primary.withValues(alpha: 0.3),
+                                colorScheme.primary.withValues(alpha: 0.0),
+                              ],
                             ),
-                            isCurved: true,
-                            curveSmoothness: 0.35,
-                            color: Colors.blue[200],
-                            dotData: const FlDotData(show: true)),
+                          ),
+                          isCurved: true,
+                          curveSmoothness: 0.35,
+                          color: colorScheme.primary,
+                          dotData: const FlDotData(show: false),
+                        ),
                       ]),
                 ),
               ),

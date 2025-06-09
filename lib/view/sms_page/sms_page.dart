@@ -213,14 +213,14 @@ class _SmsPageState extends State<SmsPage> {
                       iconBgColor:
                           colorScheme.onSurface.withValues(alpha: 0.15),
                     ),
-                    buildDivider(),
-                    buildMetricRow(
-                      'SMS Rate',
-                      'Rs $rate',
-                      Icons.attach_money_outlined,
-                      colorScheme.onSurface,
-                      iconBgColor: Colors.greenAccent.withValues(alpha: 0.25),
-                    ),
+                    // buildDivider(),
+                    // buildMetricRow(
+                    //   'SMS Rate',
+                    //   'Rs $rate',
+                    //   Icons.attach_money_outlined,
+                    //   colorScheme.onSurface,
+                    //   iconBgColor: Colors.greenAccent.withValues(alpha: 0.25),
+                    // ),
                     buildDivider(),
                     buildMetricRow(
                       'Total Cost',
@@ -245,30 +245,30 @@ class _SmsPageState extends State<SmsPage> {
           ),
 
           // Decorative bubble circle
-        //   Positioned(
-        //     top: 10,
-        //     right: -20,
-        //     child: Container(
-        //       width: 100,
-        //       height: 100,
-        //       decoration: BoxDecoration(
-        //         shape: BoxShape.circle,
-        //         color: Colors.blue.withValues(alpha: 0.1),
-        //       ),
-        //     ),
-        //   ),
-        //   Positioned(
-        //     bottom: 20,
-        //     left: -30,
-        //     child: Container(
-        //       width: 80,
-        //       height: 80,
-        //       decoration: BoxDecoration(
-        //         shape: BoxShape.circle,
-        //         color: Colors.blue.withValues(alpha: 0.1),
-        //       ),
-        //     ),
-        //   ),
+          //   Positioned(
+          //     top: 10,
+          //     right: -20,
+          //     child: Container(
+          //       width: 100,
+          //       height: 100,
+          //       decoration: BoxDecoration(
+          //         shape: BoxShape.circle,
+          //         color: Colors.blue.withValues(alpha: 0.1),
+          //       ),
+          //     ),
+          //   ),
+          //   Positioned(
+          //     bottom: 20,
+          //     left: -30,
+          //     child: Container(
+          //       width: 80,
+          //       height: 80,
+          //       decoration: BoxDecoration(
+          //         shape: BoxShape.circle,
+          //         color: Colors.blue.withValues(alpha: 0.1),
+          //       ),
+          //     ),
+          //   ),
         ],
       ),
     );
@@ -297,7 +297,6 @@ class _SmsPageState extends State<SmsPage> {
               borderRadius: BorderRadius.circular(20),
             ),
             child: ClipRRect(
-              
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
                 child: Column(
@@ -338,30 +337,30 @@ class _SmsPageState extends State<SmsPage> {
           ),
 
           // Decorative bubble circle
-        //   Positioned(
-        //     top: 10,
-        //     right: -20,
-        //     child: Container(
-        //       width: 100,
-        //       height: 100,
-        //       decoration: BoxDecoration(
-        //         shape: BoxShape.circle,
-        //         color: Colors.blue.withValues(alpha: 0.1),
-        //       ),
-        //     ),
-        //   ),
-        //   Positioned(
-        //     bottom: 20,
-        //     left: -30,
-        //     child: Container(
-        //       width: 80,
-        //       height: 80,
-        //       decoration: BoxDecoration(
-        //         shape: BoxShape.circle,
-        //         color: Colors.blue.withValues(alpha: 0.1),
-        //       ),
-        //     ),
-        //   ),
+          //   Positioned(
+          //     top: 10,
+          //     right: -20,
+          //     child: Container(
+          //       width: 100,
+          //       height: 100,
+          //       decoration: BoxDecoration(
+          //         shape: BoxShape.circle,
+          //         color: Colors.blue.withValues(alpha: 0.1),
+          //       ),
+          //     ),
+          //   ),
+          //   Positioned(
+          //     bottom: 20,
+          //     left: -30,
+          //     child: Container(
+          //       width: 80,
+          //       height: 80,
+          //       decoration: BoxDecoration(
+          //         shape: BoxShape.circle,
+          //         color: Colors.blue.withValues(alpha: 0.1),
+          //       ),
+          //     ),
+          //   ),
         ],
       ),
     );
